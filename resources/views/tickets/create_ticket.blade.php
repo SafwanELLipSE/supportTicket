@@ -38,20 +38,23 @@
             <div class="row">
               <div class="col-lg-6 col-md-12">
 								<label class="form-label">Departments</label>
-                <select class="form-control">
-                  <option value="0">Jhorotek</option>
-                  <option value="1">Joycalls</option>
-                  <option value="2">shuru Campus</option>
-                  <option value="3">Banglavision</option>
+                <select class="form-control" id="department">
+									@foreach($departments as $department )
+									<option data-department="{{$department->id}}" value="{{$department->id}}">{{$department->name}}</option>
+									@endforeach
                 </select>
               </div>
 							<div class="col-lg-6 col-md-12" >
 								<label class="form-label">Category</label>
-                <select class="form-control">
-                  <option value="0">Website</option>
-                  <option value="1">Servicing</option>
-                  <option value="2">Motors</option>
-                  <option value="3">others</option>
+                <select class="form-control" id="category">
+
+									@foreach($departments as $department )
+											@foreach($department->ticketCategories as $item )
+													<option data-department="{{$item->department_id}}" value="{{$item->id}}">{{$item->category}}</option>
+											@endforeach
+									@endforeach
+									<option data-department="0" value="0">Others</option>
+
                 </select>
               </div>
             </div>
@@ -59,8 +62,8 @@
           <div class="row">
             <div class="col-lg-4 col-md-12">
               <div class="form-group">
-                <label class="form-label">Issuer Name</label>
-                <input type="text" class="form-control" id="exampleInputname" placeholder="First Name">
+                <label class="form-label">Customer Name</label>
+                <input type="text" class="form-control" id="exampleInputname" placeholder="Customer Name">
               </div>
             </div>
 						<div class="col-lg-4 col-md-12">
@@ -86,7 +89,7 @@
             <div class="col-lg-6 col-md-12 col-sm-12 col-xm-12">
 							<div class="form-group">
 								<label class="form-label">Upload Files</label>
-								<div class="row">
+								<div class="row ml-1">
 									<input type="file" name="filesToUpload[]" id="filesToUpload" multiple="multiple" />
 								</div>
 							</div>
@@ -94,7 +97,7 @@
 						<div class="col-lg-6 col-md-12 col-sm-12 col-sm-12 col-xm-12">
 							<div class="form-group">
 		            <label class="form-label">Upload Images</label>
-								<div class="row">
+								<div class="row ml-1">
       						<input type="file" name="imagesToUpload[]" id="filesToUpload" multiple="multiple" />
     						</div>
 		          </div>
@@ -117,4 +120,5 @@
 <!-- WYSIWYG Editor js -->
 <script src="../assets/plugins/wysiwyag/jquery.richtext.js"></script>
 <script src="../assets/plugins/wysiwyag/richText1.js"></script>
+<script src="{{ asset('js/create_ticket.js') }}"></script>
 @endsection

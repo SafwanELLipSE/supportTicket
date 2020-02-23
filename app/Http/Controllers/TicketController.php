@@ -11,17 +11,21 @@ class TicketController extends Controller
 {
     public function createTicket(Request $request)
     {
+
+       $departments = array();
       if( Auth::user()->isMasterAdmin()){
         $departments = Department::where('is_active',1)->get();
       }
       else{
-        $departments = Agent_department::with('department')->where('user_id',Auth::user()->id)->get();
+        $agentDepartmentIds = Agent_department::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('department_id');
+        $departments = Department::whereIn('id', $agentDepartmentIds)->get();
 
       }
 
       return view('tickets.create_ticket',[
         'departments' => $departments,
       ]);
+
     }
 
     public function getAllTickets(Request $request)
