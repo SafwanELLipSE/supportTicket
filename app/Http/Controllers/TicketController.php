@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Department;
 use App\Agent_department;
-use Auth;
+use App\Ticket;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
@@ -28,6 +31,63 @@ class TicketController extends Controller
 
     }
 
+    public function saveCreated(Request $request)
+    {
+      $validator = Validator::make($request->all(), [
+            'title'         => 'required|min:3',
+            'department'    => 'required|exists:departments,id',
+            'category'      => 'required',
+            'priority'      => 'required',
+            'description'   => 'required|min:5'
+        ]);
+
+        if ($validator->fails()){
+            alert()->warning('Error occured',$validator->errors()->all()[0]);
+            return redirect()->back()->withInput()->withErrors($validator);
+          }
+        $imageNames = array();
+        $filenames = array();
+        // uploading Images
+
+          if($request->imagesToUpload){
+              $count = 1;
+              foreach ($request->imagesToUpload as $image) {
+                $name = Auth::user()->id.'_'.self::uniqueString().++$count.'.'.$image->extension();
+                $image->move(public_path('ticket_images'), $name);
+                $imageNames[] = $name;
+              }
+            }
+
+        // uploading Files
+
+        if($request->imagesToUpload){
+          $count = 1;
+          foreach ($request->filesToUpload as $file) {
+            $name = Auth::user()->id.'_'.self::uniqueString().++$count.'.'.$file->extension();
+            $file->move(public_path('ticket_files'), $name);
+            $filenames[] = $name;
+          }
+        }
+        $image_string =  implode(",", $imageNames);
+        $file_string =  implode(",", $filenames);
+
+        $ticket = new Ticket();
+        $ticket->user_id = Auth::user()->id;
+        $ticket->department_id = $request->post('department');
+        $ticket->dept_ticket_category_id = $request->post('category');
+        $ticket->title = $request->post('title');
+        $ticket->customer_name = $request->post('customer_name');
+        $ticket->customer_phone = $request->post('phone');
+        $ticket->priority = $request->post('priority');
+        $ticket->description = $request->post('description');
+        $ticket->file_urls = $file_string;
+        $ticket->img_urls = $image_string;
+        $ticket->status = 1;
+        $ticket->save();
+        Alert::success('Success', 'successfully added');
+        return redirect()->route('ticket.create');
+    }
+
     public function getAllTickets(Request $request)
     {
       return view('tickets.create_ticket');
@@ -44,5 +104,13 @@ class TicketController extends Controller
     public function getClosedTickets(Request $request)
     {
       return view('tickets.create_ticket');
+    }
+    private function uniqueString()
+    {
+        $m = explode(' ', microtime());
+        list($totalSeconds, $extraMilliseconds) = array($m[1], (int)round($m[0] * 1000, 3));
+        $txID = date('YmdHis', $totalSeconds) . sprintf('%03d', $extraMilliseconds);
+        $txID = substr($txID, 2, 15);
+        return $txID;
     }
 }

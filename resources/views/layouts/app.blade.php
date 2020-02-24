@@ -143,6 +143,7 @@
 
 		<!-- Custom js-->
 		<script src="../assets/js-dark/custom.js"></script>
+		@include('sweetalert::alert')
 		@yield('additional_scripts')
 	</body>
 </html>
