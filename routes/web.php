@@ -26,8 +26,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' =>'ticket', 'as'=>'ticket.'], function(){
       Route::get('create',['as' =>'create','uses' =>'TicketController@createTicket' ]);
       Route::post('save-created',['as' =>'save_created','uses' =>'TicketController@saveCreated']);
-
-      Route::get('all-tickets',['as' =>'all_tickets','uses' =>'TicketController@getAllTickets' ]);
+      Route::get('all-tickets',['as' =>'all_tickets','uses' =>'TicketController@displayAllTickets' ]);
+      Route::post('get-all-tickets',['as' =>'get_all_tickets','uses' =>'TicketController@getAllTickets' ]);
       Route::get('open-tickets',['as' =>'open_tickets','uses' =>'TicketController@getOpenTickets' ]);
       Route::get('solved-tickets',['as' =>'solved_tickets','uses' =>'TicketController@getSolvedTickets' ]);
       Route::get('closed-tickets',['as' =>'closed_tickets','uses' =>'TicketController@getClosedTickets' ]);

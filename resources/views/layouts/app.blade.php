@@ -46,6 +46,7 @@
 		<link href="../assets/plugins/iconfonts/plugin.css" rel="stylesheet" />
 		<link href="../assets/plugins/iconfonts/icons.css" rel="stylesheet" />
 		<link  href="../assets/fonts/fonts/font-awesome.min.css" rel="stylesheet">
+		<meta name="_token" content="{{ csrf_token() }}">
 		@yield('additional_headers')
 
 	</head>
@@ -127,19 +128,19 @@
 		<script src="../assets/plugins/sidebar/sidebar.js"></script>
 
 		<!-- Charts js-->
-		<script src="../assets/plugins/chart/chart.bundle-dark.js"></script>
-		<script src="../assets/plugins/chart/utils.js"></script>
+		<!-- <script src="../assets/plugins/chart/chart.bundle-dark.js"></script>
+		<script src="../assets/plugins/chart/utils.js"></script> -->
 
 		<!--Time Counter js-->
 		<script src="../assets/plugins/counters/jquery.missofis-countdown.js"></script>
 		<script src="../assets/plugins/counters/counter.js"></script>
 
 		<!--Morris  Charts js-->
-		<script src="../assets/plugins/morris/raphael-min.js"></script>
-		<script src="../assets/plugins/morris/morris.js"></script>
+		<!-- <script src="../assets/plugins/morris/raphael-min.js"></script>
+		<script src="../assets/plugins/morris/morris.js"></script> -->
 
 		<!-- Custom-charts js-->
-		<script src="../assets/js-dark/index1.js"></script>
+		<!-- <script src="../assets/js-dark/index1.js"></script> -->
 
 		<!-- Custom js-->
 		<script src="../assets/js-dark/custom.js"></script>

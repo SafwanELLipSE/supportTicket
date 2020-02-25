@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('content')
-
 @section('additional_headers')
 
 <!-- WYSIWYG Editor css -->
@@ -10,9 +8,9 @@
 
 @endsection
 
+@section('content')
 
 <div class="side-app">
-
 	<!-- page-header -->
 	<div class="page-header">
 		<ol class="breadcrumb"><!-- breadcrumb -->
@@ -21,7 +19,6 @@
 		</ol><!-- End breadcrumb -->
 	</div>
 	<!-- End page-header -->
-
   <div class="row">
     <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
 			<form action="{{ route('ticket.save_created') }}" method="POST" enctype="multipart/form-data">
@@ -104,14 +101,13 @@
 	          </div>
 	        </div>
 	        <div class="card-footer text-right">
-	          <button type="submit" class="btn btn-success mt-1">Save</div>
+	          <button type="submit" class="btn btn-success mt-1">Save</button>
+					</div>
 	          <!-- <a href="#" class="btn btn-warning mt-1">Cancel</a> -->
-	        </div>
-	      </div>
-			</form>
-    </div>
-  </div>
-
+	     	</div>
+	    </div>
+		</form>
+   </div>
 </div>
 <!--End side app-->
 @endsection

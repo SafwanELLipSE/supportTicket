@@ -60,7 +60,7 @@ class TicketController extends Controller
 
         // uploading Files
 
-        if($request->imagesToUpload){
+        if($request->filesToUpload){
           $count = 1;
           foreach ($request->filesToUpload as $file) {
             $name = Auth::user()->id.'_'.self::uniqueString().++$count.'.'.$file->extension();
@@ -88,9 +88,42 @@ class TicketController extends Controller
         return redirect()->route('ticket.create');
     }
 
+    public function displayAllTickets(Request $request)
+    {
+
+      return view('tickets.ticket_list');
+    }
+
     public function getAllTickets(Request $request)
     {
-      return view('tickets.create_ticket');
+      $tickets = Ticket::orderBy('status', 'DESC')->orderBy('priority', 'DESC')->get();
+
+      $totalData = $tickets->count();
+      $totalFiltered = $totalData;
+
+      $toReturn = array();
+      $count = 1;
+          foreach ($tickets as $item) {
+                $localArray[0] = $item->id;
+                $localArray[1] = $item->title;
+                $localArray[2] = $item->department_id;
+                $localArray[3] = $item->dept_ticket_category_id;
+                $localArray[4] = $item->priority;
+                $localArray[5] = $item->user_id;
+                $localArray[6] = $item->created_at;
+                $localArray[7] = "view";
+              $toReturn[] = $localArray;
+          }
+
+          $json_data = array(
+             "draw" => intval($request->input('draw')),
+             "recordsTotal" => intval($totalData),
+             "recordsFiltered" => intval($totalFiltered),
+             "data" => $toReturn
+         );
+         echo json_encode($json_data);
+
+
     }
 
     public function getOpenTickets(Request $request)
