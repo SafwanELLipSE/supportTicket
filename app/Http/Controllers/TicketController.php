@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Department;
 use App\Agent_department;
 use App\Ticket;
+use App\User;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -91,40 +92,99 @@ class TicketController extends Controller
     public function displayAllTickets(Request $request)
     {
 
-      return view('tickets.ticket_list');
+      return view('tickets.ticket_list',[
+        "creators" => User::where('access_level','!=','department_admin')->get(),
+        "departments" => Department::where("is_active",1)->get(),
+      ]);
     }
 
     public function getAllTickets(Request $request)
     {
-      $tickets = Ticket::orderBy('status', 'DESC')->orderBy('priority', 'DESC')->get();
+      $tickets = "";
+      if($request->post('department_id'))
+      {
+        $tickets = Ticket::where('department_id',$request->post('department_id'));
+      }
 
-      $totalData = $tickets->count();
-      $totalFiltered = $totalData;
-
-      $toReturn = array();
-      $count = 1;
-          foreach ($tickets as $item) {
-                $localArray[0] = $item->id;
-                $localArray[1] = $item->title;
-                $localArray[2] = $item->department_id;
-                $localArray[3] = $item->dept_ticket_category_id;
-                $localArray[4] = $item->priority;
-                $localArray[5] = $item->user_id;
-                $localArray[6] = $item->created_at;
-                $localArray[7] = "view";
-              $toReturn[] = $localArray;
+      if ($request->post('priority'))
+      {
+          if($tickets == "")
+          {
+            $tickets = Ticket::where('priority',$request->post('priority')-1);
           }
+          else{
+            $tickets = $tickets->where('priority',$request->post('priority')-1);
+          }
+       }
 
-          $json_data = array(
-             "draw" => intval($request->input('draw')),
-             "recordsTotal" => intval($totalData),
-             "recordsFiltered" => intval($totalFiltered),
-             "data" => $toReturn
-         );
-         echo json_encode($json_data);
+        if ($request->post('creator'))
+        {
+            if($tickets == "")
+            {
+              $tickets = Ticket::where('user_id',$request->post('creator'));
+            }
+            else{
+              $tickets = $tickets->where('user_id',$request->post('creator'));
+            }
+        }
 
+        if ($request->search['value'])
+        {
+            $filtedval = $request->search['value'];
+            if($tickets == "")
+            {
+              $tickets = Ticket::where('id', 'like', '%' . $filtedval . '%')
+                                  ->orWhere('title', 'like', '%' . $filtedval . '%');
+            }
+            else
+            {
+              $tickets = $tickets->where('id', 'like', '%' . $filtedval . '%')
+                                  ->orWhere('title', 'like', '%' . $filtedval . '%');
+            }
+        }
 
-    }
+        if($tickets == "")
+        {
+            $tickets = Ticket::orderBy('priority', 'DESC')
+                              ->orderBy('status', 'DESC')
+                              ->skip(intval($request->input('start')))
+                              ->take(intval($request->input('length')))
+                              ->get();
+        }
+        else
+        {
+            $tickets = $tickets->orderBy('priority', 'DESC')
+                                ->orderBy('status', 'DESC')
+                                ->skip(intval($request->input('start')))
+                                ->take(intval($request->input('length')))
+                                ->get();
+        }
+
+        $totalData = $tickets->count();
+        $totalFiltered = $totalData;
+
+        $toReturn = array();
+        foreach ($tickets as $item) {
+              $localArray[0] = $item->id;
+              $localArray[1] = $item->title;
+              $localArray[2] = $item->department->name;
+              $localArray[3] = $item->dept_ticket_category_id == 0 ? "Others" : $item->ticketCategory->category;
+              $localArray[4] = Ticket::getPriorityArray()[$item->priority];
+              $localArray[5] = $item->user->name;;
+              $localArray[6] = $item->created_at->format('d.m.Y');
+              $localArray[7] = "<a class='btn btn-sm btn-primary'>view</a>";
+            $toReturn[] = $localArray;
+        }
+
+      $json_data = array(
+         "draw" => intval($request->input('draw')),
+         "recordsTotal" => intval($totalData),
+         "recordsFiltered" => intval($totalFiltered),
+         "data" => $toReturn
+     );
+     echo json_encode($json_data);
+
+   }
 
     public function getOpenTickets(Request $request)
     {

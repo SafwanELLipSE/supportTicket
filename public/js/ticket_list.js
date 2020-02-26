@@ -1,26 +1,47 @@
 $(document ).ready(function() {
 
-var _token = $('meta[name="_token"]').attr('content');
-  dataTable = $('#ticket_table').DataTable({
-                  "serverSide": false,
-                  "processing": false,
-                  "pageLength": 50,
-                  "order": [],
-                  "ajax":
-                      {
-                          url: "http://127.0.0.1:8000/ticket/get-all-tickets",
-                          type: "POST",
-                          data: {
+  var _token = $('meta[name="_token"]').attr('content');
 
-                              _token
-                          },
-                      },
-                  "language": {
-                      "paginate": {
-                          "previous": "&#706",
-                          "next": "&#707"
-                      }
-                  }
-              });
+  function populate_tickets(){
+
+    dataTable = $('#ticket_table').DataTable({
+                    "serverSide": true,
+                    "processing": false,
+                    "pageLength": 50,
+                    "ordering": false,
+                    "ajax":
+                        {
+                            url: "http://"+window.location.hostname+"/ticket/get-all-tickets",
+                            type: "POST",
+                            data: {
+                               'department_id':$("#department").val(),
+                               'priority':$("#priority").val(),
+                               'creator':$("#creator").val(),
+                                _token
+                            },
+                        },
+                    "language": {
+                        "paginate": {
+                            "previous": "&#706",
+                            "next": "&#707"
+                        }
+                    }
+                });
+
+    }
+    populate_tickets();
+
+    $("#priority").on("change",function(){
+      dataTable.destroy();
+      populate_tickets();
+    });
+    $("#department").on("change",function(){
+      dataTable.destroy();
+      populate_tickets();
+    });
+    $("#creator").on("change",function(){
+      dataTable.destroy();
+      populate_tickets();
+    });
 
 });

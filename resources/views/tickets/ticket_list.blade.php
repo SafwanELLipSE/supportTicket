@@ -3,6 +3,8 @@
 @section('additional_headers')
 <!-- Data table css -->
 		<link href="{{ asset('assets/plugins/datatable/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
+		<link href="{{asset('assets/plugins/select2/select2.min-dark.css')}}" rel="stylesheet" />
+		<link rel="stylesheet" href="{{asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
 
 		<link href="{{ asset('assets/plugins/datatable/responsivebootstrap4.min.css') }}" rel="stylesheet" />
 @endsection
@@ -34,10 +36,31 @@
                 <tr>
                   <th class="wd-20p">#ID</th>
                   <th class="wd-20p"> Ticket Title</th>
-                  <th class="wd-15p">Department</th>
+                  <th class="wd-15p">
+										<select class="form-control select2-show-search" id="department">
+												<option value="" selected>Department</option>
+												@foreach($departments as $item)
+													<option value="{{$item->id}}">{{$item->name}}</option>
+												@endforeach
+										</select>
+									</th>
                   <th class="wd-15p">Category</th>
-                  <th class="wd-10p">Priority</th>
-                  <th class="wd-10p">Creator</th>
+                  <th class="wd-10p">
+										<select class="form-control select2" id="priority">
+												<option value="" selected>Priority</option>
+												<option value="1">Minor</option>
+												<option value="2">Major</option>
+												<option value="3">Critical</option>
+										</select>
+									</th>
+                  <th class="wd-10p">
+										<select class="form-control select2-show-search" id="creator">
+												<option value="" selected>Creators</option>
+												@foreach($creators as $item)
+													<option value="{{$item->id}}">{{$item->name}}</option>
+												@endforeach
+										</select>
+									</th>
                   <th class="wd-10p">Created Date</th>
                   <th class="wd-10p">View</th>
                 </tr>
@@ -61,6 +84,8 @@
 		<script src="{{asset('assets/plugins/datatable/jquery.dataTables.min.js')}}"></script>
 		<script src="{{asset('assets/plugins/datatable/dataTables.bootstrap4.min.js')}}"></script>
 		<script src="{{ asset('assets/plugins/datatable/dataTables.responsive.min.js') }}"></script>
+		<script src="../assets/plugins/select2/select2.full.min.js"></script>
+		<script src="../assets/js-dark/select2.js"></script>
 
     <script src="{{ asset('js/ticket_list.js') }}"></script>
 
