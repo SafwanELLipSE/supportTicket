@@ -11,6 +11,7 @@ class User extends Authenticatable
     use Notifiable;
 
     const ACCESS_LEVEL_MASTER_ADMIN = 'master_admin';
+    const ACCESS_LEVEL_AGENT = 'agent';
 
     /**
      * The attributes that are mass assignable.
@@ -42,5 +43,9 @@ class User extends Authenticatable
     public function isMasterAdmin()
     {
         return in_array($this->access_level, [self::ACCESS_LEVEL_MASTER_ADMIN]);
+    }
+    public function canModarateTickets()
+    {
+        return in_array($this->access_level, [self::ACCESS_LEVEL_MASTER_ADMIN, self::ACCESS_LEVEL_AGENT]);
     }
 }

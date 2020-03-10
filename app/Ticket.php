@@ -13,7 +13,7 @@ class Ticket extends Model
   }
   public function ticketCategory(){
 
-    return $this->belongsTo(Dept_ticket_category::class,'id');
+    return $this->hasOne(Dept_ticket_category::class,'id','dept_ticket_category_id');
   }
   public function user()
   {

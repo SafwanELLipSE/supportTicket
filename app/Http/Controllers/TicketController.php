@@ -186,12 +186,104 @@ class TicketController extends Controller
 
    }
 
+    public function displayOpenTickets(Request $request)
+    {
+      return view('tickets.open_ticket',[
+        "creators" => User::where('access_level','!=','department_admin')->get(),
+        "departments" => Department::where("is_active",1)->get(),
+      ]);
+
+    }
+
     public function getOpenTickets(Request $request)
     {
-      return view('tickets.create_ticket');
+        $tickets = "";
+        if($request->post('department_id'))
+        {
+          $tickets = Ticket::where('department_id',$request->post('department_id'));
+        }
+
+        if ($request->post('priority'))
+        {
+            if($tickets == "")
+            {
+              $tickets = Ticket::where('priority',$request->post('priority')-1);
+            }
+            else{
+              $tickets = $tickets->where('priority',$request->post('priority')-1);
+            }
+         }
+
+          if ($request->post('creator'))
+          {
+              if($tickets == "")
+              {
+                $tickets = Ticket::where('user_id',$request->post('creator'));
+              }
+              else{
+                $tickets = $tickets->where('user_id',$request->post('creator'));
+              }
+          }
+
+          if ($request->search['value'])
+          {
+              $filtedval = $request->search['value'];
+              if($tickets == "")
+              {
+                $tickets = Ticket::where('id', 'like', '%' . $filtedval . '%')
+                                    ->orWhere('title', 'like', '%' . $filtedval . '%');
+              }
+              else
+              {
+                $tickets = $tickets->where('id', 'like', '%' . $filtedval . '%')
+                                    ->orWhere('title', 'like', '%' . $filtedval . '%');
+              }
+          }
+
+          if($tickets == "")
+          {
+              $tickets = Ticket::orderBy('priority', 'DESC')
+                                ->orderBy('status', 'DESC')
+                                ->skip(intval($request->input('start')))
+                                ->take(intval($request->input('length')))
+                                ->get();
+          }
+          else
+          {
+              $tickets = $tickets->orderBy('priority', 'DESC')
+                                  ->orderBy('status', 'DESC')
+                                  ->skip(intval($request->input('start')))
+                                  ->take(intval($request->input('length')))
+                                  ->get();
+          }
+
+          $totalData = $tickets->count();
+          $totalFiltered = $totalData;
+
+          $toReturn = array();
+          foreach ($tickets as $item) {
+                $localArray[0] = $item->id;
+                $localArray[1] = $item->title;
+                $localArray[2] = $item->department->name;
+                $localArray[3] = $item->dept_ticket_category_id == 0 ? "Others" : $item->ticketCategory->category;
+                $localArray[4] = Ticket::getPriorityArray()[$item->priority];
+                $localArray[5] = $item->created_at->format('d.m.Y');
+                $localArray[6] = "<a class='btn btn-sm btn-primary'>view</a>";
+              $toReturn[] = $localArray;
+          }
+
+        $json_data = array(
+           "draw" => intval($request->input('draw')),
+           "recordsTotal" => intval($totalData),
+           "recordsFiltered" => intval($totalFiltered),
+           "data" => $toReturn
+       );
+       echo json_encode($json_data);
     }
     public function getSolvedTickets(Request $request)
     {
+      echo date("Y-m-d");
+      die();
       return view('tickets.create_ticket');
     }
     public function getClosedTickets(Request $request)
