@@ -44,18 +44,27 @@ class UserController extends Controller
           $user->access_level = User::ACCESS_LEVEL_AGENT;
           $user->password = bcrypt($request->post('password'));
           $user->save();
-
-          foreach ($request->post('departments') as $item) {
-            $agents_departments = new Agent_department();
-            $agents_departments->user_id = $user->id;
-            $agents_departments->department_id = $item;
-            $agents_departments->created_by = Auth::user()->id;
-            $agents_departments->is_active = Agent_department::ACTIVE;
-            $agents_departments->save();
+          if(count($request->post('departments'))){
+            foreach ($request->post('departments') as $item) {
+              $agents_departments = new Agent_department();
+              $agents_departments->user_id = $user->id;
+              $agents_departments->department_id = $item;
+              $agents_departments->created_by = Auth::user()->id;
+              $agents_departments->is_active = Agent_department::ACTIVE;
+              $agents_departments->save();
+            }
           }
 
           Alert::success('Success', 'Successfully Created');
           return redirect()->route('agent.create');
 
+    }
+
+    public function GetAgentList(Request $request)
+    {
+      $agents = User::where('access_level',User::ACCESS_LEVEL_AGENT)->get();
+      return view('agents.agent_list',[
+        'agents' => $agents
+      ]);
     }
 }

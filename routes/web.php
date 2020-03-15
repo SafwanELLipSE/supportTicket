@@ -42,6 +42,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' =>'agent', 'as'=>'agent.'], function(){
       Route::get('create',['as' =>'create','uses' =>'UserController@createAgent' ]);
       Route::post('save-created',['as' =>'save_created','uses' =>'UserController@saveCreatedAgent' ]);
+      Route::get('list',['as' =>'list','uses' =>'UserController@GetAgentList' ]);
     });
 
   });

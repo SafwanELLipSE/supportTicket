@@ -71,7 +71,7 @@
                   <div class="col-md-12">
                     <h4 class="font-weight-semibold">Agents</h4>
                     <a class="slide-item" href="{{route('agent.create')}}">Create Agents</a>
-                    <a class="slide-item" href="index.html">Agent List </a>
+                    <a class="slide-item" href="{{route('agent.list')}}">Agent List </a>
                   </div>
                 </div>
               </div>
