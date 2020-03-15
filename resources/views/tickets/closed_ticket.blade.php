@@ -18,7 +18,7 @@
 	<div class="page-header">
 		<ol class="breadcrumb"><!-- breadcrumb -->
 			<li class="breadcrumb-item"><a href="#">Home</a></li>
-			<li class="breadcrumb-item active" aria-current="page">Ticket List</li>
+			<li class="breadcrumb-item active" aria-current="page">Closed Tickets</li>
 		</ol><!-- End breadcrumb -->
 	</div>
 	<!-- End page-header -->
@@ -27,7 +27,7 @@
     <div class="col-md-12 col-lg-12">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">Open Tickets</div>
+          <div class="card-title">Closed Tickets</div>
         </div>
         <div class="card-body">
           <div class="table-responsive">
@@ -88,7 +88,7 @@
 		<script src="../assets/plugins/select2/select2.full.min.js"></script>
 		<script src="../assets/js-dark/select2.js"></script>
 
-    <script src="{{ asset('js/open_ticket.js') }}"></script>
+    <script src="{{ asset('js/closed_ticket.js') }}"></script>
 
 
 @endsection

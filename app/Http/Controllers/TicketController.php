@@ -83,7 +83,7 @@ class TicketController extends Controller
         $ticket->description = $request->post('description');
         $ticket->file_urls = $file_string;
         $ticket->img_urls = $image_string;
-        $ticket->status = 1;
+        $ticket->status = 2;
         $ticket->save();
         Alert::success('Success', 'successfully added');
         return redirect()->route('ticket.create');
@@ -195,7 +195,7 @@ class TicketController extends Controller
 
     }
 
-    public function getOpenTickets(Request $request)
+    public function getTickets(Request $request)
     {
         $tickets = "";
         if($request->post('department_id'))
@@ -214,14 +214,14 @@ class TicketController extends Controller
             }
          }
 
-          if ($request->post('creator'))
+          if ($request->post('status'))
           {
               if($tickets == "")
               {
-                $tickets = Ticket::where('user_id',$request->post('creator'));
+                $tickets = Ticket::where('status',$request->post('status')-1);
               }
               else{
-                $tickets = $tickets->where('user_id',$request->post('creator'));
+                $tickets = $tickets->where('status',$request->post('status')-1);
               }
           }
 
@@ -282,13 +282,18 @@ class TicketController extends Controller
     }
     public function getSolvedTickets(Request $request)
     {
-      echo date("Y-m-d");
-      die();
-      return view('tickets.create_ticket');
+      return view('tickets.solved_ticket',[
+        "creators" => User::where('access_level','!=','department_admin')->get(),
+        "departments" => Department::where("is_active",1)->get(),
+      ]);
+
     }
     public function getClosedTickets(Request $request)
     {
-      return view('tickets.create_ticket');
+      return view('tickets.closed_ticket',[
+        "creators" => User::where('access_level','!=','department_admin')->get(),
+        "departments" => Department::where("is_active",1)->get(),
+      ]);
     }
     private function uniqueString()
     {

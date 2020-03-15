@@ -85,16 +85,18 @@
 	            <div class="col-lg-6 col-md-12 col-sm-12 col-xm-12">
 								<div class="form-group">
 									<label class="form-label">Upload Files</label>
-									<div class="row ml-1">
-										<input type="file" name="filesToUpload[]" id="filesToUpload"  multiple="multiple" />
+									<div class="custom-file row ml-1">
+										<input type="file" class="custom-file-input" name="filesToUpload[]" id="filesToUpload"  multiple="multiple" />
+										<label class="custom-file-label">Choose files</label>
 									</div>
 								</div>
 	            </div>
 							<div class="col-lg-6 col-md-12 col-sm-12 col-sm-12 col-xm-12">
 								<div class="form-group">
 			            <label class="form-label">Upload Images</label>
-									<div class="row ml-1">
-	      						<input type="file" name="imagesToUpload[]" id="filesToUpload"  multiple="multiple" />
+									<div class="custom-file row ml-1">
+	      						<input type="file" class="custom-file-input" name="imagesToUpload[]" id="filesToUpload"  multiple="multiple" />
+										<label class="custom-file-label">Choose Images</label>
 	    						</div>
 			          </div>
 	            </div>

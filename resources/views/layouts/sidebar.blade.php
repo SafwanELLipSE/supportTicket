@@ -32,6 +32,7 @@
 							<li class="resp-tab-item hor_1 {{Request::is('home') || Request::is('home/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-device-desktop"></i></li>
 							<li class="resp-tab-item hor_1 {{Request::is('ticket') || Request::is('ticket/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-keyboard"></i></li>
               <li class="resp-tab-item hor_1"><i class="side-menu__icon typcn typcn-folder"></i></li>
+							<li class="resp-tab-item hor_1 {{Request::is('agent') || Request::is('agent/*') ? 'resp-tab-active': ''}}"><i class="si si-user-follow" data-toggle="tooltip" title="si-user-follow"></i></li>
 						</ul>
 						<div class="resp-tabs-container hor_1">
 							<div class="{{Request::is('home') || Request::is('home/*') ? 'resp-tab-content-active': ''}}">
@@ -62,6 +63,15 @@
                     <h4 class="font-weight-semibold">Depatrments</h4>
                     <a class="slide-item" href="index4.html">Create Department</a>
                     <a class="slide-item" href="index2.html">Department List </a>
+                  </div>
+                </div>
+              </div>
+							<div class="{{Request::is('agent') || Request::is('agent/*') ? 'resp-tab-content-active': ''}}">
+                <div class="row">
+                  <div class="col-md-12">
+                    <h4 class="font-weight-semibold">Agents</h4>
+                    <a class="slide-item" href="{{route('agent.create')}}">Create Agents</a>
+                    <a class="slide-item" href="index.html">Agent List </a>
                   </div>
                 </div>
               </div>

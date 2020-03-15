@@ -16,7 +16,7 @@ $(document ).ready(function() {
                             data: {
                                'department_id':$("#department").val(),
                                'priority':$("#priority").val(),
-                               'status': 3,
+                               'status': 1,
                                 _token
                             },
                         },
