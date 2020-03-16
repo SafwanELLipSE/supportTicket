@@ -3,7 +3,7 @@
 <aside class="app-sidebar">
 	<div class="app-sidebar__user pb-0">
 		<div class="user-body">
-			<span class="avatar avatar-xxl brround text-center cover-image" data-image-src="../assets/images/users/female/33.png"></span>
+			<span class="avatar avatar-xxl brround text-center cover-image" data-image-src="{{asset('assets/images/users/pyke.jpg')}}"></span>
 		</div>
 		<div class="user-info">
 			<a href="#" class="ml-2"><span class="text-dark app-sidebar__user-name font-weight-semibold">{{Auth::user()->name}}</span><br>
@@ -31,7 +31,7 @@
 						<ul class="resp-tabs-list hor_1">
 							<li class="resp-tab-item hor_1 {{Request::is('home') || Request::is('home/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-device-desktop"></i></li>
 							<li class="resp-tab-item hor_1 {{Request::is('ticket') || Request::is('ticket/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-keyboard"></i></li>
-              <li class="resp-tab-item hor_1"><i class="side-menu__icon typcn typcn-folder"></i></li>
+              <li class="resp-tab-item hor_1 {{Request::is('department') || Request::is('department/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-folder"></i></li>
 							<li class="resp-tab-item hor_1 {{Request::is('agent') || Request::is('agent/*') ? 'resp-tab-active': ''}}"><i class="si si-user-follow" data-toggle="tooltip" title="si-user-follow"></i></li>
 						</ul>
 						<div class="resp-tabs-container hor_1">
@@ -57,11 +57,11 @@
 									</div>
 								</div>
 							</div>
-              <div>
+              <div class="{{Request::is('department') || Request::is('department/*') ? 'resp-tab-content-active': ''}}">
                 <div class="row">
                   <div class="col-md-12">
                     <h4 class="font-weight-semibold">Depatrments</h4>
-                    <a class="slide-item" href="index4.html">Create Department</a>
+                    <a class="slide-item" href="{{route('department.create')}}">Create Department</a>
                     <a class="slide-item" href="index2.html">Department List </a>
                   </div>
                 </div>

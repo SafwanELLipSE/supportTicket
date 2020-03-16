@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Department;
 use App\Agent_department;
 use App\User;
+use App\Dept_ticket_category;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -67,4 +69,54 @@ class UserController extends Controller
         'agents' => $agents
       ]);
     }
+  public function createDepartment(Request $request)
+  {
+    return view("departments.create_department");
+  }
+
+  public function saveCreatedDepartment(Request $request)
+  {
+    $validator = Validator::make($request->all(), [
+          'department_name' => 'required|min:3',
+          'address'   => 'required',
+          'name'      => 'required|min:3',
+          'email'     => 'required|unique:users,email',
+          'mobile_no' => 'required|min:11|max:13',
+          'password'  => 'required|min:5',
+          'confirm_password' => 'required|same:password'
+      ]);
+
+      if ($validator->fails()){
+          alert()->warning('Error occured',$validator->errors()->all()[0]);
+          return redirect()->back()->withInput()->withErrors($validator);
+        }
+
+        $user = new User();
+        $user->name = $request->post('name');
+        $user->email = $request->post('email');
+        $user->mobile_no = $request->post('mobile_no');
+        $user->access_level = User::ACCESS_LEVEL_DEPARTMENT_ADMIN;
+        $user->password = bcrypt($request->post('password'));
+        $user->save();
+
+        $department = new Department();
+        $department->user_id = $user->id;
+        $department->name = $request->post('department_name');
+        $department->address = $request->post('address');
+        $department->is_active = Department::ACTIVE;
+        $department->save();
+
+        if(count($request->post('category'))){
+          foreach ($request->post('category') as $item) {
+            $dept_ticket_category = new Dept_ticket_category();
+            $dept_ticket_category->department_id = $department->id;
+            $dept_ticket_category->category = $item;
+            $dept_ticket_category->is_active = Dept_ticket_category::ACTIVE;
+            $dept_ticket_category->save();
+          }
+        }
+
+        Alert::success('Success', 'Successfully Created');
+        return redirect()->route('department.create');
+  }
 }
