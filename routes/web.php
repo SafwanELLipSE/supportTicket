@@ -32,6 +32,7 @@ Route::group(['middleware' => ['auth']], function () {
       Route::get('open-tickets',['as' =>'open_tickets','uses' =>'TicketController@displayOpenTickets' ]);
       Route::get('solved-tickets',['as' =>'solved_tickets','uses' =>'TicketController@getSolvedTickets' ]);
       Route::get('closed-tickets',['as' =>'closed_tickets','uses' =>'TicketController@getClosedTickets' ]);
+      Route::get('display',['as' =>'display','uses' =>'TicketController@displayTicket' ]);
 
 
     });

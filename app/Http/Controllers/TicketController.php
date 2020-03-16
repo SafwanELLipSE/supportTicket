@@ -13,6 +13,12 @@ use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
+    public function displayTicket(Request $request)
+    {
+      return view('tickets.display_ticket',[
+        'ticket' => Ticket::find(2)
+      ]);
+    }
     public function createTicket(Request $request)
     {
 
