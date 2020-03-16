@@ -45,5 +45,10 @@ Route::group(['middleware' => ['auth']], function () {
       Route::post('save-created',['as' =>'save_created','uses' =>'UserController@saveCreatedAgent' ]);
       Route::get('list',['as' =>'list','uses' =>'UserController@GetAgentList' ]);
     });
+    Route::group(['prefix' =>'department', 'as'=>'department.'], function(){
+        Route::get('create',['as' =>'create','uses' =>'UserController@createDepartment' ]);
+        Route::post('save-created',['as' =>'save_created','uses' =>'UserController@saveCreatedDepartment' ]);
+      });
+
 
   });

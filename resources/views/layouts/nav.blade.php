@@ -175,7 +175,7 @@
 					<span class="mr-3 d-none d-lg-block ">
 						<span class="text-gray-white"><span class="ml-2">{{Auth::user()->name}}</span></span>
 					</span>
-					<span class="avatar avatar-md brround"><img src="../assets/images/users/female/33.png" alt="Profile-img" class="avatar avatar-md brround"></span>
+					<span class="avatar avatar-md brround"><img src="{{asset('assets/images/users/pyke.jpg')}}" alt="Profile-img" class="avatar avatar-md brround"></span>
 				</a>
 				<div class="dropdown">
 					<a  class="nav-link icon siderbar-link" data-toggle="sidebar-right" data-target=".sidebar-right">
@@ -206,7 +206,7 @@
 			<div class="tab-pane active " id="tab">
 				<div class="card-body p-0">
 					<div class="header-user text-center mt-4 pb-4">
-						<span class="avatar avatar-xxl brround"><img src="../assets/images/users/female/33.png" alt="Profile-img" class="avatar avatar-xxl brround"></span>
+						<span class="avatar avatar-xxl brround"><img src="{{asset('assets/images/users/pyke.jpg')}}" alt="Profile-img" class="avatar avatar-xxl brround"></span>
 						<div class="dropdown-item text-center font-weight-semibold user h3 mb-0">{{Auth::user()->name}}</div>
 						<small>Web Designer</small>
 					</div>

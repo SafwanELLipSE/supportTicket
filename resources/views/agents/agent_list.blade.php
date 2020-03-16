@@ -30,7 +30,7 @@
                   <div class="media overflow-visible">
                     <a class="media-left" href="javascript:;"><img alt="" class="avatar avatar-md brround" src="../assets/images/users/female/2.jpg"></a>
                     <div class="media-body valign-middle">
-                      <b class="text-inverse">{{$item->name}}</b> <br><sub class="text-info">{{$item->mobile_no}}</sub>
+                      <b class="text-inverse">{{$item->name}}</b> <br> <sub class="text-info">{{$item->mobile_no}}</sub>
                     </div>
                     <div class="media-body valign-middle text-right overflow-visible">
                       <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
