@@ -27,4 +27,11 @@ class Ticket extends Model
           'Critical'
       ];
   }
+  public static function getTicketPriorityString($priority_id){
+    switch($priority_id) {
+            case 0    : return 'Minor';
+            case 1    : return 'Major';
+            case 2    : return 'Critical';
+        }
+  }
 }

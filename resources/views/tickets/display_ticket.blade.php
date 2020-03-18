@@ -4,6 +4,7 @@
 <style>
 table {
   border-collapse: collapse;
+	width: 100%;
 }
 
 table, th, td {
@@ -11,8 +12,8 @@ table, th, td {
 }
 .ticket-description{
 	border: 1px solid blue;
-
-
+	background-color: #020429;
+	border-radius: 20px;
 }
 </style>
 
@@ -50,19 +51,19 @@ table, th, td {
               <p class="text-muted"></p>
               <dl class="product-gallery-data1">
                 <dt class="text-primary">Category</dt>
-                <dd>Black</dd>
+                <dd>{{$ticket->ticketCategory->category ?? "Other"}}</dd>
               </dl>
               <dl class="product-gallery-data1">
                 <dt class="text-primary">Priority</dt>
-                <dd>High</dd>
+                <dd>{!! App\Ticket::getTicketPriorityString($ticket->priority) !!}</dd>
               </dl>
               <dl class="product-gallery-data1">
                 <dt class="text-primary">Customer</dt>
-                <dd>Russia, USA, and Europe</dd>
+                <dd>{{$ticket->customer_name}}</dd>
               </dl>
               <dl class="product-gallery-data1">
                 <dt class="text-primary">Contact</dt>
-                <dd>8801961566843</dd>
+                <dd>{{$ticket->customer_phone }}</dd>
               </dl>
 						</div>
 
