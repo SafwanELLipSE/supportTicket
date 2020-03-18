@@ -269,13 +269,14 @@ class TicketController extends Controller
 
           $toReturn = array();
           foreach ($tickets as $item) {
+                $show      =  route('ticket.display',$item->id);
                 $localArray[0] = $item->id;
                 $localArray[1] = $item->title;
                 $localArray[2] = $item->department->name;
                 $localArray[3] = $item->dept_ticket_category_id == 0 ? "Others" : $item->ticketCategory->category;
                 $localArray[4] = Ticket::getPriorityArray()[$item->priority];
                 $localArray[5] = $item->created_at->format('d.m.Y');
-                $localArray[6] = "<a class='btn btn-sm btn-primary'>view</a>";
+                $localArray[6] = "<a href='{$show}' class='btn btn-sm btn-primary'>view</a>";
               $toReturn[] = $localArray;
           }
 
