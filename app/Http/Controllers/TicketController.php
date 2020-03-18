@@ -13,10 +13,10 @@ use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
-    public function displayTicket(Request $request)
+    public function displayTicket(Request $request,$id)
     {
       return view('tickets.display_ticket',[
-        'ticket' => Ticket::find(2)
+        'ticket' => Ticket::find($id)
       ]);
     }
     public function createTicket(Request $request)
@@ -171,6 +171,7 @@ class TicketController extends Controller
 
         $toReturn = array();
         foreach ($tickets as $item) {
+              $show      =  route('ticket.display',$item->id);
               $localArray[0] = $item->id;
               $localArray[1] = $item->title;
               $localArray[2] = $item->department->name;
@@ -178,7 +179,7 @@ class TicketController extends Controller
               $localArray[4] = Ticket::getPriorityArray()[$item->priority];
               $localArray[5] = $item->user->name;;
               $localArray[6] = $item->created_at->format('d.m.Y');
-              $localArray[7] = "<a class='btn btn-sm btn-primary'>view</a>";
+              $localArray[7] = "<a href='{$show}' class='btn btn-sm btn-primary'>view</a>";
             $toReturn[] = $localArray;
         }
 

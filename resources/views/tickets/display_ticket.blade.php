@@ -1,9 +1,23 @@
 @extends('layouts.app')
 
 @section('additional_headers')
+<style>
+table {
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid white;
+}
+.ticket-description{
+	border: 1px solid blue;
+
+
+}
+</style>
 
 <!-- WYSIWYG Editor css -->
-<link href="../assets/plugins/wysiwyag/richtext.css" rel="stylesheet" />
+<!-- <link href="../assets/plugins/wysiwyag/richtext.css" rel="stylesheet" /> -->
 <!-- side app-->
 
 @endsection
@@ -29,25 +43,25 @@
           <div class="card">
             <div class="product-gallery-data mb-3">
               <h3 class="mb-3 font-weight-semibold">{{$ticket->title}}</h3>
-              <div class="mb-3" style="1px solid white">
+              <div class="mb-3">
                 <span class="text-primary ml-2"><i class="fa fa-info-circle"></i>{{$ticket->department->name}}</span>
               </div>
-              <h6 class="font-weight-semibold mt-3">{!! $ticket->description !!}</h6>
+              <div class="text-white mt-3 ml-2 p-2 ticket-description">{!!  $ticket->description  !!}</div>
               <p class="text-muted"></p>
               <dl class="product-gallery-data1">
-                <dt>Category</dt>
+                <dt class="text-primary">Category</dt>
                 <dd>Black</dd>
               </dl>
               <dl class="product-gallery-data1">
-                <dt>Priority</dt>
+                <dt class="text-primary">Priority</dt>
                 <dd>High</dd>
               </dl>
               <dl class="product-gallery-data1">
-                <dt>Customer</dt>
+                <dt class="text-primary">Customer</dt>
                 <dd>Russia, USA, and Europe</dd>
               </dl>
               <dl class="product-gallery-data1">
-                <dt>Contact</dt>
+                <dt class="text-primary">Contact</dt>
                 <dd>8801961566843</dd>
               </dl>
 						</div>
@@ -95,7 +109,7 @@
 
 @section('additional_scripts')
 <!-- WYSIWYG Editor js -->
-<script src="../assets/plugins/wysiwyag/jquery.richtext.js"></script>
+<!-- <script src="../assets/plugins/wysiwyag/jquery.richtext.js"></script>
 <script src="../assets/plugins/wysiwyag/richText1.js"></script>
-<script src="{{ asset('js/create_ticket.js') }}"></script>
+<script src="{{ asset('js/create_ticket.js') }}"></script> -->
 @endsection
