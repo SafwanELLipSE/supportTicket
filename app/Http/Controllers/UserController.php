@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Department;
 use App\Agent_department;
 use App\User;
+use App\Ticket;
 use App\Dept_ticket_category;
+use App\Department_employee;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -119,4 +121,73 @@ class UserController extends Controller
         Alert::success('Success', 'Successfully Created');
         return redirect()->route('department.create');
   }
+
+  public function getDepartmentList(Request $request)
+  {
+      $departments = Department::where('is_active',1)->get();
+      return view('departments.department_list',[
+        'departments' => $departments
+      ]);
+  }
+
+  public function detailDepartment(Request $request,$id)
+  {
+    $departmentId = Department::find($id)->id;
+    $tickets = Ticket::where('department_id',$departmentId)
+                      ->orderBy('id','DESC')
+                      ->limit(5)
+                      ->get();
+    $employees = Department_employee::where('department_id',$departmentId)
+                      ->orderBy('id','DESC')
+                      ->limit(5)
+                      ->get();
+
+    return view('departments.detail_department',[
+      'department' => Department::find($id),
+      'tickets' => $tickets,
+      'employees' => $employees,
+    ]);
+  }
+
+  public function editDepartment(Request $request,$id)
+  {
+    $departmentId = Department::find($id)->id;
+    $tickets = Ticket::where('department_id',$departmentId)->get();
+    $employees = Department_employee::where('department_id',$departmentId)->get();
+    return view('departments.department_edit',[
+      'department' => Department::find($id),
+      'tickets' => $tickets,
+      'employees' => $employees,
+    ]);
+  }
+  public function updateDepartment(Request $request){
+
+      $validator = Validator::make($request->all(), [
+            'department_name' => 'required|min:3',
+            'address'   => 'required',
+            'user_name' => 'required|min:3',
+            'email'     => 'required|unique:users,email',
+            'mobile'    => 'required|min:11|max:13',
+      ]);
+
+      if ($validator->fails()){
+          alert()->warning('Error occured',$validator->errors()->all()[0]);
+          return redirect()->back()->withInput()->withErrors($validator);
+        }
+
+      User::where('active',1)->update([
+          'name'     => $request->post('user_name'),
+          'email'    => $request->post('email'),
+          'mobile_no'=> $request->post('mobile')
+      ]);
+
+      Department::where('active',1)->update([
+            'name'         => $request->post('department_name'),
+            'address'      => $request->post('address')
+      ]);
+
+      Alert::success('Success', 'Successfully Updated');
+      return redirect()->route('department.detail_department');
+  }
+
 }

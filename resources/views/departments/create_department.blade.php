@@ -26,7 +26,7 @@
 										<h3 class="card-title">Add New Department</h3>
 									</div>
 									<div class="card-body">
-										<form action="{{ route('department.save_created') }}" method="POST" id="form" >
+										<form action="{{ route('department.save_created') }}" method="POST" id="form">
 												@csrf
 											<div class="list-group">
 												<div class="list-group-item py-3" data-acc-step>

@@ -6,6 +6,8 @@ use App\Department;
 use App\Agent_department;
 use App\Ticket;
 use App\User;
+use App\Ticket_comment;
+
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -13,10 +15,35 @@ use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
+    public function saveCommentsOnTicket(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(),[
+              'comments'  => 'required|min:3',
+          ]);
+
+        if($validator->fails()){
+            alert()->warning('Error occured',$validator->errors()->all()[0]);
+            return redirect()->back()->withInput()->withErrors($validator);
+          }
+
+          $comments = new Ticket_comment();
+          $comments->user_id = Auth::user()->id;
+          $comments->ticket_id = Ticket::find($id)->id;
+          $comments->comment = $request->post('comments');
+          $comments->save();
+
+          Alert::success('Success', 'successfully added');
+          return redirect()->route('ticket.display',$comments->ticket_id);
+    }
+
     public function displayTicket(Request $request,$id)
     {
+      $ticketId = Ticket::find($id)->id;
+      $comments = Ticket_comment::where('ticket_id',$ticketId)->get();
+
       return view('tickets.display_ticket',[
-        'ticket' => Ticket::find($id)
+        'ticket' => Ticket::find($id),
+        'comments' => $comments
       ]);
     }
     public function createTicket(Request $request)

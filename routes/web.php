@@ -33,21 +33,34 @@ Route::group(['middleware' => ['auth']], function () {
       Route::get('solved-tickets',['as' =>'solved_tickets','uses' =>'TicketController@getSolvedTickets' ]);
       Route::get('closed-tickets',['as' =>'closed_tickets','uses' =>'TicketController@getClosedTickets' ]);
       Route::get('display/{id}', ['as' => 'display','uses' => 'TicketController@displayTicket']);
-
+      Route::post('save-comments/{id}',['as' =>'save_comments','uses' =>'TicketController@saveCommentsOnTicket']);
 
     });
 
     Route::group(['prefix' =>'notification', 'as'=>'notification.'], function(){
       Route::get('/',['as' =>'index','uses' =>'NotificationController@index' ]);
     });
+
     Route::group(['prefix' =>'agent', 'as'=>'agent.'], function(){
       Route::get('create',['as' =>'create','uses' =>'UserController@createAgent' ]);
       Route::post('save-created',['as' =>'save_created','uses' =>'UserController@saveCreatedAgent' ]);
       Route::get('list',['as' =>'list','uses' =>'UserController@GetAgentList' ]);
     });
+
     Route::group(['prefix' =>'department', 'as'=>'department.'], function(){
         Route::get('create',['as' =>'create','uses' =>'UserController@createDepartment' ]);
         Route::post('save-created',['as' =>'save_created','uses' =>'UserController@saveCreatedDepartment' ]);
+        Route::get('all-departments',['as' =>'all_departments','uses' =>'UserController@getDepartmentList' ]);
+        Route::get('details/{id}',['as' =>'details','uses' =>'UserController@detailDepartment' ]);
+        Route::get('edit/{id}',['as' =>'edit','uses' =>'UserController@editDepartment' ]);
+        Route::put('update',['as' =>'update','uses' =>'UserController@updateDepartment' ]);
+      });
+
+    Route::group(['prefix' =>'employee', 'as'=>'employee.'], function(){
+        Route::get('create',['as' =>'create','uses' =>'EmployeeController@createEmployee' ]);
+        Route::post('save-created',['as' =>'save_created','uses' =>'EmployeeController@saveCreatedEmployee' ]);
+        Route::get('all-employees',['as' =>'all_employees','uses' =>'EmployeeController@getEmployeeList' ]);
+        Route::get('details/{id}',['as' =>'details','uses' =>'EmployeeController@detailEmployee' ]);
       });
 
 

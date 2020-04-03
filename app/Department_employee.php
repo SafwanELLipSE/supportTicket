@@ -4,19 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Department extends Model
+class Department_employee extends Model
 {
   const ACTIVE = 1;
   const INACTIVE = 0;
 
-  public function user()
+  public function department()
   {
-    return $this->belongsTo(User::class);
-  }
-
-  public function ticketCategories(){
-
-    return $this->hasMany(Dept_ticket_category::class);
+    return $this->belongsTo(Department::class);
   }
 
   public static function getStatus($active_id){
@@ -25,4 +20,5 @@ class Department extends Model
             case 1    : return "<p class='text-success'> Active </p>";
         }
   }
+
 }

@@ -29,10 +29,11 @@
 				<div class="row row-demo-list">
 					<div id="parentVerticalTab" class="col-md-12">
 						<ul class="resp-tabs-list hor_1">
-							<li class="resp-tab-item hor_1 {{Request::is('home') || Request::is('home/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-device-desktop"></i></li>
-							<li class="resp-tab-item hor_1 {{Request::is('ticket') || Request::is('ticket/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-keyboard"></i></li>
-              <li class="resp-tab-item hor_1 {{Request::is('department') || Request::is('department/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-folder"></i></li>
+							<li class="resp-tab-item hor_1 {{Request::is('home') || Request::is('home/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-device-desktop" data-toggle="tooltip" title="si-user-follow"></i></li>
+							<li class="resp-tab-item hor_1 {{Request::is('ticket') || Request::is('ticket/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-keyboard" data-toggle="tooltip" title="si-user-follow"></i></li>
+              <li class="resp-tab-item hor_1 {{Request::is('department') || Request::is('department/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-folder"data-toggle="tooltip" title="si-user-follow"></i></li>
 							<li class="resp-tab-item hor_1 {{Request::is('agent') || Request::is('agent/*') ? 'resp-tab-active': ''}}"><i class="si si-user-follow" data-toggle="tooltip" title="si-user-follow"></i></li>
+							<li class="resp-tab-item hor_1 {{Request::is('employee') || Request::is('employee/*') ? 'resp-tab-active': ''}}"><i class="si si-people" data-toggle="tooltip" title="si-user-follow"></i></li>
 						</ul>
 						<div class="resp-tabs-container hor_1">
 							<div class="{{Request::is('home') || Request::is('home/*') ? 'resp-tab-content-active': ''}}">
@@ -62,7 +63,7 @@
                   <div class="col-md-12">
                     <h4 class="font-weight-semibold">Depatrments</h4>
                     <a class="slide-item" href="{{route('department.create')}}">Create Department</a>
-                    <a class="slide-item" href="index2.html">Department List </a>
+                    <a class="slide-item" href="{{route('department.all_departments')}}">Department List </a>
                   </div>
                 </div>
               </div>
@@ -75,6 +76,15 @@
                   </div>
                 </div>
               </div>
+							<div class="{{Request::is('employee') || Request::is('employee/*') ? 'resp-tab-content-active': ''}}">
+								<div class="row">
+									<div class="col-md-12">
+										<h4 class="font-weight-semibold">Employees</h4>
+										<a class="slide-item" href="{{route('employee.create')}}">Create Employees</a>
+										<a class="slide-item" href="{{route('employee.all_employees')}}">Employee List </a>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div><!-- col-4 -->

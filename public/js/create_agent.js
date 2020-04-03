@@ -54,7 +54,6 @@ function validateEmail(email) {
 
 function verifySecondSepts()
 {
-
 	if(validateMobileNumber($(".mobile").val()) == false){
 		notif({
 			msg: "<b>error:</b> Please enter a valid mobile number",

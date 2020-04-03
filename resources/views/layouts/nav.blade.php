@@ -3,7 +3,7 @@
 	<div class="container-fluid">
 		<div class="d-flex">
 			<a class="header-brand" href="index.html">
-				<img src="../assets/images/brand/service_chai.png" class="header-brand-img main-logo" alt="service chai logo" style=" max-width: 60%;">
+				<img src="{{ asset('assets/images/brand/service_chai.png') }}" class="header-brand-img main-logo" alt="service chai logo" style=" max-width: 60%;">
 				<!-- <img src="../assets/images/brand/icon.png" class="header-brand-img icon-logo" alt="Hogo logo"> -->
 			</a><!-- logo-->
 			<a aria-label="Hide Sidebar" class="app-sidebar__toggle" data-toggle="sidebar" href="#"></a>
@@ -213,10 +213,10 @@
           <a class="dropdown-item  border-top" href="{{route('ticket.create')}}">
             <i class="dropdown-icon mdi mdi-account-outline "></i> Create Ticket
           </a>
-					<a class="dropdown-item  border-top" href="#">
+					<a class="dropdown-item  border-top" href="{{route('agent.create')}}">
 						<i class="dropdown-icon mdi mdi-account-outline "></i> Create Agents
 					</a>
-					<a class="dropdown-item border-top" href="#">
+					<a class="dropdown-item border-top" href="{{route('department.create')}}">
 						<i class="dropdown-icon  mdi mdi-account-plus"></i> Create Department
 					</a>
 					<div class="card-body border-top">

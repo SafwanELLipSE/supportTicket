@@ -14,7 +14,7 @@
 	<!-- page-header -->
 	<div class="page-header">
 		<ol class="breadcrumb"><!-- breadcrumb -->
-			<li class="breadcrumb-item"><a href="#">Home</a></li>
+			<li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
 			<li class="breadcrumb-item active" aria-current="page">Create Ticket</li>
 		</ol><!-- End breadcrumb -->
 	</div>
@@ -64,7 +64,7 @@
 	            </div>
 							<div class="col-lg-4 col-md-12">
 								<div class="form-group">
-			            <label class="form-label">Conatct Number</label>
+			            <label class="form-label">Contact Number</label>
 			            <input type="number" class="form-control" id="exampleInputnumber" placeholder="ph number" value="{{ old('phone') }}" name="phone">
 			          </div>
 	            </div>

@@ -18,28 +18,21 @@
             }
     }
 	}
-	$( "#form" ).accWizard(options);
+$( "#form" ).accWizard(options);
 
 
 })(jQuery);
 
 function verifyFirstSepts()
 {
-  if($(".department_name").val().length < 3){
+  if($(".department").val() == 0){
 		notif({
-			msg: "<b>error:</b> Department Name should have minimum characters",
+			msg: "<b>error:</b> Department should be Selected",
 			type: "error"
 		});
 			return false;
 	}
 
-  if($(".address").val() == ""){
-    notif({
-      msg: "<b>error:</b> Address is required",
-      type: "error"
-    });
-    return false;
-  }
 
 	return true;
 }
@@ -71,22 +64,6 @@ function verifySecondSepts()
     return false;
   }
 
-  if($(".password").val().length < 5){
-    notif({
-      msg: "<b>error:</b> Your password must be at least 5 characters long",
-      type: "error"
-    });
-      return false;
-  }
-
-  if($(".password").val() != $(".confirm_password").val()){
-    notif({
-      msg: "<b>error:</b> password and confirm password does not match",
-      type: "error"
-    });
-      return false;
-  }
-
 	return true;
 }
 
@@ -107,26 +84,3 @@ function validateMobileNumber(mobileNumber)
 	  	return false;
      }
 }
-$(document).ready(function(){
-		 var i=1;
-		 $('#add').click(function(){
-					i++;
-					$('#dynamic_field').append('<div class="row"><div class="col-md-6 col-sm-12"><div id="row'+i+'" class="d-flex my-1"><input type="text" name="category[]" placeholder="Enter your Category" class="form-control name_list" /><a type="button" name="remove" id="'+i+'" class="btn btn-danger btn_remove ml-1 px-2" style="border-radius: 50%"><i class="fa fa-trash"></i></a></div></div></div>');
-		 });
-		 $(document).on('click', '.btn_remove', function(){
-					var button_id = $(this).attr("id");
-					$('#row'+button_id+'').remove();
-		 });
-		 $('#submit').click(function(){
-					$.ajax({
-							 url:"name.php",
-							 method:"POST",
-							 data:$('#add_name').serialize(),
-							 success:function(data)
-							 {
-										alert(data);
-										$('#add_name')[0].reset();
-							 }
-					});
-		 });
-});

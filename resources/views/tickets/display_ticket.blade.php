@@ -29,7 +29,7 @@ table, th, td {
 	<!-- page-header -->
 	<div class="page-header">
 		<ol class="breadcrumb"><!-- breadcrumb -->
-			<li class="breadcrumb-item"><a href="#">Home</a></li>
+			<li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
 			<li class="breadcrumb-item active" aria-current="page">Display Ticket</li>
 		</ol><!-- End breadcrumb -->
 	</div>
@@ -67,10 +67,11 @@ table, th, td {
               </dl>
 						</div>
 
-            <form class="mt ng-pristine ng-valid" action="#">
+            <form action="{{ route('ticket.save_comments',$ticket->id) }}" method="POST" enctype="multipart/form-data" class="mt ng-pristine ng-valid">
+	               @csrf
               <div class="form-group mb-0">
                 <label class="sr-only" for="new-event">New event</label>
-                <textarea class="form-control " id="new-event" placeholder="Comment something..." rows="3"></textarea>
+                <textarea class="form-control" id="comments" name="comments" placeholder="Comment something..." rows="3"></textarea>
               </div>
               <div class="btn-toolbar pull-right">
                 <!-- <div class=""><a href="#" class="btn btn-sm btn-primary mr-2"><i class="fa fa-camera fa-lg"></i></a> <a href="#" class="btn btn-sm btn-info"><i class="fa fa-map-marker fa-lg"></i></a>
@@ -80,15 +81,16 @@ table, th, td {
             </form>
           </div>
           <div class="activities">
+            @foreach($comments as $item)
             <section class="event card border">
               <div class="d-flex">
                 <span class="thumb-sm  pull-left mr-sm"><img class="avatar avatar-md brround" src="../assets/images/users/female/18.jpg" alt="..."></span>
                 <div>
-                  <h4 class="event-heading"><a href="#">John doe</a><span><small class="text-muted"><a href="#">@nils</a></small></span></h4>
-                  <p class="text-xs text-muted">February 22, 2014 at 01:59 PM</p>
+                  <h4 class="event-heading"><a href="#">{{ $item->user->name }}</a><span><small class="text-muted"><a href="#">{{ $item->user->email }}</a></small></span></h4>
+                  <p class="text-xs text-muted">{{ $item->created_at->format('M d, Y') }} at {{ $item->created_at->format('h:i A') }}</p>
                 </div>
               </div>
-              <p class="text-sm ">There is no such thing as maturity. There is instead an ever-evolving process of maturing. Because when there is a maturity, there is ...</p>
+              <p class="text-sm ">{{ $item->comment }}</p>
               <div class="border-top post-comments">
                 <ul class="post-links mb-0 pt-2 pl-2 pr-2">
                   <li><a href="#">1 hour</a>
@@ -100,6 +102,7 @@ table, th, td {
                 </ul>
               </div>
             </section>
+           @endforeach
           </div>
         </div>
     </div>
