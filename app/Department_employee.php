@@ -16,8 +16,8 @@ class Department_employee extends Model
 
   public static function getStatus($active_id){
     switch($active_id) {
-            case 0    : return "<p class='text-danger'> Inactive </p>";
-            case 1    : return "<p class='text-success'> Active </p>";
+            case 0    : return "<span class='text-danger'> Inactive </span>";
+            case 1    : return "<span class='text-success'> Active </span>";
         }
   }
 

@@ -20,6 +20,9 @@ table, th, td {
 <!-- WYSIWYG Editor css -->
 <!-- <link href="../assets/plugins/wysiwyag/richtext.css" rel="stylesheet" /> -->
 <!-- side app-->
+<link href="{{asset('assets/plugins/notify/css/notifIt.css')}}" rel="stylesheet" />
+<link href="{{asset('assets/plugins/select2/select2.min-dark.css')}}" rel="stylesheet" />
+<link rel="stylesheet" href="{{asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
 
 @endsection
 
@@ -50,8 +53,17 @@ table, th, td {
               <div class="text-white mt-3 ml-2 p-2 ticket-description">{!!  $ticket->description  !!}</div>
               <p class="text-muted"></p>
               <dl class="product-gallery-data1">
-                <dt class="text-primary">Category</dt>
-                <dd>{{$ticket->ticketCategory->category ?? "Other"}}</dd>
+                <div class="row">
+                  <div class="col-md-6">
+                    <dt class="text-primary">Category</dt>
+                    <dd>{{$ticket->ticketCategory->category ?? "Other"}}</dd>
+                  </div>
+                  <div class="col-md-6">
+                    <a href="" data-toggle="modal"  data-target="#btnAssign" class="btn btn-pill btn-success btn-sm float-right">
+                      <i class="fas fa-pencil-alt" aria-hidden="true"></i> Assign
+                    </a>
+                  </div>
+                </div>
               </dl>
               <dl class="product-gallery-data1">
                 <dt class="text-primary">Priority</dt>
@@ -109,11 +121,93 @@ table, th, td {
    </div>
 </div>
 <!--End side app-->
+
+<div class="modal fade" id="btnAssign" aria-labelledby="btnAssign" aria-hidden="true" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Add New Category</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form action="{{ route('ticket.assign_ticket',$ticket->id) }}" id="assignTicketForm" method="POST" enctype="multipart/form-data">
+					@csrf
+          <div class="form-group">
+            <label class="form-label">Assign Employee:</label>
+            <div class="row">
+              <div class="col-md-10">
+                <select class="select2" data-placeholder="Choose Employees" name="employees[]" multiple style="width:100% !important">
+                  @foreach($employees as $employee)
+                    <option value="{{$employee->id}}">{{$employee->name}}</option>
+                  @endforeach
+                </select>
+              </div>
+              <div class="col-md-2">
+                <button type="submit" class="btn btn-pill btn-success"><i class="fa fa-check" aria-hidden="true"></i> Pick</button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div class="container">
+          <div class="row">
+            <div class="card">
+              <div class="card-header">
+                  <h3 class="card-title">Departmental Employees</h3>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="employee_assign_table" class="table table-striped table-bordered text-nowrap w-100">
+                    <thead>
+                      <tr>
+                        <th class="wd-20p">#ID</th>
+                        <th class="wd-20p">Name</th>
+                        <th class="wd-15p">Email</th>
+                        <th class="wd-10p">Mobile No.</th>
+                        <th class="wd-10p">Status</th>
+                        <th class="wd-10p">View</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach($assigned as $item)
+                        <tr>
+                            <th>{{ $item->id }} </th>
+                            <th>{{ $item->employee->name }}</th>
+                            <th>{{ $item->employee->email }} </th>
+                            <th>{{ $item->employee->mobile_no }}</th>
+                            <th>{!! App\Department_employee_ticket::getStatus($item->is_active) !!}</th>
+                            <th><a href="#" class="btn btn-sm btn-primary">view</a> </th>
+                        </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div><!-- row end -->
+        </div>
+
+			</div>
+		</div>
+	</div>
+</div>
+
 @endsection
 
 @section('additional_scripts')
 <!-- WYSIWYG Editor js -->
-<!-- <script src="../assets/plugins/wysiwyag/jquery.richtext.js"></script>
-<script src="../assets/plugins/wysiwyag/richText1.js"></script>
-<script src="{{ asset('js/create_ticket.js') }}"></script> -->
+<!-- <<script src="../assets/plugins/wysiwyag/jquery.richtext.js"></script>
+<script src="../assets/plugins/wysiwyag/richText1.js"></script> -->
+<script src="{{ asset('assets/plugins/accordion-Wizard-Form/jquery.accordion-wizard.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/notify/js/notifIt.js') }}"></script>
+<script src="{{ asset('assets/plugins/select2/select2.full.min.js') }}"></script>
+
+<script>
+$('.select2').select2({
+minimumResultsForSearch: Infinity
+});
+</script>
+
 @endsection

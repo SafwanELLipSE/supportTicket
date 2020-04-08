@@ -24,40 +24,40 @@
 						<div class="card"> <div class="card-header">
 								<h3 class="card-title">Edit Department Profile</h3>
 							</div>
-								<form class="{{ route('department.update') }}" method="POST" id="form" enctype="multipart/form-data">
+								<form action="{{ route('department.save_edit') }}" method="POST" enctype="multipart/form-data">
 									@csrf
-									@method('PUT')
 									<div class="card-body">
 										<div class="form-group">
 											<label for="exampleInputname">Department Name</label>
-											<input type="text" class="form-control" id="exampleInputname" value="{{$department->name}}" placeholder="Department Name" name="department_name">
+											<input type="hidden" name= "department_id" value="{{$department->id}}">
+											<input type="text" class="form-control" id="department_name" value="{{$department->name}}" placeholder="Department Name" name="department_name">
 										</div>
 										<div class="row">
 											<div class="col-lg-6 col-md-12">
 												<div class="form-group">
 													<label for="exampleInputEmail1">User Name</label>
-													<input type="text" class="form-control" id="exampleInputEmail1" value="{{ $department->user->name }}" placeholder="User Name" name="user_name">
+													<input type="text" class="form-control" id="user_name" value="{{ $department->user->name }}" placeholder="User Name" name="user_name">
 												</div>
 											</div>
 											<div class="col-lg-6 col-md-12">
 												<div class="form-group">
 													<label for="exampleInputnumber">Conatct Number</label>
-													<input type="number" class="form-control" id="exampleInputnumber" value="{{ $department->user->mobile_no }}" placeholder="Mobile Number" name="mobile">
+													<input type="number" class="form-control" id="mobile" value="{{ $department->user->mobile_no }}" placeholder="Mobile Number" name="mobile">
 												</div>
 											</div>
 										</div>
 										<div class="form-group">
 											<label for="exampleInputEmail1">Email address</label>
-											<input type="email" class="form-control" id="exampleInputEmail1" value="{{ $department->user->email }}" placeholder="Email Address" name="email">
+											<input type="email" class="form-control" id="email" value="{{ $department->user->email }}" placeholder="Email Address" name="email">
 										</div>
 										<div class="form-group">
 											<label for="exampleInputname1">Address</label>
-											<input type="text" class="form-control" id="exampleInputname1" value="{{ $department->address }}" placeholder="Address" name="address">
+											<input type="text" class="form-control" id="address" value="{{ $department->address }}" placeholder="Address" name="address">
 										</div>
 										</div>
 										<div class="card-footer text-right">
-											<a href="#" class="btn btn-danger mt-1">Cancel</a>
-											<button type="submit" class="btn btn-success mt-1">Save</button>
+											<a href="{{ route('department.details',$department->id) }}" class="btn btn-danger mt-1">Cancel</a>
+											<button type="submit" class="btn btn-success mt-1">Update</button>
 										</div>
 								</form>
 							</div>

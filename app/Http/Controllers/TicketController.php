@@ -7,6 +7,9 @@ use App\Agent_department;
 use App\Ticket;
 use App\User;
 use App\Ticket_comment;
+use App\Department_employee;
+use App\Department_employee_ticket;
+
 
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +18,33 @@ use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
+
+    public function assignTicket(Request $request, $id)
+    {
+      $ticketId = Ticket::find($id)->id;
+      $validator = Validator::make($request->all(), [
+            'employees'      => 'required',
+        ]);
+
+        if ($validator->fails()){
+            alert()->warning('Error occured',$validator->errors()->all()[0]);
+            return redirect()->back()->withInput()->withErrors($validator);
+          }
+
+          if(count($request->post('employees'))){
+            foreach ($request->post('employees') as $item) {
+              $assign_ticket = new Department_employee_ticket();
+              $assign_ticket->ticket_id = $ticketId;
+              $assign_ticket->dept_employee_id = $item;
+              $assign_ticket->created_by = Auth::user()->id;
+              $assign_ticket->is_active = Department_employee_ticket::ACTIVE;
+              $assign_ticket->save();
+            }
+          }
+
+          Alert::success('Success', 'Successfully Created');
+          return redirect()->route('ticket.display',$ticketId);
+    }
     public function saveCommentsOnTicket(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
@@ -40,10 +70,14 @@ class TicketController extends Controller
     {
       $ticketId = Ticket::find($id)->id;
       $comments = Ticket_comment::where('ticket_id',$ticketId)->get();
-
+      $departmentId = Ticket::find($id)->department_id;
+      $employees = Department_employee::where('department_id',$departmentId)->get();
+      $assigned = Department_employee_ticket::where('ticket_id',$ticketId)->get();
       return view('tickets.display_ticket',[
-        'ticket' => Ticket::find($id),
-        'comments' => $comments
+        'ticket'   => Ticket::find($id),
+        'comments' => $comments,
+        'employees'=> $employees,
+        'assigned' => $assigned
       ]);
     }
     public function createTicket(Request $request)

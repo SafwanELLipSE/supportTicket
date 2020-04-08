@@ -5,6 +5,14 @@
 		<link href="{{asset('assets/plugins/select2/select2.min-dark.css')}}" rel="stylesheet" />
 		<link rel="stylesheet" href="{{asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
 
+
+		<style media="screen">
+					.button-style{
+						background-color:#fff;
+						border-radius: 50%;
+						border:2px solid #FFF;
+					}
+		</style>
 @endsection
 
 @section('content')
@@ -91,9 +99,9 @@
 																	<label class="form-label">Categories:</label>
 																		<div id="dynamic_field">
 																			<div class="row">
-																				<div class="col-md-6 col-sm-12 d-flex" style="width:80%">
+																				<div class="col-md-6 col-sm-12 d-flex">
 																					<input type="text" name="category[]" placeholder="Enter your Category" class="form-control name_list"/>
-																					<div type="button" name="add" id="add" class="btn btn-sm btn-success ml-1">Add</div>
+																					<a name="add" id="add" class="ml-1 my-2"><i class="fa fa-plus-circle text-success button-style"></i></a>
 																				</div>
 																			</div>
 																		</div>

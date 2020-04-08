@@ -149,6 +149,31 @@ class UserController extends Controller
     ]);
   }
 
+
+  public function addCategoryDepartment(Request $request, $id)
+  {
+      $departmentId = Department::find($id)->id;
+
+      $validator = Validator::make($request->all(), [
+          'category' => 'required|min:3',
+      ]);
+      if ($validator->fails()){
+          alert()->warning('Error occured',$validator->errors()->all()[0]);
+          return redirect()->back()->withInput()->withErrors($validator);
+        }
+
+        $category = new Dept_ticket_category();
+        $category->department_id = $departmentId;
+        $category->category = $request->post('category');
+        $category->is_active = Dept_ticket_category::ACTIVE;
+        $category->save();
+
+        Alert::success('Success', 'Successfully Created');
+        return redirect()->route('department.department_list');
+  }
+
+
+
   public function editDepartment(Request $request,$id)
   {
     $departmentId = Department::find($id)->id;
@@ -163,6 +188,7 @@ class UserController extends Controller
   public function updateDepartment(Request $request){
 
       $validator = Validator::make($request->all(), [
+            'department_id' => 'required',
             'department_name' => 'required|min:3',
             'address'   => 'required',
             'user_name' => 'required|min:3',
@@ -170,24 +196,29 @@ class UserController extends Controller
             'mobile'    => 'required|min:11|max:13',
       ]);
 
+
+
       if ($validator->fails()){
           alert()->warning('Error occured',$validator->errors()->all()[0]);
           return redirect()->back()->withInput()->withErrors($validator);
         }
 
-      User::where('active',1)->update([
-          'name'     => $request->post('user_name'),
-          'email'    => $request->post('email'),
-          'mobile_no'=> $request->post('mobile')
-      ]);
+        $department = Department::find($request->post('department_id'));
+        $department->name = $request->post('department_name');
+        $department->address = $request->post('address');
+        $department->save();
 
-      Department::where('active',1)->update([
-            'name'         => $request->post('department_name'),
-            'address'      => $request->post('address')
-      ]);
+        // I will do this commented section later
+
+        // $user = Department::find($id)->user_id;
+        // $user->name = $request->post('user_name');
+        // $user->email = $request->post('email');
+        // $user->mobile_no = $request->post('mobile');
+        // $user->save();
 
       Alert::success('Success', 'Successfully Updated');
-      return redirect()->route('department.detail_department');
+      return redirect()->route('department.edit',$department->id);
   }
+
 
 }

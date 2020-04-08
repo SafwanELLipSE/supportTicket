@@ -34,7 +34,7 @@ Route::group(['middleware' => ['auth']], function () {
       Route::get('closed-tickets',['as' =>'closed_tickets','uses' =>'TicketController@getClosedTickets' ]);
       Route::get('display/{id}', ['as' => 'display','uses' => 'TicketController@displayTicket']);
       Route::post('save-comments/{id}',['as' =>'save_comments','uses' =>'TicketController@saveCommentsOnTicket']);
-
+      Route::post('assign-ticket/{id}',['as' =>'assign_ticket','uses' =>'TicketController@assignTicket']);
     });
 
     Route::group(['prefix' =>'notification', 'as'=>'notification.'], function(){
@@ -52,8 +52,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('save-created',['as' =>'save_created','uses' =>'UserController@saveCreatedDepartment' ]);
         Route::get('all-departments',['as' =>'all_departments','uses' =>'UserController@getDepartmentList' ]);
         Route::get('details/{id}',['as' =>'details','uses' =>'UserController@detailDepartment' ]);
+        Route::get('addCategory/{id}',['as' =>'addCategory','uses' =>'UserController@addCategoryDepartment' ]);
         Route::get('edit/{id}',['as' =>'edit','uses' =>'UserController@editDepartment' ]);
-        Route::put('update',['as' =>'update','uses' =>'UserController@updateDepartment' ]);
+        Route::post('save-edit',['as' =>'save_edit','uses' =>'UserController@updateDepartment']);
       });
 
     Route::group(['prefix' =>'employee', 'as'=>'employee.'], function(){
