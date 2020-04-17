@@ -45,6 +45,12 @@ Route::group(['middleware' => ['auth']], function () {
       Route::get('create',['as' =>'create','uses' =>'UserController@createAgent' ]);
       Route::post('save-created',['as' =>'save_created','uses' =>'UserController@saveCreatedAgent' ]);
       Route::get('list',['as' =>'list','uses' =>'UserController@GetAgentList' ]);
+      Route::get('profile/{id}',['as' =>'profile','uses' =>'UserController@agentProfile' ]);
+      Route::post('assign-department',['as' =>'assign_department','uses' =>'UserController@assignDepartmentToEmployee']);
+      Route::post('inactive',['as' =>'inactive','uses' =>'UserController@inactiveAgentDepartment']);
+      Route::get('edit/{id}',['as' =>'edit','uses' =>'UserController@editAgent' ]);
+      Route::post('save-edit',['as' =>'save_edit','uses' =>'UserController@updateAgent']);
+      Route::post('active',['as' =>'active','uses' =>'UserController@activeAgentDepartment']);
     });
 
     Route::group(['prefix' =>'department', 'as'=>'department.'], function(){
@@ -52,7 +58,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('save-created',['as' =>'save_created','uses' =>'UserController@saveCreatedDepartment' ]);
         Route::get('all-departments',['as' =>'all_departments','uses' =>'UserController@getDepartmentList' ]);
         Route::get('details/{id}',['as' =>'details','uses' =>'UserController@detailDepartment' ]);
-        Route::get('addCategory/{id}',['as' =>'addCategory','uses' =>'UserController@addCategoryDepartment' ]);
+        Route::post('add-category',['as' =>'add_category','uses' =>'UserController@addCategoryDepartment' ]);
         Route::get('edit/{id}',['as' =>'edit','uses' =>'UserController@editDepartment' ]);
         Route::post('save-edit',['as' =>'save_edit','uses' =>'UserController@updateDepartment']);
       });

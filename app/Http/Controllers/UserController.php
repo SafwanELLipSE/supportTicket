@@ -71,6 +71,123 @@ class UserController extends Controller
         'agents' => $agents
       ]);
     }
+
+    public function agentProfile(Request $request, $id){
+        $agentId = User::find($id)->id;
+        $agentDepartments = Agent_department::where('user_id',$agentId)->where('is_active',1)->get();
+        $agentDepartmentIds = Agent_department::where('user_id',$agentId)->where('is_active',1)->pluck('department_id');
+        $tickets = Ticket::where('department_id',$agentDepartmentIds)->get();
+        $departments = Department::where('is_active',1)->get();
+        return view("agents.agent_profile",[
+          'agent' => User::find($id),
+          'agentDepartments' => $agentDepartments,
+          'departments' => $departments,
+          'tickets' => $tickets,
+        ]);
+    }
+    public function assignDepartmentToEmployee(Request $request){
+
+      $validator = Validator::make($request->all(), [
+            'departments'  => 'required',
+            'agent_id'     => 'required',
+        ]);
+
+        if ($validator->fails()){
+            alert()->warning('Error occured',$validator->errors()->all()[0]);
+            return redirect()->back()->withInput()->withErrors($validator);
+          }
+
+          $agentId = $request->post('agent_id');
+          if(count($request->post('departments'))){
+            foreach ($request->post('departments') as $item) {
+              $assign_department = new Agent_department();
+              $assign_department->user_id = $agentId;
+              $assign_department->department_id = $item;
+              $assign_department->created_by = Auth::user()->id;
+              $assign_department->is_active = Agent_department::ACTIVE;
+              $assign_department->save();
+            }
+          }
+
+          Alert::success('Success', 'Successfully Created');
+          return redirect()->route('agent.profile',$agentId);
+    }
+
+    public function editAgent(Request $request, $id)
+    {
+        $agentId = User::find($id)->id;
+        $agentDepartments = Agent_department::where('user_id',$agentId)->where('is_active',0)->get();
+        return view('agents.agent_edit',[
+          'agent' => User::find($id),
+          'agentDepartments' => $agentDepartments,
+        ]);
+    }
+    public function updateAgent(Request $request){
+      $validator = Validator::make($request->all(), [
+            'user_name' => 'required|min:3',
+            'email'     => 'required|email',
+            'mobile'    => 'required|min:11|max:13',
+            'agent_id'  => 'required',
+      ]);
+
+      if ($validator->fails()){
+          alert()->warning('Error occured',$validator->errors()->all()[0]);
+          return redirect()->back()->withInput()->withErrors($validator);
+        }
+
+         $agentId = $request->post('agent_id');
+         $user = User::find($agentId);
+         $user->name = $request->post('user_name');
+         $user->email = $request->post('email');
+         $user->mobile_no = $request->post('mobile');
+         $user->save();
+
+      Alert::success('Success', 'Successfully Updated');
+      return redirect()->route('agent.edit',$agentId);
+    }
+
+    public function inactiveAgentDepartment(Request $request)
+    {
+      $validator = Validator::make($request->all(), [
+            'agent_id'  => 'required',
+      ]);
+
+      if ($validator->fails()){
+          alert()->warning('Error occured',$validator->errors()->all()[0]);
+          return redirect()->back()->withInput()->withErrors($validator);
+        }
+
+         $agentId = $request->post('agent_id');
+         $agentUser = $request->post('agent_user');
+         $agentDepartment = Agent_department::find($agentId);
+         $agentDepartment->is_active = Agent_department::INACTIVE;
+         $agentDepartment->save();
+
+      Alert::success('Success', 'Successfully Updated');
+      return redirect()->route('agent.profile',$agentUser);
+    }
+
+    public function activeAgentDepartment(Request $request)
+    {
+      $validator = Validator::make($request->all(), [
+            'agent_id'  => 'required',
+      ]);
+
+      if ($validator->fails()){
+          alert()->warning('Error occured',$validator->errors()->all()[0]);
+          return redirect()->back()->withInput()->withErrors($validator);
+        }
+
+         $agentId = $request->post('agent_id');
+         $agentUser = $request->post('agent_user');
+         $agentDepartment = Agent_department::find($agentId);
+         $agentDepartment->is_active = Agent_department::ACTIVE;
+         $agentDepartment->save();
+
+      Alert::success('Success', 'Successfully Updated');
+      return redirect()->route('agent.edit',$agentUser);
+    }
+
   public function createDepartment(Request $request)
   {
     return view("departments.create_department");
@@ -137,6 +254,7 @@ class UserController extends Controller
                       ->orderBy('id','DESC')
                       ->limit(5)
                       ->get();
+    $openTickets = Ticket::where('status',2)->get();
     $employees = Department_employee::where('department_id',$departmentId)
                       ->orderBy('id','DESC')
                       ->limit(5)
@@ -145,31 +263,36 @@ class UserController extends Controller
     return view('departments.detail_department',[
       'department' => Department::find($id),
       'tickets' => $tickets,
+      'openTickets' => $openTickets,
       'employees' => $employees,
     ]);
   }
 
 
-  public function addCategoryDepartment(Request $request, $id)
+  public function addCategoryDepartment(Request $request)
   {
-      $departmentId = Department::find($id)->id;
-
       $validator = Validator::make($request->all(), [
-          'category' => 'required|min:3',
+          'category' => 'required',
+          'department_id' => 'required',
       ]);
       if ($validator->fails()){
           alert()->warning('Error occured',$validator->errors()->all()[0]);
           return redirect()->back()->withInput()->withErrors($validator);
         }
 
-        $category = new Dept_ticket_category();
-        $category->department_id = $departmentId;
-        $category->category = $request->post('category');
-        $category->is_active = Dept_ticket_category::ACTIVE;
-        $category->save();
+        $departmentId = $request->post('department_id');
+        if(count($request->post('category'))){
+          foreach ($request->post('category') as $item) {
+            $category = new Dept_ticket_category();
+            $category->department_id = $departmentId;
+            $category->category = $item;
+            $category->is_active = Dept_ticket_category::ACTIVE;
+            $category->save();
+          }
+        }
 
         Alert::success('Success', 'Successfully Created');
-        return redirect()->route('department.department_list');
+        return redirect()->route('department.all_departments');
   }
 
 
@@ -192,11 +315,9 @@ class UserController extends Controller
             'department_name' => 'required|min:3',
             'address'   => 'required',
             'user_name' => 'required|min:3',
-            'email'     => 'required|unique:users,email',
+            'email'     => 'required|email',
             'mobile'    => 'required|min:11|max:13',
       ]);
-
-
 
       if ($validator->fails()){
           alert()->warning('Error occured',$validator->errors()->all()[0]);
@@ -208,13 +329,13 @@ class UserController extends Controller
         $department->address = $request->post('address');
         $department->save();
 
-        // I will do this commented section later
-
-        // $user = Department::find($id)->user_id;
-        // $user->name = $request->post('user_name');
-        // $user->email = $request->post('email');
-        // $user->mobile_no = $request->post('mobile');
-        // $user->save();
+        // do it first
+         $userID = Department::find($request->post('department_id'))->user_id;
+         $user = User::find($userID);
+         $user->name = $request->post('user_name');
+         $user->email = $request->post('email');
+         $user->mobile_no = $request->post('mobile');
+         $user->save();
 
       Alert::success('Success', 'Successfully Updated');
       return redirect()->route('department.edit',$department->id);

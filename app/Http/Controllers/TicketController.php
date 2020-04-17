@@ -19,7 +19,7 @@ use Illuminate\Http\Request;
 class TicketController extends Controller
 {
 
-    public function assignTicket(Request $request, $id)
+    public function assignTicket(Request $request)
     {
       $ticketId = Ticket::find($id)->id;
       $validator = Validator::make($request->all(), [

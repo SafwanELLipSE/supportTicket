@@ -37,7 +37,7 @@
                         Active
                       </button>
                       <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                        <li><a href="#">View profile</a></li>
+                        <li><a href="{{ route('agent.profile',$item->id) }}">View profile</a></li>
                         <li><a href="#">Message</a></li>
                         <li><a href="#">Inactive</a></li>
                       </ul>

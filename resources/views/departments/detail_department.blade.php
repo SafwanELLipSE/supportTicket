@@ -31,32 +31,38 @@
 							<div class="row">
 								<h2 class="text-primary">Departmental Profile</h2> <h5 class="text-primary"><sup><i class="fa fa-info-circle"></i></sup></h5>
 							</div>
-							 <div class="row">
-								 <div class="col-lg-6">
+							 <div class="row mt-5">
+								 <div class="col-12">
 									<h5>
 										 	<strong class="text-primary">Name :</strong> {{ $department->name }}
 									</h5>
 									<hr class="my-2">
 									<h5>
-										<strong class="text-primary">Created :</strong> {{ $department->created_at->format('M d, Y') }}
+										<strong class="text-primary">Manager Name:</strong> {{ $department->user->name }}
 									</h5>
 									<hr class="my-2">
 								 </div>
-								 <div class="col-lg-6">
-										<h5>
-									 		<strong class="text-primary">Manager Name:</strong> {{ $department->user->name }}
-										</h5>
-										<hr class="my-2">
-										<h5>
-								 			<strong class="text-primary">Email :</strong> {{ $department->user->email }}
-										</h5>
-										<hr class="my-2">
-								 </div>
-								 <div class="col-12 justify-content-center">
-									 <h5 class="text-center">
-										 <strong class="text-primary">Mobile No.:</strong> {{ $department->user->mobile_no }}
+								 <div class="col-lg-12">
+									 <h5>
+										 <strong class="text-primary">Email :</strong> {{ $department->user->email }}
 									 </h5>
-									 	<hr class="my-2">
+									 <hr class="my-2">
+								 </div>
+								 <div class="col-12">
+									 <div class="row">
+									 		<div class="col-md-6">
+												<h5>
+													<strong class="text-primary">Mobile No.:</strong> {{ $department->user->mobile_no }}
+												</h5>
+												 <hr class="my-2">
+									 		</div>
+											<div class="col-md-6">
+												<h5>
+												 <strong class="text-primary">Created :</strong> {{ $department->created_at->format('M d, Y') }}
+											 	</h5>
+												<hr class="my-2">
+									 		</div>
+									 </div>
 								 </div>
 								 <div class="col-12">
 									 <h5>
@@ -69,7 +75,10 @@
 							<div class="row justify-content-center">
 								<div class="col-12">
 									<a href="{{ route('department.edit',$department->id) }}" class="btn btn-pill btn-info btn-sm float-right">
-										<i class="fas fa-pencil-alt" aria-hidden="true"></i> Edit profile
+										<i class="fa fa-pencil"></i> Edit profile
+									</a>
+									<a href="{{route('ticket.open_tickets')}}" class="btn btn-pill btn-info btn-sm float-right">
+										<i class="fa fa-ticket"></i> Open Ticket ({{ count($openTickets) }})
 									</a>
 								</div>
 								<div class="col-12 mt-4">

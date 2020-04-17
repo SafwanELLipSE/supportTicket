@@ -63,7 +63,7 @@
 										<td>
 											<div class="row">
 												<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 my-2">
-													<a href="#" data-toggle="modal" id="btnCategory" value="{{ $item->id }}" data-target="{{ $item->id }}"><i class="fa fa-plus-circle button-style"></i></a>
+													<a href="#" data-toggle="modal" id="btnCategory" data-id="{{ $item->id }}" data-target="#categoryModal"><i class="fa fa-plus-circle button-style"></i></a>
 												</div>
 												<div class="col-xl-10 col-lg-10 cal-md-10 col-sm-10">
 													<select size="1" class="form-control wd-20p">
@@ -100,10 +100,11 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<form id="newCategoryForm" method="POST" enctype="multipart/form-data">
+				<form action="{{ route('department.add_category') }}"method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="form-group">
 						<label class="form-label">Categories:</label>
+						<p id="takeValue"><p>
 						<div id="dynamic_field">
 							<div class="row">
 								<div class="col-sm-12 d-flex">
@@ -116,7 +117,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				<button type="submit" class="btn btn-primary">Send message</button>
+				<button type="submit" class="btn btn-primary">Add New Category</button>
 				</form>
 			</div>
 		</div>
@@ -127,48 +128,13 @@
 
 @section('additional_scripts')
 <script type="text/javascript">
-
-
-	// $(document).ready(function(){
-	// 	 var table = $('#department_table').Datatable();
-	//
-	// 	 table.on('click','.edit', function(){
-	//
-	//  		});
-	// });
 	$(document).ready(function(){
 	  $("#btnCategory").click(function(){
-			 departmentId = $(this).attr('data-target');
+			 departmentId = $(this).attr('data-id');
+			 document.getElementById("takeValue").innerHTML = "<input type='hidden' name='department_id' value='"+ departmentId +"'>";
 
-			 $('#newCategoryForm').attr('action','addCategory/'+departmentId+')')
-			 $('#categoryModal').modal('show');
-
-			 // $.ajax({
-				//  {
-				// 		 url: "http://"+window.location.hostname+"/department/addCategory",
-				// 		 type: "POST",
-				// 		 data: {
-				// 				'department_id': departmentId,
-				// 				 _token
-				// 		 },
-				//  },
-				//  success:function(response) {
-       //      	$('#categoryModal').modal('show');
-       //        $('#department-list').html(response);
-       //        //console.log(response);
-       //      },
-				// 		error: function (response) {
-       //          Swal.fire({
-		   //        title: "Success!",
-		   //        text: response.responseJSON.message,
-		   //        type: "error",
-		   //        });
-			 //
-       //      }
-				//  });
 	  });
 	});
-
 </script>
 <!-- Data tables js-->
 		<script src="{{asset('assets/plugins/datatable/jquery.dataTables.min.js')}}"></script>

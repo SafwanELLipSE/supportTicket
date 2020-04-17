@@ -96,7 +96,7 @@ table, th, td {
             @foreach($comments as $item)
             <section class="event card border">
               <div class="d-flex">
-                <span class="thumb-sm  pull-left mr-sm"><img class="avatar avatar-md brround" src="../assets/images/users/female/18.jpg" alt="..."></span>
+                <span class="thumb-sm  pull-left mr-sm"><img class="avatar avatar-md brround" src="{{ asset('assets/images/users/female/18.jpg') }}" alt="..."></span>
                 <div>
                   <h4 class="event-heading"><a href="#">{{ $item->user->name }}</a><span><small class="text-muted"><a href="#">{{ $item->user->email }}</a></small></span></h4>
                   <p class="text-xs text-muted">{{ $item->created_at->format('M d, Y') }} at {{ $item->created_at->format('h:i A') }}</p>
@@ -105,17 +105,20 @@ table, th, td {
               <p class="text-sm ">{{ $item->comment }}</p>
               <div class="border-top post-comments">
                 <ul class="post-links mb-0 pt-2 pl-2 pr-2">
-                  <li><a href="#">1 hour</a>
+                  <li>
+                    <a href="#">1 hour</a>
                   </li>
-                  <li><a href="#"><span class="text-danger"><i class="fa fa-heart"></i> Like</span></a>
+                  <li>
+                    <a href="#"><span class="text-danger"><i class="fa fa-heart"></i> Like</span></a>
                   </li>
-                  <li><a href="#">Comment</a>
+                  <li>
+                    <a href="#">Comment</a>
                   </li>
                 </ul>
               </div>
             </section>
            @endforeach
-          </div>
+         </div><!---  Activities   ---->
         </div>
     </div>
    </div>
