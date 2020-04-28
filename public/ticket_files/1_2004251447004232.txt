@@ -1,0 +1,257 @@
+ $(document).ready(function(){
+       var _token = $('meta[name="_token"]').attr('content');
+   function displayDosage(){
+    dataTable = $('#dosage_table').DataTable({
+                "serverSide": false,
+                "processing": true,
+                 "pageLength": 10,
+                  "pagingType": "first_last_numbers",
+                "order": [],
+                "ajax":
+                    {
+                        url: "http://"+window.location.hostname+"/dosage/get-list",
+                        type: "POST",
+                        data: {
+                          _token
+
+                        },
+                    },
+                "language": {
+                    "paginate": {
+                        "previous": "&#706",
+                        "next": "&#707"
+                    }
+                }
+            });
+      }
+      displayDosage();
+
+            // diagnoses delete from database
+                $("#dosage_table").on("click",'.delete-item', function(){
+                    var advice_id = $(this).attr("data-target");
+                    console.log(advice_id);
+
+                   $('#LoadingImage').show();
+                   var to_be_deleted = $(this).parent().parent();
+                   // console.log(to_be_deleted);
+
+                    $.ajax({
+                            url: "http://"+window.location.hostname+"/dosage/delete",
+                            type: "POST",
+                            data: {
+                              'id':advice_id,
+                               _token
+                            },
+                              success:function(response) {
+                                to_be_deleted.remove();
+                                $('#LoadingImage').hide();
+                                Swal.fire({
+                                title: "SUCCESS!!",
+                                text: response,
+                                type: "success",
+                              });
+
+                              },
+                              error: function (response) {
+                                  $('#LoadingImage').hide();
+                                  Swal.fire({
+                                  title: "ERROR!",
+                                  text: response.responseJSON,
+                                  type: "error",
+                                });
+                              }
+                        });
+                });
+
+                // advice edit
+                var target;
+                var advice_id;
+
+                $("#dosage_table").on("click",'.edit-item', function(){
+                      advice_id = $(this).attr("data-target");
+                      target = $(this).parent().siblings();
+                      //console.log(target);
+                      var type = '<option value="1">General</option>';
+                      var dosage =[];
+                      for (i = 1; i < 3 ; i++) {
+                        // console.log(data[i].firstChild.nodeValue);
+                        dosage[i-1] = target[i].firstChild.nodeValue;
+                      }
+                      if(dosage[1] != "General")
+                      {
+                        type = type+'<option value="" selected>'+dosage[1]+'</option>';
+                      }
+
+
+                        $('#name').val(dosage[0]);
+                          $('#type').html(type);
+
+                      $('#edit_advice').modal('show');
+                });
+
+                $("#save_edited").on("click",function(){
+                    // edit request to the serverSide
+                     $('#LoadingImage').show();
+                    $.ajax({
+                            url: "http://"+window.location.hostname+"/dosage/edit",
+                            type: "POST",
+                            data: {
+                              'id':advice_id,
+                              'name': $('#name').val(),
+                              'usages':$('#type').val(),
+                               _token
+                            },
+                              success:function(response) {
+                                //reset datatable nodeValue
+                                  target[1].firstChild.nodeValue = $('#name').val();
+                                  $('#LoadingImage').hide();
+                                  $('#edit_advice').modal('hide');
+                                  $('#dosage_table').DataTable().destroy();
+                                  displayDosage();
+
+                                Swal.fire({
+                                title: "SUCCESS!!",
+                                text: response,
+                                type: "success",
+                              });
+
+                              },
+                              error: function (response) {
+                                  $('#LoadingImage').hide();
+                                  Swal.fire({
+                                  title: "ERROR!",
+                                  text: response.responseJSON,
+                                  type: "error",
+                                });
+                              }
+                        });
+
+                });
+
+      //dosage delete selected or truncate
+        var selected_ids =[];
+        $("#dosage_table").on("click",'.form-check-input', function(){
+
+          if(this.checked){
+          selected_ids.push($(this).val());
+
+          }
+          else{
+            var index = selected_ids.indexOf($(this).val());
+            if (index > -1) {
+              selected_ids.splice(index, 1);
+              }
+          }
+          if(selected_ids.length != 0){
+            $(".selected_count").text("("+selected_ids.length+")");
+          }
+          else{
+            $(".selected_count").text("");
+
+          }
+
+        });
+
+        $("#delete_selected").on("click",function(){
+
+          if(selected_ids.length != 0){
+            $('#LoadingImage').show();
+            $.ajax({
+                    url: "http://"+window.location.hostname+"/dosage/selected-delete",
+                    type: "POST",
+                    data: {
+                      "dosages":selected_ids.toString(),
+                        _token
+
+                    },
+                      success:function(response) {
+                        $('#LoadingImage').hide();
+                        selected_ids = [];
+                        $(".selected_count").text("");
+                        $('#dosage_table').DataTable().destroy();
+                        displayDosage();
+
+                        Swal.fire({
+                        title: "SUCCESS!!",
+                        text: response,
+                        type: "success",
+                      });
+
+
+                      },
+                      error: function (response) {
+                        $('#LoadingImage').hide();
+                        Swal.fire({
+                        title: "ERROR!",
+                        text: response,
+                        type: "error",
+                      });
+                      }
+                });
+              }
+              else{
+                  Swal.fire({
+                  title: "Warning!",
+                  text: "Please select Advice first",
+                  type: "error",
+                });
+
+
+              }
+        });
+
+        $("#clear_db").on("click",function(){
+          $.confirm({
+              title: 'Clear Dosage!!!',
+              content: 'Are you sure, you want to remove all Dosages?',
+              type: 'red',
+              typeAnimated: true,
+              buttons: {
+                  confirm: {
+                      text: 'Confirm',
+                      btnClass: 'btn-red',
+                      action: function(){
+                        $('#LoadingImage').show();
+                        $.ajax({
+                                url: "http://"+window.location.hostname+"/dosage/delete_all",
+                                type: "POST",
+                                data: {
+                                    _token
+                                },
+                                  success:function(response) {
+                                    $('#LoadingImage').hide();
+                                    selected_ids = [];
+                                    $(".selected_count").text("");
+                                    $('#dosage_table').DataTable().destroy();
+                                    displayDosage();
+
+
+                                    Swal.fire({
+                                    title: "SUCCESS!!",
+                                    text: response,
+                                    type: "success",
+                                  });
+
+
+                                  },
+                                  error: function (response) {
+                                    $('#LoadingImage').hide();
+                                    Swal.fire({
+                                    title: "ERROR!",
+                                    text: response,
+                                    type: "error",
+                                  });
+                                  }
+                            });
+
+                      }
+                  },
+                  close: function () {
+                  }
+              }
+            });
+
+        });
+
+
+});

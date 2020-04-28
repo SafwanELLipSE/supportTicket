@@ -1,0 +1,58 @@
+
+$( document ).ready(function() {
+
+  dataTable = $('#user_list_table').DataTable({
+              "serverSide": false,
+              "processing": true,
+               "pageLength": 10,
+              "order": [],
+              "ajax":
+                  {
+                      url: "http://admin.healthbridgebd.com/user/app/list",
+                      type: "get",
+                      data: {
+                          '_token'     : '7HVJLS10pdJz4oDUKsJPra69E5xG7W5Q2GgryWyo'
+                      },
+                  },
+              "language": {
+                  "paginate": {
+                      "previous": "&#706",
+                      "next": "&#707"
+                  }
+              }
+          });
+
+  $("#user_list_table").on("click",'.show-profile', function(){
+      var user_id = $(this).attr("data-target");
+      $('#profile-list').empty();
+     $('#LoadingImage').show();
+      // ajax request
+      $.ajax({
+              url: "http://admin.healthbridgebd.com/user/app/user-profiles",
+              type: "POST",
+              data: {
+                'user_id':user_id,
+                '_token'    : '7HVJLS10pdJz4oDUKsJPra69E5xG7W5Q2GgryWyo'
+              },
+                success:function(response) {
+                  $('#LoadingImage').hide();
+                  $('#profile_modal').modal('show');
+                  $('#profile-list').html(response);
+                  //console.log(response);
+                },
+                error: function (response) {
+                    $('#LoadingImage').hide();
+                    Swal.fire({
+  			          title: "Success!",
+  			          text: response.responseJSON.message,
+  			          type: "error",
+  			          });
+
+                }
+          });
+      //end ajax request
+      // $('#profile_modal').modal('show');
+      // console.log(data);
+  });
+
+});

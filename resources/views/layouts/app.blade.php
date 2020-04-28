@@ -52,8 +52,7 @@
 
 	</head>
 
-	<body class="app sidebar-mini rtl">
-
+	<body class="app sidebar-mini rtl sidebar-gone">
 		<!--Global-Loader-->
 		<div id="global-loader">
 			<img src="{{ asset('assets/images/icons/loader.svg') }}" alt="loader">

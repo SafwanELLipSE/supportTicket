@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
 {
+  const OPEN = 2;
+  const SOLVED = 1;
+  const CLOSED = 0;
 
   public function department()
   {

@@ -10,20 +10,45 @@ use App\Ticket_comment;
 use App\Department_employee;
 use App\Department_employee_ticket;
 
-
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TicketController extends Controller
 {
 
+    public function downloadUploadFile(Request $request)
+    {
+        $file = $request->post('file_name');
+        $path = public_path(). '/ticket_files/'. $file;
+        return response()->download($path);
+    }
+    public function displayUploadedFile(Request $request, $id){
+        $ticketId = Ticket::find($id)->id;
+        
+        $imageIds = Ticket::where('id',$ticketId)->pluck('img_urls');
+        $image = explode('["',$imageIds); // separate [" from the start
+        $images = explode('"]',$image[1]); // separate "] from the end
+        $arrayOfImageFiles = explode(',',$images[0]);
+
+        $fileIds = Ticket::where('id',$ticketId)->pluck('file_urls');
+        $file = explode('["',$fileIds); // separate [" from the start
+        $files = explode('"]',$file[1]); // separate "] from the end
+        $arrayOfFiles = explode(',',$files[0]);
+
+        return view('tickets.ticket_internal_files',[
+            'arrayOfImageFiles' => $arrayOfImageFiles,
+            'arrayOfFiles' => $arrayOfFiles,
+        ]);
+    }
+
     public function assignTicket(Request $request)
     {
-      $ticketId = Ticket::find($id)->id;
       $validator = Validator::make($request->all(), [
-            'employees'      => 'required',
+            'employees' => 'required',
+            'ticket_id' => 'required',
         ]);
 
         if ($validator->fails()){
@@ -31,20 +56,24 @@ class TicketController extends Controller
             return redirect()->back()->withInput()->withErrors($validator);
           }
 
-          if(count($request->post('employees'))){
-            foreach ($request->post('employees') as $item) {
-              $assign_ticket = new Department_employee_ticket();
-              $assign_ticket->ticket_id = $ticketId;
-              $assign_ticket->dept_employee_id = $item;
-              $assign_ticket->created_by = Auth::user()->id;
-              $assign_ticket->is_active = Department_employee_ticket::ACTIVE;
-              $assign_ticket->save();
+          $ticketId = $request->post('ticket_id');
+          $employeeIds = $request->post('employees');
+
+          if(count($employeeIds)){
+            foreach ($employeeIds as $item){
+                $assign_ticket = new Department_employee_ticket();
+                $assign_ticket->ticket_id = $ticketId;
+                $assign_ticket->dept_employee_id = $item;
+                $assign_ticket->created_by = Auth::user()->id;
+                $assign_ticket->is_active = Department_employee_ticket::ACTIVE;
+                $assign_ticket->save();
+                }
             }
-          }
 
           Alert::success('Success', 'Successfully Created');
           return redirect()->route('ticket.display',$ticketId);
     }
+
     public function saveCommentsOnTicket(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
@@ -69,17 +98,110 @@ class TicketController extends Controller
     public function displayTicket(Request $request,$id)
     {
       $ticketId = Ticket::find($id)->id;
-      $comments = Ticket_comment::where('ticket_id',$ticketId)->get();
+      $comments = Ticket_comment::where('ticket_id',$ticketId)->paginate(3);
       $departmentId = Ticket::find($id)->department_id;
-      $employees = Department_employee::where('department_id',$departmentId)->get();
+      $deptEmployeeId = array();
+      $deptEmployeeIds = Department_employee_ticket::where('ticket_id',$ticketId)->pluck('dept_employee_id');
+
+      $employees = Department_employee::where('department_id',$departmentId)->where(function($q) use ($deptEmployeeIds) {
+          foreach ($deptEmployeeIds as $deptEmployeeId) {
+              $q->where('id','!=',$deptEmployeeId);
+          }
+      })->get();
+
       $assigned = Department_employee_ticket::where('ticket_id',$ticketId)->get();
+      $departmentEmployeeTickets = Department_employee_ticket::where('ticket_id',$ticketId)->get();
+
+       $departments = array();
+       if( Auth::user()->isMasterAdmin()){
+         $departments = Department::where('is_active',1)->get();
+       }
+       else{
+         $agentDepartmentIds = Agent_department::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('department_id');
+         $departments = Department::whereIn('id', $agentDepartmentIds)->get();
+       }
+
       return view('tickets.display_ticket',[
         'ticket'   => Ticket::find($id),
         'comments' => $comments,
         'employees'=> $employees,
-        'assigned' => $assigned
+        'assigned' => $assigned,
+        'departmentEmployeeTickets' => $departmentEmployeeTickets,
+        'departments' => $departments,
       ]);
     }
+
+    public function changeTicketStatus(Request $request)
+    {
+      $validator = Validator::make($request->all(),[
+            'ticket_status' => 'required|int',
+        ]);
+
+      if($validator->fails()){
+          alert()->warning('Error occured',$validator->errors()->all()[0]);
+          return redirect()->back()->withInput()->withErrors($validator);
+        }
+
+        $ticketId = $request->post('ticket_id');
+        $statusNumber = $request->post('ticket_status');
+        $departmentId = $request->post('department');
+        $deptTicketCategoryId = $request->post('category');
+
+          if($statusNumber == 2){
+              $ticket = Ticket::find($ticketId);
+              $ticket->department_id = $departmentId;
+              $ticket->dept_ticket_category_id = $deptTicketCategoryId;
+              $ticket->status = $statusNumber;
+              $ticket->save();
+
+              $departmentEmployeeTickets = Department_employee_ticket::where('ticket_id',$ticketId)->where('is_active',1)->get();
+              foreach ($departmentEmployeeTickets as $item) {
+                $item->is_active = 0;
+                $item->save();
+              }
+          }
+          else {
+            $ticket = Ticket::find($ticketId);
+            $ticket->status = $statusNumber;
+            $ticket->save();
+          }
+
+        Alert::success('Success', 'successfully Updated');
+        return redirect()->route('ticket.display',$ticketId);
+
+    }
+
+    public function changeEmployeeStatus(Request $request){
+          $validator = Validator::make($request->all(),[
+                'ticket_id'               =>   'required|int',
+                'dept_employee_ticket_id' =>   'required|int',
+                'employee_status'         =>   'required|int',
+            ]);
+
+          if($validator->fails()){
+              alert()->warning('Error occured',$validator->errors()->all()[0]);
+              return redirect()->back()->withInput()->withErrors($validator);
+            }
+
+            $ticketId = $request->post('ticket_id');
+            $deptEmployeeTicketId = $request->post('dept_employee_ticket_id');
+            $employeeStatusNumber = $request->post('employee_status');
+
+            if($employeeStatusNumber != 0){
+                $dept_employee_ticket = Department_employee_ticket::find($deptEmployeeTicketId);
+                $dept_employee_ticket->is_active = 1;
+            }
+            elseif($employeeStatusNumber == 0)
+            {
+                $dept_employee_ticket = Department_employee_ticket::find($deptEmployeeTicketId);
+                $dept_employee_ticket->is_active = 0;
+            }
+
+            $dept_employee_ticket->save();
+            Alert::success('Success', 'successfully Updated');
+            return redirect()->route('ticket.display',$ticketId);
+    }
+
     public function createTicket(Request $request)
     {
 

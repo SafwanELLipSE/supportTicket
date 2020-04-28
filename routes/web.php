@@ -34,7 +34,11 @@ Route::group(['middleware' => ['auth']], function () {
       Route::get('closed-tickets',['as' =>'closed_tickets','uses' =>'TicketController@getClosedTickets' ]);
       Route::get('display/{id}', ['as' => 'display','uses' => 'TicketController@displayTicket']);
       Route::post('save-comments/{id}',['as' =>'save_comments','uses' =>'TicketController@saveCommentsOnTicket']);
-      Route::post('assign-ticket/{id}',['as' =>'assign_ticket','uses' =>'TicketController@assignTicket']);
+      Route::post('assign-ticket',['as' =>'assign_ticket','uses' =>'TicketController@assignTicket']);
+      Route::post('staging-ticket-status',['as' =>'staging_ticket_status','uses' =>'TicketController@changeTicketStatus']);
+      Route::post('staging-employee-status',['as' =>'staging_employee_status','uses' =>'TicketController@changeEmployeeStatus']);
+      Route::get('upload-file/{id}', ['as' => 'upload_file','uses' => 'TicketController@displayUploadedFile']);
+      Route::post('download-file',['as' =>'download_file','uses' =>'TicketController@downloadUploadFile']);
     });
 
     Route::group(['prefix' =>'notification', 'as'=>'notification.'], function(){
@@ -68,6 +72,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('save-created',['as' =>'save_created','uses' =>'EmployeeController@saveCreatedEmployee' ]);
         Route::get('all-employees',['as' =>'all_employees','uses' =>'EmployeeController@getEmployeeList' ]);
         Route::get('details/{id}',['as' =>'details','uses' =>'EmployeeController@detailEmployee' ]);
+        Route::get('edit/{id}',['as' =>'edit','uses' =>'EmployeeController@editEmployee' ]);
+        Route::post('save-edit',['as' =>'save_edit','uses' =>'EmployeeController@updateEmployee']);
       });
 
 

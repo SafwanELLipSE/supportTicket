@@ -73,18 +73,35 @@ class UserController extends Controller
     }
 
     public function agentProfile(Request $request, $id){
+
         $agentId = User::find($id)->id;
         $agentDepartments = Agent_department::where('user_id',$agentId)->where('is_active',1)->get();
-        $agentDepartmentIds = Agent_department::where('user_id',$agentId)->where('is_active',1)->pluck('department_id');
-        $tickets = Ticket::where('department_id',$agentDepartmentIds)->get();
-        $departments = Department::where('is_active',1)->get();
+
+        $agentDepartmentIds = Agent_department::where('user_id',$agentId)->pluck('department_id');
+        $departments = Department::where('id','!=', $agentDepartmentIds)->where('is_active',1)->get();
+
+        $tickets = Ticket::where('user_id',$agentId)->orderBy('updated_at','DESC')->limit(10)->get();
+
+        $openTickets = Ticket::where('user_id',$agentId)->where('status',Ticket::OPEN)
+                                  ->orderBy('updated_at','DESC')
+                                  ->limit(10)
+                                  ->get();
+        $closeTickets = Ticket::where('user_id',$agentId)->where('status',Ticket::CLOSED)
+                                  ->orderBy('updated_at','DESC')
+                                  ->limit(10)
+                                  ->get();
+
+
         return view("agents.agent_profile",[
           'agent' => User::find($id),
           'agentDepartments' => $agentDepartments,
           'departments' => $departments,
           'tickets' => $tickets,
+          'openTickets' => $openTickets,
+          'closeTickets' => $closeTickets,
         ]);
     }
+
     public function assignDepartmentToEmployee(Request $request){
 
       $validator = Validator::make($request->all(), [
@@ -251,10 +268,12 @@ class UserController extends Controller
   {
     $departmentId = Department::find($id)->id;
     $tickets = Ticket::where('department_id',$departmentId)
-                      ->orderBy('id','DESC')
+                      ->orderBy('created_at','DESC')
                       ->limit(5)
                       ->get();
-    $openTickets = Ticket::where('status',2)->get();
+    $openTickets = Ticket::where('department_id',$departmentId)->where('status',2)
+                      ->limit(5)
+                      ->get();
     $employees = Department_employee::where('department_id',$departmentId)
                       ->orderBy('id','DESC')
                       ->limit(5)

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Department;
 use App\User;
+use App\Ticket;
 use App\Department_employee;
+use App\Department_employee_ticket;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -52,7 +54,6 @@ class EmployeeController extends Controller
 
           Alert::success('Success', 'Successfully Created');
           return redirect()->route('employee.create');
-
   }
 
   public function getEmployeeList(Request $request)
@@ -64,8 +65,64 @@ class EmployeeController extends Controller
   }
 
   public function detailEmployee(Request $request, $id){
+
+      $employeeId = Department_employee::find($id)->id;
+      $ticketIds = Department_employee_ticket::where('dept_employee_id',$employeeId)->where('is_active',1)->pluck('ticket_id');
+
+      $openTickets = Ticket::where('status',Ticket::OPEN)->whereIn('id',$ticketIds)
+                      ->orderBy('id','DESC')
+                      ->limit(5)
+                      ->get();
+      $closeTickets = Ticket::where('status',Ticket::CLOSED)->whereIn('id',$ticketIds)
+                      ->orderBy('id','DESC')
+                      ->limit(5)
+                      ->get();
       return view('employees.detail_employee',[
         'employee' => Department_employee::find($id),
+        'openTickets' => $openTickets,
+        'closeTickets' => $closeTickets,
       ]);
+  }
+
+  public function editEmployee(Request $request, $id){
+
+    if( Auth::user()->isMasterAdmin()){
+      $departments = Department::where('is_active',1)->get();
+    }
+    else{
+      $userIds = User::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('id');
+      $departments = Department::whereIn('id', $userIds)->get();
+    }
+
+    return view('employees.employee_edit',[
+      'employee' => Department_employee::find($id),
+      'departments' => $departments,
+    ]);
+  }
+
+  public function updateEmployee(Request $request){
+
+    $validator = Validator::make($request->all(), [
+          'employee_name' => 'required|min:3',
+          'employee_id' => 'required',
+          'email'     => 'required|unique:users,email',
+          'mobile' => 'required|min:11|max:13',
+      ]);
+
+      if ($validator->fails()){
+          alert()->warning('Error occured',$validator->errors()->all()[0]);
+          return redirect()->back()->withInput()->withErrors($validator);
+        }
+
+        $employeeId = $request->post('employee_id');
+        $employee =  Department_employee::find($employeeId);
+        $employee->department_id = $request->post('department');
+        $employee->name = $request->post('employee_name');
+        $employee->email = $request->post('email');
+        $employee->mobile_no = $request->post('mobile');
+        $employee->save();
+
+        Alert::success('Success', 'Successfully Created');
+        return redirect()->route('employee.edit', $employeeId);
   }
 }

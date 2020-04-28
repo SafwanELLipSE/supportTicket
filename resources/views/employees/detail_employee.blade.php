@@ -18,45 +18,6 @@
   	</ol><!-- End breadcrumb -->
   </div>
   <!-- End page-header -->
-  <!--row open-->
-      <div class="row row-cards">
-      <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3">
-        <div class="card">
-          <div class="card-body text-center list-icons">
-            <i class="si si-briefcase text-primary"></i>
-            <p class="card-text mt-3 mb-3">Total Projects</p>
-            <p class="h1 text-center  text-primary">459</p>
-          </div>
-        </div>
-      </div><!-- col end -->
-      <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3">
-        <div class="card">
-          <div class="card-body text-center list-icons">
-            <i class="si si-basket-loaded text-secondary"></i>
-            <p class="card-text mt-3 mb-3">New Sales</p>
-            <p class="h1 text-center  text-secondary">262</p>
-          </div>
-        </div>
-      </div><!-- col end -->
-      <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3">
-        <div class="card">
-          <div class="card-body text-center list-icons">
-            <i class="si si-people text-warning"></i>
-            <p class="card-text mt-3 mb-3">Employees</p>
-            <p class="h1 text-center  text-warning">789</p>
-          </div>
-        </div>
-      </div><!-- col end -->
-      <div class="col-sm-12 col-md-6 col-lg-3 col-xl-3">
-        <div class="card">
-          <div class="card-body text-center list-icons">
-            <i class="si si-eye text-success"></i>
-            <p class="card-text mt-3 mb-3">Customer Visitis</p>
-            <p class="h1 text-center text-success">2635</p>
-          </div>
-        </div>
-      </div><!-- col end -->
-    </div>
     <!--  Main card profile  -->
     <div class="row">
     	<div class="col-md-12">
@@ -71,36 +32,57 @@
                     <h2 class="text-primary">Employee Profile</h2> <h5 class="text-primary"><sup><i class="fa fa-info-circle"></i></sup></h5>
                   </div>
                    <div class="row">
-                     <div class="col-lg-6">
+                     <div class="col-12">
                       <h5>
-                          <strong class="text-primary">Department Name:</strong>
-                      </h5>
-                      <hr class="my-2">
-                      <h5>
-                        <strong class="text-primary">Name :</strong>
+                          <strong class="text-primary">Department Name:</strong> {{ $employee->department->name }}
                       </h5>
                       <hr class="my-2">
                      </div>
-                     <div class="col-lg-6">
-                        <h5>
-                          <strong class="text-primary">Email :</strong>
-                        </h5>
-                        <hr class="my-2">
-                        <h5>
-                          <strong class="text-primary">Mobile No. :</strong>
-                        </h5>
-                        <hr class="my-2">
+                     <div class="col-12">
+											 <div class="row">
+											 		<div class="col-md-6">
+														<h5>
+		 													<strong class="text-primary">Name :</strong> {{ $employee->name }}
+		 												</h5>
+		 												<hr class="my-2">
+											 		</div>
+													<div class="col-md-6">
+														<h5>
+															<strong class="text-primary">Mobile No. :</strong> {{ $employee->mobile_no }}
+														</h5>
+														<hr class="my-2">
+													</div>
+											 </div>
                      </div>
+										 <div class="col-12">
+											 <h5>
+											 	<strong class="text-primary">Email :</strong> {{ $employee->email }}
+											 </h5>
+											 <hr class="my-2">
+										 </div>
                    </div>
                 </div><!--col-md-7 -->
                 <div class="col-md-4 justify-content-center">
-                  <div class="row justify-content-center">
+                  <div class="row justify-content-center mt-3">
                     <div class="col-12">
-                      <a href="" class="btn btn-pill btn-info btn-sm float-right">
+                      <a href="{{ route('employee.edit', $employee->id) }}" class="btn btn-pill btn-info btn-sm float-right">
                         <i class="fas fa-pencil-alt" aria-hidden="true"></i> Edit profile
                       </a>
                     </div>
                   </div>
+									<div class="row mt-6">
+										<div class="col-12">
+											<hr class="my-2">
+											<h6 class="text-center">
+												<i class="si si-exclamation text-primary"></i> {{ count($openTickets) }} <span class="text-secondary">Open Ticket</span>
+											</h6>
+											<hr class="my-2">
+											<h6 class="text-center">
+												<i class="si si-close text-primary"></i> {{ count($closeTickets) }} <span class="text-secondary">Close Ticket</span>
+											</h6>
+											<hr class="my-2">
+										</div>
+									</div>
               </div>
             </div>
           </div>
@@ -108,6 +90,86 @@
         </div>
       </div>
     </div>
+
+		<!---              Recent Open Tickets        ------->
+		@if(count($openTickets) > 0)
+		<div class="row">
+			<div class="card">
+				<div class="card-header">
+						<h3 class="card-title">Recent Open Tickets</h3>
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table id="Open_ticket_table" class="table table-striped table-bordered text-nowrap w-100">
+							<thead>
+								<tr>
+									<th class="wd-20p">#ID</th>
+									<th class="wd-20p">Ticket Title</th>
+									<th class="wd-15p">Category</th>
+									<th class="wd-10p">Priority</th>
+									<th class="wd-10p">Created Date</th>
+									<th class="wd-10p">View</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($openTickets as $item)
+								<tr>
+									<th>{{ $item->id }}</th>
+									<th>{{ $item->title }}</th>
+									<th>{{ $item->ticketCategory->category ?? "Other" }}</th>
+									<th>{!! App\Ticket::getTicketPriorityString($item->priority) !!}</th>
+									<td>{{ $item->created_at->format('M d, Y') }}</td>
+									<td><a href="{{ route('ticket.display',$item->id) }}" class="btn btn-sm btn-primary">view</a></td>
+								</tr>
+								@endforeach
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div><!--- card ends---->
+		</div><!--- row ends----->
+		@endif
+
+		<!---              Recent Close Tickets        ------->
+		@if(count($closeTickets) > 0)
+		<div class="row">
+			<div class="card">
+				<div class="card-header">
+						<h3 class="card-title">Recent Close Tickets</h3>
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table id="Open_ticket_table" class="table table-striped table-bordered text-nowrap w-100">
+							<thead>
+								<tr>
+									<th class="wd-20p">#ID</th>
+									<th class="wd-20p">Ticket Title</th>
+									<th class="wd-15p">Category</th>
+									<th class="wd-10p">Priority</th>
+									<th class="wd-10p">Created Date</th>
+									<th class="wd-10p">View</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($closeTickets as $item)
+								<tr>
+									<th>{{ $item->id }}</th>
+									<th>{{ $item->title }}</th>
+									<th>{{ $item->ticketCategory->category ?? "Other" }}</th>
+									<th>{!! App\Ticket::getTicketPriorityString($item->priority) !!}</th>
+									<td>{{ $item->created_at->format('M d, Y') }}</td>
+									<td><a href="{{ route('ticket.display',$item->id) }}" class="btn btn-sm btn-primary">view</a></td>
+								</tr>
+								@endforeach
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div><!--- card ends---->
+		</div><!--- row ends----->
+		@endif
+
+
   </div>
 <!--End side app-->
 @endsection

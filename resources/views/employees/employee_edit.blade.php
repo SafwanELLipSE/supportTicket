@@ -21,38 +21,39 @@
   <!--row open-->
 				<div class="row">
 					<div class="col-lg-12 col-xl-8 col-md-12 col-sm-12">
-						<div class="card"> <div class="card-header">
+						<div class="card">
+							<div class="card-header">
 								<h3 class="card-title">Edit Employee Profile</h3>
 							</div>
-								<form class="{{ route('department.update') }}" method="POST" id="form" enctype="multipart/form-data">
+								<form action="{{route('employee.save_edit')}}" method="POST" enctype="multipart/form-data">
 									@csrf
-									@method('PUT')
 									<div class="card-body">
 										<div class="form-group">
+											<input type="hidden" name="employee_id" value="{{$employee->id}}">
 											<label for="exampleInputname">Department Name</label>
-											<input type="text" class="form-control" id="exampleInputname" value="{{$department->name}}" placeholder="Department Name" name="department_name">
+											<select class="form-control" id="department" name="department" required>
+	 	 										@foreach($departments as $department )
+	 	 										<option value="{{$department->id}}">{{$department->name}}</option>
+	 	 										@endforeach
+ 	 	                	</select>
 										</div>
 										<div class="row">
 											<div class="col-lg-6 col-md-12">
 												<div class="form-group">
 													<label for="exampleInputEmail1">User Name</label>
-													<input type="text" class="form-control" id="exampleInputEmail1" value="{{ $department->user->name }}" placeholder="User Name" name="user_name">
+													<input type="text" class="form-control" id="exampleInputEmail1" value="{{$employee->name}}" placeholder="Employee Name" name="employee_name">
 												</div>
 											</div>
 											<div class="col-lg-6 col-md-12">
 												<div class="form-group">
 													<label for="exampleInputnumber">Conatct Number</label>
-													<input type="number" class="form-control" id="exampleInputnumber" value="{{ $department->user->mobile_no }}" placeholder="Mobile Number" name="mobile">
+													<input type="number" class="form-control" id="exampleInputnumber" value="{{$employee->mobile_no}}" placeholder="Mobile Number" name="mobile">
 												</div>
 											</div>
 										</div>
 										<div class="form-group">
 											<label for="exampleInputEmail1">Email address</label>
-											<input type="email" class="form-control" id="exampleInputEmail1" value="{{ $department->user->email }}" placeholder="Email Address" name="email">
-										</div>
-										<div class="form-group">
-											<label for="exampleInputname1">Address</label>
-											<input type="text" class="form-control" id="exampleInputname1" value="{{ $department->address }}" placeholder="Address" name="address">
+											<input type="email" class="form-control" id="exampleInputEmail1" value="{{$employee->email}}" placeholder="Email Address" name="email">
 										</div>
 										</div>
 										<div class="card-footer text-right">
@@ -67,7 +68,7 @@
 							<div class="card-header">
 								<h3 class="card-title">My Profile</h3>
 								<div class="card-options">
-									<a href="{{ route('employee.details',$item->id) }}" class="btn btn-primary btn-sm"><i class="si si-eye mr-1"></i>View Profile</a>
+									<a href="#" class="btn btn-primary btn-sm"><i class="si si-eye mr-1"></i>View Profile</a>
 								</div>
 							</div>
 							<div class="card-body">
@@ -77,16 +78,9 @@
 											<img src="../../assets/images/users/female/5.jpg" alt="" class="userpicimg">
 										</div>
 										<h3 class="username mb-2">Employee</h3>
-										<p class="mb-1">{{ $department->name }}</p>
+										<p class="mb-1">{{ $employee->department->name }}</p>
 									</div>
 								</div>
-							</div>
-							<div class="card-footer">
-								<ul class="row text-center clearfix mb-0">
-									<li class="col-sm-4"> <span class="text-dark font-weight-bold">count($employees)</span> <p class="text-muted mb-0"> <small>Employees</small> </p></li>
-									<li class="col-sm-4"> <span class="text-dark font-weight-bold">count($tickets)</span> <p class="text-muted mb-0"> <small>Tickets</small> </p></li>
-									<li class="col-sm-4"> <span class="text-dark font-weight-bold">count($department->ticketCategories)</span> <p class="text-muted mb-0"> <small>Categories</small> </p></li>
-								</ul>
 							</div>
 						</div>
 						<!-- SECOND CARD -->
@@ -103,7 +97,7 @@
 											</p>
 										</div>
 										<div class="col-md-8 col-sm-6 h6">
-											<p class="text-muted">{{ $department->user->name }}</p>
+											<p class="text-muted">{{ $employee->name }} </p>
 										</div>
 									</div>
 									<hr class="mt-1">
@@ -114,7 +108,7 @@
 											</p>
 										</div>
 										<div class="col-md-8 col-sm-6 h6">
-											<p class="text-muted">{{ $department->user->email }}</p>
+											<p class="text-muted">{{ $employee->email }} </p>
 										</div>
 									</div>
 									<hr class="mt-1">
@@ -125,7 +119,7 @@
 											</p>
 										</div>
 										<div class="col-md-8 col-sm-6 h6">
-											<p class="text-muted">{{ $department->user->mobile_no }}</p>
+											<p class="text-muted">{{ $employee->mobile_no }}</p>
 										</div>
 									</div>
 								</div>
