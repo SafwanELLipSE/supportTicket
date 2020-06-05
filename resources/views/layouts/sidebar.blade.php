@@ -30,10 +30,18 @@
 					<div id="parentVerticalTab" class="col-md-12">
 						<ul class="resp-tabs-list hor_1">
 							<li class="resp-tab-item hor_1 {{Request::is('home') || Request::is('home/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-device-desktop" data-toggle="tooltip" title="si-user-follow"></i></li>
-							<li class="resp-tab-item hor_1 {{Request::is('ticket') || Request::is('ticket/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-keyboard" data-toggle="tooltip" title="si-user-follow"></i></li>
-              <li class="resp-tab-item hor_1 {{Request::is('department') || Request::is('department/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-folder"data-toggle="tooltip" title="si-user-follow"></i></li>
-							<li class="resp-tab-item hor_1 {{Request::is('agent') || Request::is('agent/*') ? 'resp-tab-active': ''}}"><i class="si si-user-follow" data-toggle="tooltip" title="si-user-follow"></i></li>
-							<li class="resp-tab-item hor_1 {{Request::is('employee') || Request::is('employee/*') ? 'resp-tab-active': ''}}"><i class="si si-people" data-toggle="tooltip" title="si-user-follow"></i></li>
+							@if(Auth::user()->canModarateTickets())
+								<li class="resp-tab-item hor_1 {{Request::is('ticket') || Request::is('ticket/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-keyboard" data-toggle="tooltip" title="si-user-follow"></i></li>
+							@endif
+							@if(Auth::user()->isMasterAdmin() || Auth::user()->canDepartmentAdmin())
+								<li class="resp-tab-item hor_1 {{Request::is('department') || Request::is('department/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-folder"data-toggle="tooltip" title="si-user-follow"></i></li>
+							@endif
+							@if(Auth::user()->isMasterAdmin())
+								<li class="resp-tab-item hor_1 {{Request::is('agent') || Request::is('agent/*') ? 'resp-tab-active': ''}}"><i class="si si-user-follow" data-toggle="tooltip" title="si-user-follow"></i></li>
+							@endif
+							@if(Auth::user()->isMasterAdmin() || Auth::user()->canDepartmentAdmin())
+								<li class="resp-tab-item hor_1 {{Request::is('employee') || Request::is('employee/*') ? 'resp-tab-active': ''}}"><i class="si si-people" data-toggle="tooltip" title="si-user-follow"></i></li>
+							@endif
 						</ul>
 						<div class="resp-tabs-container hor_1">
 							<div class="{{Request::is('home') || Request::is('home/*') ? 'resp-tab-content-active': ''}}">
@@ -46,27 +54,38 @@
 									</div>
 								</div>
 							</div>
+							@if(Auth::user()->canModarateTickets() || Auth::user()->canDepartmentAdmin())
 							<div class="{{Request::is('ticket') || Request::is('ticket/*') ? 'resp-tab-content-active': ''}}">
 								<div class="row">
 									<div class="col-md-12">
 										<h4 class="font-weight-semibold">Tickets</h4>
-										<a class="slide-item" href="{{route('ticket.create')}}">Create Ticket</a>
-										<a class="slide-item" href="{{route('ticket.all_tickets')}}">All Tickets </a>
+										@if(Auth::user()->canModarateTickets())
+											<a class="slide-item" href="{{route('ticket.create')}}">Create Ticket</a>
+										@endif
+										@if(Auth::user()->isMasterAdmin())
+											<a class="slide-item" href="{{route('ticket.all_tickets')}}">All Tickets </a>
+										@endif
 										<a class="slide-item" href="{{route('ticket.open_tickets')}}">Open Tickets</a>
 										<a class="slide-item" href="{{route('ticket.solved_tickets')}}">Solved Tickets</a>
 										<a class="slide-item" href="{{route('ticket.closed_tickets')}}">Closed Tickets</a>
 									</div>
 								</div>
 							</div>
+							@endif
+							@if(Auth::user()->canModarateTickets())
               <div class="{{Request::is('department') || Request::is('department/*') ? 'resp-tab-content-active': ''}}">
                 <div class="row">
                   <div class="col-md-12">
                     <h4 class="font-weight-semibold">Depatrments</h4>
-                    <a class="slide-item" href="{{route('department.create')}}">Create Department</a>
+										@if(Auth::user()->isMasterAdmin())
+                    	<a class="slide-item" href="{{route('department.create')}}">Create Department</a>
+										@endif
                     <a class="slide-item" href="{{route('department.all_departments')}}">Department List </a>
                   </div>
                 </div>
               </div>
+							@endif
+							@if(Auth::user()->isMasterAdmin())
 							<div class="{{Request::is('agent') || Request::is('agent/*') ? 'resp-tab-content-active': ''}}">
                 <div class="row">
                   <div class="col-md-12">
@@ -76,6 +95,8 @@
                   </div>
                 </div>
               </div>
+							@endif
+							@if(Auth::user()->isMasterAdmin() || Auth::user()->canDepartmentAdmin())
 							<div class="{{Request::is('employee') || Request::is('employee/*') ? 'resp-tab-content-active': ''}}">
 								<div class="row">
 									<div class="col-md-12">
@@ -85,6 +106,7 @@
 									</div>
 								</div>
 							</div>
+							@endif
 						</div>
 					</div>
 				</div><!-- col-4 -->

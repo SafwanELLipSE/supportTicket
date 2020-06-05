@@ -26,7 +26,7 @@
 										<h3 class="card-title">Add New Agent</h3>
 									</div>
 									<div class="card-body">
-										<form action="{{ route('agent.save_created') }}" method="POST" id="form" >
+										<form action="{{ route('agent.save_created') }}" method="POST" id="form">
 												@csrf
 											<div class="list-group">
 												<div class="list-group-item py-3" data-acc-step>
@@ -88,7 +88,7 @@
 															</div>
                               <div class="custom-controls-stacked">
         												<label class="custom-control custom-checkbox">
-        													<input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1" checked>
+        													<input type="checkbox" class="custom-control-input" name="example-checkbox1" value="1" checked>
         													<span class="custom-control-label">Email</span>
         												</label>
                                 <label class="custom-control custom-checkbox">

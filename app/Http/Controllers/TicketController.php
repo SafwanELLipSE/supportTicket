@@ -27,7 +27,7 @@ class TicketController extends Controller
     }
     public function displayUploadedFile(Request $request, $id){
         $ticketId = Ticket::find($id)->id;
-        
+
         $imageIds = Ticket::where('id',$ticketId)->pluck('img_urls');
         $image = explode('["',$imageIds); // separate [" from the start
         $images = explode('"]',$image[1]); // separate "] from the end

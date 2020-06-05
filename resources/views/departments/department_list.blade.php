@@ -63,7 +63,7 @@
 										<td>
 											<div class="row">
 												<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 my-2">
-													<a href="#" data-toggle="modal" id="btnCategory" data-id="{{ $item->id }}" data-target="#categoryModal"><i class="fa fa-plus-circle button-style"></i></a>
+													<a href="#" data-toggle="modal" data-departmentid="{{$item->id}}" data-target="#categoryModal"><i class="fa fa-plus-circle button-style"></i></a>
 												</div>
 												<div class="col-xl-10 col-lg-10 cal-md-10 col-sm-10">
 													<select size="1" class="form-control wd-20p">
@@ -103,8 +103,8 @@
 				<form action="{{ route('department.add_category') }}"method="POST" enctype="multipart/form-data">
 					@csrf
 					<div class="form-group">
+						<input type="hidden" name="department_id" id="department_id" value="">
 						<label class="form-label">Categories:</label>
-						<p id="takeValue"><p>
 						<div id="dynamic_field">
 							<div class="row">
 								<div class="col-sm-12 d-flex">
@@ -125,16 +125,14 @@
 </div>
 
 @endsection
-
 @section('additional_scripts')
 <script type="text/javascript">
-	$(document).ready(function(){
-	  $("#btnCategory").click(function(){
-			 departmentId = $(this).attr('data-id');
-			 document.getElementById("takeValue").innerHTML = "<input type='hidden' name='department_id' value='"+ departmentId +"'>";
-
-	  });
-	});
+$('#categoryModal').on('show.bs.modal', function (event) {
+		var button = $(event.relatedTarget)
+		var department_id = button.data('departmentid')
+		var modal = $(this)
+		modal.find('.modal-body #department_id').val(department_id);
+})
 </script>
 <!-- Data tables js-->
 		<script src="{{asset('assets/plugins/datatable/jquery.dataTables.min.js')}}"></script>

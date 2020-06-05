@@ -38,7 +38,7 @@
 									<label class="form-label">Departments</label>
 	                <select class="form-control" id="department" name="department" required>
 										@foreach($departments as $department )
-										<option data-department="{{$department->id}}" value="{{$department->id}}">{{$department->name}}</option>
+											<option data-department="{{$department->id}}" value="{{$department->id}}">{{$department->name}}</option>
 										@endforeach
 	                </select>
 	              </div>

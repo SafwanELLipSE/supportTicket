@@ -8,11 +8,14 @@ use App\User;
 use App\Ticket;
 use App\Dept_ticket_category;
 use App\Department_employee;
+use App\Mail\createAgent;
+use App\Mail\createDepartment;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -59,6 +62,20 @@ class UserController extends Controller
             }
           }
 
+      if($request->post('example-checkbox1') == 1)
+      {
+          $toUser = $request->post('email');
+          $department = $request->post('departments');
+          $name = $request->post('name');
+          $details = [
+            'title' => 'Service Chia Agent('. $request->post('name') .')',
+            'body' => 'Welcome! From now on You are one us. we are glad to have you with us',
+            'from' =>  Auth::user()->name,
+            'department' => $department,
+            'name' => $name,
+          ];
+        Mail::to($toUser)->send(new createAgent($details));
+      }
           Alert::success('Success', 'Successfully Created');
           return redirect()->route('agent.create');
 
@@ -250,6 +267,22 @@ class UserController extends Controller
             $dept_ticket_category->is_active = Dept_ticket_category::ACTIVE;
             $dept_ticket_category->save();
           }
+        }
+
+        if($request->post('example-checkbox1'))
+        {
+            $toUser = $request->post('email');
+            $department_name = $request->post('department_name');
+            $name = $request->post('name');
+            $details = [
+              'title' => 'Service Chia Department('. $request->post('name') .')',
+              'body' => 'Welcome! As a new Department Working for Service Chia',
+              'from' =>  Auth::user()->name,
+              'department_name' => $department_name,
+              'name' => $name,
+            ];
+
+            Mail::to($toUser)->send(new createDepartment($details));
         }
 
         Alert::success('Success', 'Successfully Created');

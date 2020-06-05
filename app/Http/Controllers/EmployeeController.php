@@ -7,10 +7,12 @@ use App\User;
 use App\Ticket;
 use App\Department_employee;
 use App\Department_employee_ticket;
+use App\Mail\createEmployee;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
 class EmployeeController extends Controller
@@ -33,24 +35,40 @@ class EmployeeController extends Controller
 
   public function saveCreatedEmployee(Request $request)
   {
-      $validator = Validator::make($request->all(), [
-            'name'      => 'required|min:3',
-            'email'     => 'required|unique:users,email',
-            'mobile_no' => 'required|min:11|max:13',
-        ]);
+      // $validator = Validator::make($request->all(), [
+      //       'name'      => 'required|min:3',
+      //       'email'     => 'required|unique:users,email',
+      //       'mobile_no' => 'required|min:11|max:13',
+      //   ]);
+      //
+      //   if ($validator->fails()){
+      //       alert()->warning('Error occured',$validator->errors()->all()[0]);
+      //       return redirect()->back()->withInput()->withErrors($validator);
+      //     }
+      //
+      //     $dept_employee = new Department_employee();
+      //     $dept_employee->department_id = $request->post('department');
+      //     $dept_employee->name = $request->post('name');
+      //     $dept_employee->email = $request->post('email');
+      //     $dept_employee->mobile_no = $request->post('mobile_no');
+      //     $dept_employee->is_active = Department_employee::ACTIVE;
+      //     $dept_employee->save();
 
-        if ($validator->fails()){
-            alert()->warning('Error occured',$validator->errors()->all()[0]);
-            return redirect()->back()->withInput()->withErrors($validator);
+          if($request->post('example-checkbox1') == 1)
+          {
+              $toUser = $request->post('email');
+              $department_name = Department::where('id',$request->post('department'))->first()->name;
+              $name = $request->post('name');
+
+              $details = [
+                'title' => $department_name .' Employee('. $request->post('name') .')',
+                'body' => 'Welcome! From now on You are one us. we are glad to have you with us',
+                'from' =>  Auth::user()->name,
+                'department_name' => $department_name,
+                'name' => $name,
+              ];
+              Mail::to($toUser)->send(new createEmployee($details));
           }
-
-          $dept_employee = new Department_employee();
-          $dept_employee->department_id = $request->post('department');
-          $dept_employee->name = $request->post('name');
-          $dept_employee->email = $request->post('email');
-          $dept_employee->mobile_no = $request->post('mobile_no');
-          $dept_employee->is_active = Department_employee::ACTIVE;
-          $dept_employee->save();
 
           Alert::success('Success', 'Successfully Created');
           return redirect()->route('employee.create');

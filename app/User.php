@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return in_array($this->access_level, [self::ACCESS_LEVEL_MASTER_ADMIN, self::ACCESS_LEVEL_AGENT]);
     }
+    public function canDepartmentAdmin()
+    {
+        return in_array($this->access_level, [self::ACCESS_LEVEL_DEPARTMENT_ADMIN]);
+    }
+
 }

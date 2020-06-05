@@ -210,15 +210,19 @@
 						<div class="dropdown-item text-center font-weight-semibold user h3 mb-0">{{Auth::user()->name}}</div>
 						<small>Web Designer</small>
 					</div>
-          <a class="dropdown-item  border-top" href="{{route('ticket.create')}}">
-            <i class="dropdown-icon mdi mdi-account-outline "></i> Create Ticket
-          </a>
-					<a class="dropdown-item  border-top" href="{{route('agent.create')}}">
-						<i class="dropdown-icon mdi mdi-account-outline "></i> Create Agents
-					</a>
-					<a class="dropdown-item border-top" href="{{route('department.create')}}">
-						<i class="dropdown-icon  mdi mdi-account-plus"></i> Create Department
-					</a>
+					@if(Auth::user()->canModarateTickets())
+	          <a class="dropdown-item  border-top" href="{{route('ticket.create')}}">
+	            <i class="dropdown-icon mdi mdi-account-outline "></i> Create Ticket
+	          </a>
+					@endif
+					@if(Auth::user()->isMasterAdmin())
+						<a class="dropdown-item  border-top" href="{{route('agent.create')}}">
+							<i class="dropdown-icon mdi mdi-account-outline "></i> Create Agents
+						</a>
+						<a class="dropdown-item border-top" href="{{route('department.create')}}">
+							<i class="dropdown-icon  mdi mdi-account-plus"></i> Create Department
+						</a>
+					@endif
 					<div class="card-body border-top">
 						<div class="row">
 							<div class="col-4 text-center">
