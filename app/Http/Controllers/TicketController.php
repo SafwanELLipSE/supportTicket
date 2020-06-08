@@ -9,12 +9,14 @@ use App\User;
 use App\Ticket_comment;
 use App\Department_employee;
 use App\Department_employee_ticket;
+use App\Mail\assignTicket;
 
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 
 class TicketController extends Controller
 {
@@ -26,17 +28,14 @@ class TicketController extends Controller
         return response()->download($path);
     }
     public function displayUploadedFile(Request $request, $id){
+
         $ticketId = Ticket::find($id)->id;
+        $get_ticket = Ticket::where('id',$ticketId)->first();
 
-        $imageIds = Ticket::where('id',$ticketId)->pluck('img_urls');
-        $image = explode('["',$imageIds); // separate [" from the start
-        $images = explode('"]',$image[1]); // separate "] from the end
-        $arrayOfImageFiles = explode(',',$images[0]);
-
-        $fileIds = Ticket::where('id',$ticketId)->pluck('file_urls');
-        $file = explode('["',$fileIds); // separate [" from the start
-        $files = explode('"]',$file[1]); // separate "] from the end
-        $arrayOfFiles = explode(',',$files[0]);
+        $images = $get_ticket->img_urls;
+        $arrayOfImageFiles = explode(',',$images);
+        $files = $get_ticket->file_urls;
+        $arrayOfFiles = explode(',',$files);
 
         return view('tickets.ticket_internal_files',[
             'arrayOfImageFiles' => $arrayOfImageFiles,
@@ -67,7 +66,12 @@ class TicketController extends Controller
                 $assign_ticket->created_by = Auth::user()->id;
                 $assign_ticket->is_active = Department_employee_ticket::ACTIVE;
                 $assign_ticket->save();
-                }
+              }
+            }
+
+            $get_employee_email = Department_employee::where('is_active',1)->whereIn('id',$employeeIds)->pluck('email');
+            foreach ($get_employee_email as $item){
+                Mail::to($item)->send(new assignTicket($ticketId));
             }
 
           Alert::success('Success', 'Successfully Created');

@@ -36,7 +36,6 @@
                 <tr>
                   <th class="wd-10p">#ID</th>
                   <th class="wd-20p"> Ticket Title</th>
-                  @if(Auth::user()->canModarateTickets())
                   <th class="wd-15p">
 										<select class="form-control select2-show-search" id="department">
 												<option value="" selected>Department</option>
@@ -45,7 +44,6 @@
 												@endforeach
 										</select>
 									</th>
-                  @endif
                   <th class="wd-15p">Category</th>
                   <th class="wd-10p">
 										<select class="form-control select2" id="priority">

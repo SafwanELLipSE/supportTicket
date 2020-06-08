@@ -59,9 +59,11 @@ table, th, td {
                     <dd>{{$ticket->ticketCategory->category ?? "Other"}}</dd>
                   </div>
                   <div class="col-md-6">
-                    <a href="" data-toggle="modal" data-target="#btnAssign" class="btn btn-pill btn-success btn-sm float-right">
-                      <i class="fas fa-pencil-alt" aria-hidden="true"></i> Assign
-                    </a>
+                    @if (Auth::user()->isMasterAdmin() || Auth::user()->canDepartmentAdmin())
+                      <a href="" data-toggle="modal" data-target="#btnAssign" class="btn btn-pill btn-success btn-sm float-right">
+                        <i class="fas fa-pencil-alt" aria-hidden="true"></i> Assign
+                      </a>
+                    @endif
                   </div>
                 </div>
               </dl>
@@ -75,14 +77,14 @@ table, th, td {
                     <form action="{{route('ticket.staging_ticket_status')}}" method="POST" enctype="multipart/form-data">
                       @csrf
                       <input type="hidden" name="ticket_id" value="{{$ticket->id}}">
-                      @if ($ticket->status == 2)
+                      @if ($ticket->status == 2 && Auth::user()->canModifyTickets())
                         <input type="hidden" name="ticket_status" value="1">
                         <button type="submit" class="btn btn-pill btn-secondary btn-sm float-right">Solved</button>
-                      @elseif ($ticket->status == 1)
+                      @elseif ($ticket->status == 1 && Auth::user()->canModarateTickets())
                         <input type="hidden" name="ticket_status" value="0">
                         <button type="submit" class="btn btn-pill btn-danger btn-sm float-right">Closed</button>
                       @else
-                        @if(count($departmentEmployeeTickets) != 0)
+                        @if(count($departmentEmployeeTickets) != 0 && Auth::user()->canModarateTickets())
                           <a  data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" class="btn btn-pill btn-primary btn-sm text-white float-right">Reassign</a>
                         @endif
                       @endif

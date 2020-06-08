@@ -24,8 +24,7 @@ class EmployeeController extends Controller
          $departments = Department::where('is_active',1)->get();
        }
        else{
-         $userIds = User::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('id');
-         $departments = Department::whereIn('id', $userIds)->get();
+         $departments = Department::where('user_id',Auth::user()->id)->get();
        }
 
       return view("employees.create_employee",[
@@ -35,24 +34,24 @@ class EmployeeController extends Controller
 
   public function saveCreatedEmployee(Request $request)
   {
-      // $validator = Validator::make($request->all(), [
-      //       'name'      => 'required|min:3',
-      //       'email'     => 'required|unique:users,email',
-      //       'mobile_no' => 'required|min:11|max:13',
-      //   ]);
-      //
-      //   if ($validator->fails()){
-      //       alert()->warning('Error occured',$validator->errors()->all()[0]);
-      //       return redirect()->back()->withInput()->withErrors($validator);
-      //     }
-      //
-      //     $dept_employee = new Department_employee();
-      //     $dept_employee->department_id = $request->post('department');
-      //     $dept_employee->name = $request->post('name');
-      //     $dept_employee->email = $request->post('email');
-      //     $dept_employee->mobile_no = $request->post('mobile_no');
-      //     $dept_employee->is_active = Department_employee::ACTIVE;
-      //     $dept_employee->save();
+      $validator = Validator::make($request->all(), [
+            'name'      => 'required|min:3',
+            'email'     => 'required|unique:users,email',
+            'mobile_no' => 'required|min:11|max:13',
+        ]);
+
+        if ($validator->fails()){
+            alert()->warning('Error occured',$validator->errors()->all()[0]);
+            return redirect()->back()->withInput()->withErrors($validator);
+          }
+
+          $dept_employee = new Department_employee();
+          $dept_employee->department_id = $request->post('department');
+          $dept_employee->name = $request->post('name');
+          $dept_employee->email = $request->post('email');
+          $dept_employee->mobile_no = $request->post('mobile_no');
+          $dept_employee->is_active = Department_employee::ACTIVE;
+          $dept_employee->save();
 
           if($request->post('example-checkbox1') == 1)
           {
@@ -76,14 +75,20 @@ class EmployeeController extends Controller
 
   public function getEmployeeList(Request $request)
   {
-      $dept_employees = Department_employee::where('is_active',1)->get();
+      $dept_employees = array();
+      if( Auth::user()->isMasterAdmin()){
+        $dept_employees = Department_employee::where('is_active',1)->get();
+      }
+      else{
+        $departmentId = Department::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('id');
+        $dept_employees = Department_employee::where('department_id',$departmentId)->get();
+      }
       return view("employees.employee_list",[
         'dept_employees' => $dept_employees
       ]);
   }
 
   public function detailEmployee(Request $request, $id){
-
       $employeeId = Department_employee::find($id)->id;
       $ticketIds = Department_employee_ticket::where('dept_employee_id',$employeeId)->where('is_active',1)->pluck('ticket_id');
 
@@ -102,14 +107,13 @@ class EmployeeController extends Controller
       ]);
   }
 
-  public function editEmployee(Request $request, $id){
-
+  public function editEmployee(Request $request, $id)
+  {
     if( Auth::user()->isMasterAdmin()){
       $departments = Department::where('is_active',1)->get();
     }
     else{
-      $userIds = User::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('id');
-      $departments = Department::whereIn('id', $userIds)->get();
+      $departments = Department::where('user_id',Auth::user()->id)->get();
     }
 
     return view('employees.employee_edit',[

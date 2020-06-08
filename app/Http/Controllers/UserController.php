@@ -269,7 +269,7 @@ class UserController extends Controller
           }
         }
 
-        if($request->post('example-checkbox1'))
+        if($request->post('example-checkbox1')== 1)
         {
             $toUser = $request->post('email');
             $department_name = $request->post('department_name');

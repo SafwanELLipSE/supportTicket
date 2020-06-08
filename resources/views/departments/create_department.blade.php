@@ -109,7 +109,7 @@
 															<!--     Not Used Yet      -->
                               <div class="custom-controls-stacked">
         												<label class="custom-control custom-checkbox">
-        													<input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1" checked>
+        													<input type="checkbox" class="custom-control-input" name="example-checkbox1" value="1" checked>
         													<span class="custom-control-label">Email</span>
         												</label>
                                 <label class="custom-control custom-checkbox">
