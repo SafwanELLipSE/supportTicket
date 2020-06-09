@@ -45,6 +45,10 @@ class User extends Authenticatable
     {
         return in_array($this->access_level, [self::ACCESS_LEVEL_MASTER_ADMIN]);
     }
+    public function isAgent()
+    {
+        return in_array($this->access_level, [self::ACCESS_LEVEL_AGENT]);
+    }
     public function canModarateTickets()
     {
         return in_array($this->access_level, [self::ACCESS_LEVEL_MASTER_ADMIN, self::ACCESS_LEVEL_AGENT]);

@@ -293,6 +293,7 @@ class TicketController extends Controller
 
     public function getAllTickets(Request $request)
     {
+
       $tickets = "";
       if($request->post('department_id'))
       {
@@ -391,7 +392,18 @@ class TicketController extends Controller
 
     public function getTickets(Request $request)
     {
-        $tickets = "";
+        if(Auth::user()->isMasterAdmin()){
+          $tickets = "";
+        }
+        elseif(Auth::user()->isAgent()){
+            $agentDepartmentIds = Agent_department::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('department_id');
+            $tickets = Ticket::whereIn('department_id',$agentDepartmentIds);
+        }
+        elseif(Auth::user()->canDepartmentAdmin()){
+          $DepartmentIds = Department::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('id');
+          $tickets = Ticket::whereIn('department_id',$DepartmentIds);
+        }
+
         if($request->post('department_id'))
         {
           $tickets = Ticket::where('department_id',$request->post('department_id'));
