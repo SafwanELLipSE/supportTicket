@@ -208,7 +208,13 @@
 					<div class="header-user text-center mt-4 pb-4">
 						<span class="avatar avatar-xxl brround"><img src="{{asset('assets/images/users/pyke.jpg')}}" alt="Profile-img" class="avatar avatar-xxl brround"></span>
 						<div class="dropdown-item text-center font-weight-semibold user h3 mb-0">{{Auth::user()->name}}</div>
-						<small>Web Designer</small>
+						@if(Auth::user()->access_level == 'master_admin')
+							<small>Admin</small>
+						@elseif(Auth::user()->access_level == 'department_admin')
+								<small>Department</small>
+						@elseif(Auth::user()->access_level == 'agent')
+								<small>Agent</small>
+						@endif
 					</div>
 					@if(Auth::user()->canModarateTickets())
 	          <a class="dropdown-item  border-top" href="{{route('ticket.create')}}">

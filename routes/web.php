@@ -22,6 +22,9 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/logout', ['uses' => 'Auth\LoginController@logout']);
     Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/profile',['as' =>'profile','uses' =>'ProfileController@profileView']);
+    Route::get('edit/{id}',['as' =>'edit','uses' =>'ProfileController@profileEdit' ]);
+    Route::post('save-edit',['as' =>'save_edit','uses' =>'ProfileController@profileUpdate']);
 
     Route::group(['prefix' =>'ticket', 'as'=>'ticket.'], function(){
       Route::get('create',['as' =>'create','uses' =>'TicketController@createTicket' ]);

@@ -12,7 +12,7 @@
 		</div>
 		<div class="col col-auto">
 			<!-- <a class="btn btn-light mt-4 mt-sm-0" href="#"><i class="fe fe-help-circle mr-1 mt-1"></i>  Support</a> -->
-			<a class="btn btn-success mt-4 mt-sm-0" href="#"><i class="fe fe-plus mr-1 mt-1"></i> Add Ticket</a>
+			<a class="btn btn-success mt-4 mt-sm-0" href="{{route('ticket.create')}}"><i class="fe fe-plus mr-1 mt-1"></i> Add Ticket</a>
 		</div>
 	</div>
 	<!-- page-header -->
@@ -27,132 +27,96 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="owl-carousel owl-carousel2 owl-theme mb-5">
-				<div class="item">
-					<div class="card mb-0">
-						<div class="row">
-							<div class="col-4">
-								<div class="feature">
-									<div class="fa-stack fa-lg fa-2x icon bg-primary-transparent">
-										<i class="si si-briefcase  fa-stack-1x text-primary"></i>
-									</div>
+
+
+		@if(count($solved) != 0)
+			@foreach($solved as $item)
+			<div class="item">
+				<div class="card mb-0">
+					<div class="row">
+						<div class="col-4">
+							<div class="feature">
+								<div class="fa-stack fa-lg fa-2x icon bg-warning-transparent">
+									<i class="fa fa-ticket fa-stack-1x text-warning"></i>
 								</div>
 							</div>
-							<div class="col-8">
-								<div class="card-body p-3  d-flex">
-									<div>
-										<p class="text-muted mb-1">Total Income</p>
-										<h2 class="mb-0 text-dark">18,367K</h2>
-									</div>
+						</div>
+						<div class="col-8">
+							<div class="card-body p-3 d-flex">
+								<div>
+									@php
+										$value = str_limit($item->title, 12);
+									@endphp
+									<p class="text-muted mb-1">{{ $value }}</p>
+									<h4 class="mb-0 text-dark">{{ $item->created_at->format('d.m.Y') }}</h4>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="item">
-					<div class="card mb-0">
-						<div class="row">
-							<div class="col-4">
-								<div class="feature">
-									<div class="fa-stack fa-lg fa-2x icon bg-success-transparent">
-										<i class="si si-drawer fa-stack-1x text-success"></i>
-									</div>
+			</div>
+		 @endforeach
+		@endif
+		@if(count($close) != 0)
+		 @foreach($close as $item)
+			<div class="item">
+				<div class="card mb-0">
+					<div class="row">
+						<div class="col-4">
+							<div class="feature">
+								<div class="fa-stack fa-lg fa-2x icon bg-danger-transparent">
+									<i class="fa fa-ticket fa-stack-1x text-danger"></i>
 								</div>
 							</div>
-							<div class="col-8">
-								<div class="card-body p-3  d-flex">
-									<div>
-										<p class="text-muted mb-1">Total Profit 1</p>
-										<h2 class="mb-0 text-dark">35%</h2>
-									</div>
+						</div>
+						<div class="col-8">
+							<div class="card-body p-3  d-flex">
+								<div>
+									@php
+										$value = str_limit($item->title, 12);
+									@endphp
+									<p class="text-muted mb-1">{{ $value }}</p>
+									<h4 class="mb-0 text-dark">{{ $item->created_at->format('d.m.Y') }}</h4>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="item">
-					<div class="card mb-0">
-						<div class="row">
-							<div class="col-4">
-								<div class="feature">
-									<div class="fa-stack fa-lg fa-2x icon bg-success-transparent">
-										<i class="si si-drawer fa-stack-1x text-success"></i>
-									</div>
+			</div>
+		 @endforeach
+		@endif
+		@if(count($open) != 0)
+		 @foreach($open as $item)
+			<div class="item">
+				<div class="card mb-0">
+					<div class="row">
+						<div class="col-4">
+							<div class="feature">
+								<div class="fa-stack fa-lg fa-2x icon bg-success-transparent">
+									<i class="fa fa-ticket fa-stack-1x text-success"></i>
 								</div>
 							</div>
-							<div class="col-8">
-								<div class="card-body p-3  d-flex">
-									<div>
-										<p class="text-muted mb-1">Total Profit 2</p>
-										<h2 class="mb-0 text-dark">35%</h2>
-									</div>
+						</div>
+						<div class="col-8">
+							<div class="card-body p-3  d-flex">
+								<div>
+									@php
+										$value = str_limit($item->title, 12);
+									@endphp
+									<p class="text-muted mb-1">{{ $value }}</p>
+									<h4 class="mb-0 text-dark">{{ $item->created_at->format('d.m.Y') }}</h4>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="item">
-					<div class="card mb-0">
-						<div class="row">
-							<div class="col-4">
-								<div class="feature">
-									<div class="fa-stack fa-lg fa-2x icon bg-success-transparent">
-										<i class="si si-drawer fa-stack-1x text-success"></i>
-									</div>
-								</div>
-							</div>
-							<div class="col-8">
-								<div class="card-body p-3  d-flex">
-									<div>
-										<p class="text-muted mb-1">Total Profit 3</p>
-										<h2 class="mb-0 text-dark">35%</h2>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="item">
-					<div class="card mb-0">
-						<div class="row">
-							<div class="col-4">
-								<div class="feature">
-									<div class="fa-stack fa-lg fa-2x icon bg-pink-transparent">
-										<i class="si si-layers fa-stack-1x text-pink"></i>
-									</div>
-								</div>
-							</div>
-							<div class="col-8">
-								<div class="card-body p-3  d-flex">
-									<div>
-										<p class="text-muted mb-1">Total Revenue</p>
-										<h2 class="mb-0 text-dark">3,548K</h2>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="item">
-					<div class="card mb-0">
-						<div class="row">
-							<div class="col-4">
-								<div class="feature">
-									<div class="fa-stack fa-lg fa-2x icon bg-warning-transparent">
-										<i class="si si-chart fa-stack-1x text-warning"></i>
-									</div>
-								</div>
-							</div>
-							<div class="col-8">
-								<div class="card-body p-3  d-flex">
-									<div>
-										<p class="text-muted mb-1">Total Sales</p>
-										<h2 class="mb-0 text-dark">9,756</h2>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+			</div>
+		 @endforeach
+		@endif
+
+
+
+
 			</div>
 		</div>
 	</div>

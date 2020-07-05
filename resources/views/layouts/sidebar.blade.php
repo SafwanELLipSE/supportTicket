@@ -6,8 +6,17 @@
 			<span class="avatar avatar-xxl brround text-center cover-image" data-image-src="{{asset('assets/images/users/pyke.jpg')}}"></span>
 		</div>
 		<div class="user-info">
-			<a href="#" class="ml-2"><span class="text-dark app-sidebar__user-name font-weight-semibold">{{Auth::user()->name}}</span><br>
-				<span class="text-muted app-sidebar__user-name text-sm"> Jhorotek</span>
+			<a href="#" class="ml-2">
+				<span class="text-dark app-sidebar__user-name font-weight-semibold">{{Auth::user()->name}}</span>
+				<br>
+				@php
+					 if(Auth::user()->canDepartmentAdmin()){
+						 $dep = App\Department::where('user_id',Auth::user()->id)->first();
+					 }
+				@endphp
+				@if(Auth::user()->canDepartmentAdmin())
+					<span class="text-muted app-sidebar__user-name text-sm"> {{ $dep->name }}</span>
+				@endif
 			</a>
 		</div>
 	</div>
@@ -29,7 +38,7 @@
 				<div class="row row-demo-list">
 					<div id="parentVerticalTab" class="col-md-12">
 						<ul class="resp-tabs-list hor_1">
-							<li class="resp-tab-item hor_1 {{Request::is('home') || Request::is('home/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-device-desktop" data-toggle="tooltip" title="si-user-follow"></i></li>
+							<li class="resp-tab-item hor_1 {{Request::is('home') || Request::is('profile') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-device-desktop" data-toggle="tooltip" title="si-user-follow"></i></li>
 							@if(Auth::user()->canModarateTickets())
 								<li class="resp-tab-item hor_1 {{Request::is('ticket') || Request::is('ticket/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-keyboard" data-toggle="tooltip" title="si-user-follow"></i></li>
 							@endif
@@ -44,12 +53,12 @@
 							@endif
 						</ul>
 						<div class="resp-tabs-container hor_1">
-							<div class="{{Request::is('home') || Request::is('home/*') ? 'resp-tab-content-active': ''}}">
+							<div class="{{Request::is('home') || Request::is('profile') ? 'resp-tab-content-active': ''}}">
 								<div class="row">
 									<div class="col-md-12">
 										<h4 class="font-weight-semibold">Home</h4>
                     <a class="slide-item" href="{{route('home')}}"> Dashboard</a>
-										<a class="slide-item" href="index2.html"> Profile</a>
+										<a class="slide-item" href="{{route('profile')}}"> Profile</a>
 										<a class="slide-item" href="index2.html"> Notifications</a>
 									</div>
 								</div>
