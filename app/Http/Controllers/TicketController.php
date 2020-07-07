@@ -45,9 +45,9 @@ class TicketController extends Controller
 
     public function assignTicket(Request $request)
     {
-      $validator = Validator::make($request->all(), [
-            'employees' => 'required',
-            'ticket_id' => 'required',
+        $validator = Validator::make($request->all(), [
+              'employees' => 'required',
+              'ticket_id' => 'required',
         ]);
 
         if ($validator->fails()){
@@ -58,16 +58,18 @@ class TicketController extends Controller
           $ticketId = $request->post('ticket_id');
           $employeeIds = $request->post('employees');
 
-          if(count($employeeIds)){
-            foreach ($employeeIds as $item){
-                $assign_ticket = new Department_employee_ticket();
-                $assign_ticket->ticket_id = $ticketId;
-                $assign_ticket->dept_employee_id = $item;
-                $assign_ticket->created_by = Auth::user()->id;
-                $assign_ticket->is_active = Department_employee_ticket::ACTIVE;
-                $assign_ticket->save();
+          if(count($employeeIds))
+          {
+            foreach ($employeeIds as $item)
+            {
+                  $assign_ticket = new Department_employee_ticket();
+                  $assign_ticket->ticket_id = $ticketId;
+                  $assign_ticket->dept_employee_id = $item;
+                  $assign_ticket->created_by = Auth::user()->id;
+                  $assign_ticket->is_active = Department_employee_ticket::ACTIVE;
+                  $assign_ticket->save();
               }
-            }
+          }
 
             $get_employee_email = Department_employee::where('is_active',1)->whereIn('id',$employeeIds)->pluck('email');
             foreach ($get_employee_email as $item){

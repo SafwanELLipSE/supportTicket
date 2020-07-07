@@ -14,8 +14,14 @@
 						 $dep = App\Department::where('user_id',Auth::user()->id)->first();
 					 }
 				@endphp
+				@if(Auth::user()->isMasterAdmin())
+					<span class="text-muted app-sidebar__user-name text-sm"> (Admin)</span>
+				@endif
+				@if(Auth::user()->isAgent())
+					<span class="text-muted app-sidebar__user-name text-sm"> (Agent)</span>
+				@endif
 				@if(Auth::user()->canDepartmentAdmin())
-					<span class="text-muted app-sidebar__user-name text-sm"> {{ $dep->name }}</span>
+					<span class="text-muted app-sidebar__user-name text-sm"> {{ $dep->name }} <br> (Department)</span>
 				@endif
 			</a>
 		</div>

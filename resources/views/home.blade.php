@@ -3,18 +3,22 @@
 @section('content')
 <!-- side app-->
 <div class="side-app">
-	<div class="bg-white p-3 header-secondary row">
-		<div class="col">
-			<!-- <div class="d-flex">
-				<a class="btn btn-danger" href="#"><i class="fe fe-rotate-cw mr-1 mt-1"></i> Upgrade </a>
-			</div> -->
+	@if(Auth::user()->canModarateTickets())
+		<div class="bg-white p-3 header-secondary row">
+			<div class="col">
+				<!-- <div class="d-flex">
+					<a class="btn btn-danger" href="#"><i class="fe fe-rotate-cw mr-1 mt-1"></i> Upgrade </a>
+				</div> -->
+
+			</div>
+
+				<div class="col col-auto">
+					<!-- <a class="btn btn-light mt-4 mt-sm-0" href="#"><i class="fe fe-help-circle mr-1 mt-1"></i>  Support</a> -->
+					<a class="btn btn-success mt-4 mt-sm-0" href="{{route('ticket.create')}}"><i class="fe fe-plus mr-1 mt-1"></i> Add Ticket</a>
+				</div>
 
 		</div>
-		<div class="col col-auto">
-			<!-- <a class="btn btn-light mt-4 mt-sm-0" href="#"><i class="fe fe-help-circle mr-1 mt-1"></i>  Support</a> -->
-			<a class="btn btn-success mt-4 mt-sm-0" href="{{route('ticket.create')}}"><i class="fe fe-plus mr-1 mt-1"></i> Add Ticket</a>
-		</div>
-	</div>
+	@endif
 	<!-- page-header -->
 	<div class="page-header">
 		<ol class="breadcrumb"><!-- breadcrumb -->
@@ -128,42 +132,42 @@
 					<div class="col-xl-2 col-lg-6 col-sm-6 pr-0 pl-0">
 						<div class="card-body text-center">
 							<h5 class="text-white">Today</h5>
-							<h2 class="mb-2 mt-3 fs-2 text-white mainvalue">863</h2>
+							<h2 class="mb-2 mt-3 fs-2 text-white mainvalue">{{ $today }}</h2>
 							 <div><i class="si si-graph mr-1 text-danger"></i><span class="text-white">Generated</span></div>
 						</div>
 					</div>
 					<div class="col-xl-2 col-lg-6 col-sm-6 pr-0 pl-0">
 						<div class="card-body text-center">
 							<h5 class="text-white">Yesterday</h5>
-							<h2 class="mb-2 mt-3 fs-2 text-white mainvalue">1,364</h2>
+							<h2 class="mb-2 mt-3 fs-2 text-white mainvalue">{{ $yesterday }}</h2>
 							 <div><i class="si si-graph mr-1 text-danger"></i><span class="text-white">Generated</span></div>
 						</div>
 					</div>
 					<div class="col-xl-2 col-lg-6 col-sm-6 pr-0 pl-0">
 						<div class="card-body text-center">
 							<h5 class="text-white">Last Week</h5>
-							<h2 class="mb-2 mt-3 fs-2 text-white mainvalue">3,876</h2>
+							<h2 class="mb-2 mt-3 fs-2 text-white mainvalue">{{ $lastWeek }}</h2>
 							 <div><i class="si si-graph mr-1 text-danger"></i><span class="text-white">Generated</span></div>
 						</div>
 					</div>
 					<div class="col-xl-2 col-lg-6 col-sm-6 pr-0 pl-0">
 						<div class="card-body text-center">
 							<h5 class="text-white">Last Month</h5>
-							<h2 class="mb-2 mt-3 fs-2 text-white mainvalue">8,547</h2>
+							<h2 class="mb-2 mt-3 fs-2 text-white mainvalue">{{ $lastMonth }}</h2>
 							 <div><i class="si si-graph mr-1 text-danger"></i><span class="text-white">Generated</span></div>
 						</div>
 					</div>
 					<div class="col-xl-2 col-lg-6 col-sm-6 pr-0 pl-0">
 						<div class="card-body text-center">
 							<h5 class="text-white">Last 6Months</h5>
-							<h2 class="mb-2 mt-3 fs-2 text-white mainvalue">12,976</h2>
+							<h2 class="mb-2 mt-3 fs-2 text-white mainvalue">{{ $lastSixMonth }}</h2>
 							 <div><i class="si si-graph mr-1 text-danger"></i><span class="text-white">Generated</span></div>
 						</div>
 					</div>
 					<div class="col-xl-2 col-lg-6 col-sm-6 pr-0 pl-0">
 						<div class="card-body text-center">
 							<h5 class="text-white">Last Year</h5>
-							<h2 class="mb-2 mt-3 fs-2 text-white mainvalue">24,844</h2>
+							<h2 class="mb-2 mt-3 fs-2 text-white mainvalue">{{ $lastYear }}</h2>
 							 <div><i class="si si-graph mr-1 text-danger"></i><span class="text-white">Generated</span></div>
 						</div>
 					</div>
@@ -309,97 +313,62 @@
 			</div>
 		</div>
 	</div>
-
+@if(Auth::user()->canModarateTickets())
 	<div class="row">
 		<div class="col-12">
 			<div class="card">
 				<div class="card-header ">
 					<h3 class="card-title ">Company/Department List</h3>
-					<div class="card-options">
-						<button id="add__new__list" type="button" class="btn btn-sm btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg"><i class="fa fa-plus"></i> Add a new Company</button>
-					</div>
+					@if(Auth::user()->isMasterAdmin())
+						<div class="card-options">
+							<a id="add__new__list" href="{{route('department.create')}}"  class="btn btn-sm btn-primary text-light"><i class="fa fa-plus"></i> Add a new Company</a>
+						</div>
+					@endif
 				</div>
 				<div class="table-responsive">
 					<table class="table card-table table-striped table-vcenter table-outline table-bordered text-nowrap ">
 						<thead>
 							<tr>
-								<th scope="col" class="border-top-0">ID</th>
-								<th scope="col" class="border-top-0">Project Name</th>
-								<th scope="col" class="border-top-0">Backend</th>
-								<th scope="col" class="border-top-0">Deadline</th>
-								<th scope="col" class="border-top-0">Team Members</th>
-								<th scope="col" class="border-top-0">Edit Project Details </th>
-								<th scope="col" class="border-top-0">list info</th>
+								<th scope="col" class="border-top-0 wd-20p">#ID</th>
+								<th scope="col" class="border-top-0 wd-20p">Department</th>
+								<th scope="col" class="border-top-0 wd-15p">Name</th>
+								<th scope="col" class="border-top-0 wd-10p">Email</th>
+								<th scope="col" class="border-top-0 wd-10p">Mobile Number</th>
+								<th scope="col" class="border-top-0 wd-20p">Ticket Category</th>
+								<th scope="col" class="border-top-0 wd-10p">Created Date</th>
+								<th scope="col" class="border-top-0 wd-10p">View</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr>
-								<th scope="row">1</th>
-								<td>At vero eos et accusamus et iusto odio</td>
-								<td>PHP</td>
-								<td>15/11/2018</td>
-								<td>15 Members</td>
-								<td>
-									<a class="btn btn-sm btn-primary" href="#"><i class="fa fa-edit"></i> Edit</a>
-									<a class="btn btn-sm btn-danger" href="#"><i class="fa fa-trash"></i> Delete</a>
-								</td>
-								<td><a class="btn btn-sm btn-info" href="#"><i class="fa fa-info-circle"></i> Details</a> </td>
-							</tr>
-							<tr>
-								<th scope="row">2</th>
-								<td>voluptatum deleniti atque corrupti quos</td>
-								<td>Angular js</td>
-								<td>25/11/2018</td>
-								<td>12 Members</td>
-								<td>
-									<a class="btn btn-sm btn-primary" href="#"><i class="fa fa-edit"></i> Edit</a>
-									<a class="btn btn-sm btn-danger" href="#"><i class="fa fa-trash"></i> Delete</a>
-								</td>
-								<td><a class="btn btn-sm btn-info" href="#"><i class="fa fa-info-circle"></i> Details</a> </td>
-							</tr>
-							<tr>
-								<th scope="row">3</th>
-								<td>dignissimos ducimus qui blanditiis praesentium </td>
-								<td>Java</td>
-								<td>5/12/2018</td>
-								<td>20 Members</td>
-								<td>
-									<a class="btn btn-sm btn-primary" href="#"><i class="fa fa-edit"></i> Edit</a>
-									<a class="btn btn-sm btn-danger" href="#"><i class="fa fa-trash"></i> Delete</a>
-								</td>
-								<td><a class="btn btn-sm btn-info" href="#"><i class="fa fa-info-circle"></i> Details</a> </td>
-							</tr>
-							<tr>
-								<th scope="row">4</th>
-								<td>deleniti atque corrupti quos dolores  </td>
-								<td>Phython</td>
-								<td>14/12/2018</td>
-								<td>10 Members</td>
-								<td>
-									<a class="btn btn-sm btn-primary" href="#"><i class="fa fa-edit"></i> Edit</a>
-									<a class="btn btn-sm btn-danger" href="#"><i class="fa fa-trash"></i> Delete</a>
-								</td>
-								<td><a class="btn btn-sm btn-info" href="#"><i class="fa fa-info-circle"></i> Details</a> </td>
-							</tr>
-							<tr>
-								<th scope="row">5</th>
-								<td>et quas molestias excepturi sint occaecati</td>
-								<td>Phython</td>
-								<td>4/12/2018</td>
-								<td>17 Members</td>
-								<td>
-									<a class="btn btn-sm btn-primary" href="#"><i class="fa fa-edit"></i> Edit</a>
-									<a class="btn btn-sm btn-danger" href="#"><i class="fa fa-trash"></i> Delete</a>
-								</td>
-								<td><a class="btn btn-sm btn-info" href="#"><i class="fa fa-info-circle"></i> Details</a> </td>
-							</tr>
+							@foreach($recentDepartment as $dept)
+								<tr>
+									<th scope="row">{{ $dept->id }}</th>
+									<td>{{ $dept->name }}</td>
+									<td>{{ $dept->user->name }}</td>
+									<td>{{ $dept->user->email }}</td>
+									<td>{{ $dept->user->mobile_no }}</td>
+									<td>
+										<div class="row">
+											<div class="col-xl-10 col-lg-10 cal-md-10 col-sm-10">
+												<select size="1" class="form-control wd-20p">
+													@foreach($dept->ticketCategories as $ticket_cat)
+														<option value="{{ $ticket_cat->id }}">{{ $ticket_cat->category }}</option>
+													@endforeach
+												</select>
+											</div>
+										</div>
+									</td>
+									<td>{{ $dept->created_at->format('d.m.Y') }}</td>
+									<td><a href="{{ route('department.details',$dept->id) }}" class="btn btn-sm btn-primary">view</a></td>
+								</tr>
+							@endforeach
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
 	</div>
-
+@endif
 	<div class="row">
 		<div class="col-xl-12 col-lg-12 col-md-12">
 			<div class="card">
@@ -425,70 +394,29 @@
 						<table class="table table-bordered text-nowrap mb-0">
 							<thead>
 								<tr>
-									<th>Product ID</th>
-									<th>Product</th>
-									<th>Product Cost</th>
-									<th>Payment Mode</th>
-									<th>Status</th>
+									<th class="wd-20p">#ID</th>
+									<th class="wd-20p">Ticket Title</th>
+									<th class="wd-15p">Department</th>
+									<th class="wd-15p">Category</th>
+									<th class="wd-10p">Priority</th>
+									<th class="wd-10p">Created Date</th>
+									<th class="wd-10p">View</th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr>
-									<td><a href="#">PRO12345</a></td>
-									<td>Mi LED Smart TV 4A 80</td>
-									<td>$14,500</td>
-									<td>Online Payment</td>
-									<td><span class="badge badge-success">Available</span></td>
-								</tr>
-								<tr>
-									<td><a href="#">PRO8765</a></td>
-									<td>Thomson R9 122cm (48 inch) Full HD LED TV </td>
-									<td>$30,000</td>
-									<td>Cash on delivered</td>
-									<td><span class="badge badge-primary">Available</span></td>
-								</tr>
-								<tr>
-									<td><a href="#">PRO54321</a></td>
-									<td>Vu 80cm (32 inch) HD Ready LED TV</td>
-									<td>$13,200</td>
-									<td>Online Payment</td>
-									<td><span class="badge badge-warning">Limited</span></td>
-								</tr>
-								<tr>
-									<td><a href="#">PRO97654</a></td>
-									<td>Micromax 81cm (32 inch) HD Ready LED TV</td>
-									<td>$15,100</td>
-									<td>Cash on delivered</td>
-									<td><span class="badge badge-danger">No stock</span></td>
-								</tr>
-								<tr>
-									<td><a href="#">PRO4532</a></td>
-									<td>HP 200 Mouse &amp; Wireless Laptop Keyboard </td>
-									<td>$5,987</td>
-									<td>Online Payment</td>
-									<td><span class="badge badge-danger">No stock</span></td>
-								</tr>
-								<tr>
-									<td><a href="#">PRO6789</a></td>
-									<td>Digisol DG-HR3400 Router </td>
-									<td>$11,987</td>
-									<td>Cash on delivered</td>
-									<td><span class="badge badge-success">Available</span></td>
-								</tr>
-								<tr>
-									<td><a href="#">PRO4567</a></td>
-									<td>Dell WM118 Wireless Optical Mouse</td>
-									<td>$4,700</td>
-									<td>Online Payment</td>
-									<td><span class="badge badge-secondary">Available</span></td>
-								</tr>
-								<tr>
-									<td><a href="#">PRO32156</a></td>
-									<td>Dell 16 inch Laptop Backpack </td>
-									<td>$678</td>
-									<td>Cash On delivered</td>
-									<td><span class="badge badge-cyan">Limited</span></td>
-								</tr>
+									@foreach($recentTicketList as $ticket)
+									<tr>
+										<th scope="row">{{ $ticket->id }}</th>
+										<td>{{ $ticket->title }}</td>
+										<td>{{ $ticket->department->name }}</td>
+										<td>{{ $ticket->ticketCategory->category ?? "Other" }}</td>
+										<td>{!! App\Ticket::getTicketPriorityString($ticket->priority) !!}</td>
+										<td>{{ $ticket->created_at->format('d.m.Y') }}</td>
+										<td>
+											<a href="{{ route('ticket.display',$ticket->id) }}" class="btn btn-sm btn-primary">view</a>
+										</td>
+									</tr>
+									@endforeach
 							</tbody>
 						</table>
 					</div>
