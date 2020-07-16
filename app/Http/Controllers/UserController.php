@@ -401,7 +401,7 @@ class UserController extends Controller
         }
 
         Alert::success('Success', 'Successfully Created');
-        return redirect()->route('department.all_departments');
+        return redirect()->back();
   }
 
 

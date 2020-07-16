@@ -137,9 +137,9 @@
 											<div class="card-header">
 												<h3 class="card-title">Department Ticket Category</h3>
 												<div class="card-options">
-													<button id="add__new__list" type="button" class="btn btn-sm btn-primary " data-toggle="modal" data-target=".bd-example-modal-lg">
+													<a data-toggle="modal" data-departmentid="{{$department->id}}" data-target="#categoryModal" class="btn btn-sm btn-primary text-white">
 														<i class="fa fa-plus"></i> Add a new Category
-													</button>
+													</a>
 												</div>
 											</div>
 											<div class="table-responsive">
@@ -262,17 +262,61 @@
 		</div>
 	</div>
 
+
+	<div class="modal fade" id="categoryModal" aria-labelledby="categoryModal" aria-hidden="true" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="example-Modal3">Add New Category</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form action="{{ route('department.add_category') }}"method="POST" enctype="multipart/form-data">
+						@csrf
+						<div class="form-group">
+							<input type="hidden" name="department_id" id="department_id" value="">
+							<label class="form-label">Categories:</label>
+							<div id="dynamic_field">
+								<div class="row">
+									<div class="col-sm-12 d-flex">
+										<input type="text" name="category[]" placeholder="Enter your Category" class="form-control name_list"/>
+										<a name="add" id="add" class="ml-1 my-2"><i class="fa fa-plus-circle text-success button-style"></i></a>
+									</div>
+								</div>
+							</div>
+						</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary">Add New Category</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
 	<!--row closed-->
 </div>
 <!--End side app-->
 @endsection
 
 @section('additional_scripts')
+<script type="text/javascript">
+$('#categoryModal').on('show.bs.modal', function (event) {
+		var button = $(event.relatedTarget)
+		var department_id = button.data('departmentid')
+		var modal = $(this)
+		modal.find('.modal-body #department_id').val(department_id);
+})
+</script>
 <!--Accordion-Wizard-Form js-->
 <!-- <script src="../assets/plugins/accordion-Wizard-Form/jquery.accordion-wizard.min.js"></script> -->
 <script src="{{ asset('assets/plugins/accordion-Wizard-Form/jquery.accordion-wizard.min.js') }}"></script>
 <script src="../assets/plugins/notify/js/notifIt.js"></script>
 <script src="../assets/plugins/select2/select2.full.min.js"></script>
-
+<script src="{{ asset('js/department_list.js') }}"></script>
 
 @endsection
