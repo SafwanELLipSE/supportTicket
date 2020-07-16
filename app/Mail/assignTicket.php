@@ -42,7 +42,7 @@ class assignTicket extends Mailable
         $ticket_title = $get_ticket->title;
         $ticket_desc = $get_ticket->description;
         $ticket_priority = $get_ticket->priority;
- 
+
 
         $email = $this->view('mails.mail_assign_ticket')->subject('Employment Application')
                       ->with([
@@ -52,13 +52,19 @@ class assignTicket extends Mailable
                               'ticketCategory' => $ticket_deptTicketCategoryId,
                               'ticketPriority' => $ticket_priority,
                           ]);
-        foreach ($arrayOfFiles as $file) {
-            $email->attach(public_path(). '/ticket_files/'. $file); // attach each file
+
+        if(count($arrayOfFiles) == ""){
+          foreach ($arrayOfFiles as $file) {
+              $email->attach(public_path(). '/ticket_files/'. $file); // attach each file
+          }
         }
-        foreach ($arrayOfImages as $image) {
-            $extension = explode('.',$image);
-            $email->attach(public_path().'/ticket_images/'. $image,['mime' => 'image/'.$extension[1] ]);// attach each file
+        if(count($arrayOfImages) == ""){
+          foreach ($arrayOfImages as $image) {
+              $extension = explode('.',$image);
+              $email->attach(public_path().'/ticket_images/'. $image,['mime' => 'image/'.$extension[1] ]);// attach each file
+          }
         }
+
         return $email;
     }
 }

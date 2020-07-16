@@ -8,12 +8,15 @@ use App\Ticket;
 use App\Department_employee;
 use App\Department_employee_ticket;
 use App\Mail\createEmployee;
+use App\Notifications\createEmployeeNotification;
+use App\Notifications\editEmployeeNotification;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class EmployeeController extends Controller
 {
@@ -28,7 +31,7 @@ class EmployeeController extends Controller
        }
 
       return view("employees.create_employee",[
-        'departments' => $departments
+        "departments" => $departments,
       ]);
   }
 
@@ -69,6 +72,14 @@ class EmployeeController extends Controller
               Mail::to($toUser)->send(new createEmployee($details));
           }
 
+          // Notify Admin
+          $user1 = User::where('access_level', 'master_admin')->first();
+          $user->notify(new createEmployeeNotification($dept_employee->id));
+          // Notify Department
+          $userDepartment = Department::where('id',$request->post('department'))->pluck('user_id');
+          $user2 = User::where('id',$userDepartment)->first();
+          $user2->notify(new createEmployeeNotification($dept_employee->id));
+
           Alert::success('Success', 'Successfully Created');
           return redirect()->route('employee.create');
   }
@@ -77,14 +88,14 @@ class EmployeeController extends Controller
   {
       $dept_employees = array();
       if( Auth::user()->isMasterAdmin()){
-        $dept_employees = Department_employee::where('is_active',1)->get();
+         $dept_employees = Department_employee::where('is_active',1)->get();
       }
       else{
-        $departmentId = Department::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('id');
-        $dept_employees = Department_employee::where('department_id',$departmentId)->get();
+         $departmentId = Department::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('id');
+         $dept_employees = Department_employee::where('department_id',$departmentId)->get();
       }
       return view("employees.employee_list",[
-        'dept_employees' => $dept_employees
+        "dept_employees" => $dept_employees,
       ]);
   }
 
@@ -100,10 +111,11 @@ class EmployeeController extends Controller
                       ->orderBy('id','DESC')
                       ->limit(5)
                       ->get();
+
       return view('employees.detail_employee',[
-        'employee' => Department_employee::find($id),
-        'openTickets' => $openTickets,
-        'closeTickets' => $closeTickets,
+        "employee" => Department_employee::find($id),
+        "openTickets" => $openTickets,
+        "closeTickets" => $closeTickets,
       ]);
   }
 
@@ -117,8 +129,8 @@ class EmployeeController extends Controller
     }
 
     return view('employees.employee_edit',[
-      'employee' => Department_employee::find($id),
-      'departments' => $departments,
+      "employee" => Department_employee::find($id),
+      "departments" => $departments,
     ]);
   }
 
@@ -143,6 +155,15 @@ class EmployeeController extends Controller
         $employee->email = $request->post('email');
         $employee->mobile_no = $request->post('mobile');
         $employee->save();
+
+        // Notify Admin
+        $user1 = User::where('access_level', 'master_admin')->first();
+        $user1->notify(new editEmployeeNotification($employeeId));
+        // Notify Department
+        $userDepartment = Department::where('id',$request->post('department'))->pluck('user_id');
+        $user2 = User::where('id',$userDepartment)->first();
+        $user2->notify(new createEmployeeNotification($dept_employee->id));
+
 
         Alert::success('Success', 'Successfully Created');
         return redirect()->route('employee.edit', $employeeId);

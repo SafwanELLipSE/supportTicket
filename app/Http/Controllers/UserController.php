@@ -10,6 +10,13 @@ use App\Dept_ticket_category;
 use App\Department_employee;
 use App\Mail\createAgent;
 use App\Mail\createDepartment;
+use App\Notifications\AgentCreateNotification;
+use App\Notifications\DepartmentCreateNotification;
+use App\Notifications\editDepartmentNotifiaction;
+use App\Notifications\editAgentNotification;
+use App\Notifications\ActiveAgentDepartment;
+use App\Notifications\InactiveAgentDepartment;
+use App\Notifications\AddDepartmentToAgent;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -17,14 +24,16 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class UserController extends Controller
 {
     public function createAgent(Request $request)
     {
       $departments = Department::where('is_active',1)->get();
+
       return view("agents.create_agent",[
-        'departments' => $departments
+        "departments" => $departments,
       ]);
     }
 
@@ -76,8 +85,16 @@ class UserController extends Controller
           ];
         Mail::to($toUser)->send(new createAgent($details));
       }
-          Alert::success('Success', 'Successfully Created');
-          return redirect()->route('agent.create');
+        // Notify Admin
+        $user1 = User::where('access_level', 'master_admin')->first();
+        $user1->notify(new AgentCreateNotification($user->id));
+
+        // Notify Agent
+        $user2 =  User::where('id',$user->id)->first();
+        $user2->notify(new AgentCreateNotification($user->id));
+
+        Alert::success('Success', 'Successfully Created');
+        return redirect()->route('agent.create');
 
     }
 
@@ -85,7 +102,7 @@ class UserController extends Controller
     {
       $agents = User::where('access_level',User::ACCESS_LEVEL_AGENT)->get();
       return view('agents.agent_list',[
-        'agents' => $agents
+        'agents' => $agents,
       ]);
     }
 
@@ -95,7 +112,7 @@ class UserController extends Controller
         $agentDepartments = Agent_department::where('user_id',$agentId)->where('is_active',1)->get();
 
         $agentDepartmentIds = Agent_department::where('user_id',$agentId)->pluck('department_id');
-        $departments = Department::where('id','!=', $agentDepartmentIds)->where('is_active',1)->get();
+        $departments = Department::whereNotIn('id',$agentDepartmentIds)->where('is_active',1)->get();
 
         $tickets = Ticket::where('user_id',$agentId)->orderBy('updated_at','DESC')->limit(10)->get();
 
@@ -107,7 +124,6 @@ class UserController extends Controller
                                   ->orderBy('updated_at','DESC')
                                   ->limit(10)
                                   ->get();
-
 
         return view("agents.agent_profile",[
           'agent' => User::find($id),
@@ -143,6 +159,13 @@ class UserController extends Controller
             }
           }
 
+          // Notify Admin
+          $user1 = User::where('access_level', 'master_admin')->first();
+          $user1->notify(new AddDepartmentToAgent($agentId));
+
+          $user2 = User::where('id',$agentId)->first();
+          $user2->notify(new AddDepartmentToAgent($agentId));
+
           Alert::success('Success', 'Successfully Created');
           return redirect()->route('agent.profile',$agentId);
     }
@@ -164,7 +187,7 @@ class UserController extends Controller
             'agent_id'  => 'required',
       ]);
 
-      if ($validator->fails()){
+      if($validator->fails()){
           alert()->warning('Error occured',$validator->errors()->all()[0]);
           return redirect()->back()->withInput()->withErrors($validator);
         }
@@ -175,6 +198,14 @@ class UserController extends Controller
          $user->email = $request->post('email');
          $user->mobile_no = $request->post('mobile');
          $user->save();
+
+         // Notify Admin
+         $user1 = User::where('access_level', 'master_admin')->first();
+         $user1->notify(new editAgentNotification($user->id));
+
+         // Notify Agent
+         $user2 = User::where('id',$agentId)->first();
+         $user2->notify(new editAgentNotification($user->id));
 
       Alert::success('Success', 'Successfully Updated');
       return redirect()->route('agent.edit',$agentId);
@@ -197,6 +228,15 @@ class UserController extends Controller
          $agentDepartment->is_active = Agent_department::INACTIVE;
          $agentDepartment->save();
 
+         // Notify Admin
+         $user1 = User::where('access_level', 'master_admin')->first();
+         $user1->notify(new InactiveAgentDepartment($agentId));
+
+         // Notify Agent
+         $userAgentDepartment = Agent_department::where('id',$agentId)->pluck('user_id');
+         $user2 = User::where('id',$userAgentDepartment)->first();
+         $user2->notify(new InactiveAgentDepartment($agentId));
+
       Alert::success('Success', 'Successfully Updated');
       return redirect()->route('agent.profile',$agentUser);
     }
@@ -217,6 +257,15 @@ class UserController extends Controller
          $agentDepartment = Agent_department::find($agentId);
          $agentDepartment->is_active = Agent_department::ACTIVE;
          $agentDepartment->save();
+
+         // Notify Admin
+         $user1 = User::where('access_level', 'master_admin')->first();
+         $user1->notify(new ActiveAgentDepartment($agentId));
+
+         // Notify Agent
+         $userAgentDepartment = Agent_department::where('id',$agentId)->pluck('user_id');
+         $user2 = User::where('id',$userAgentDepartment)->first();
+         $user2->notify(new InactiveAgentDepartment($agentId));
 
       Alert::success('Success', 'Successfully Updated');
       return redirect()->route('agent.edit',$agentUser);
@@ -285,6 +334,14 @@ class UserController extends Controller
             Mail::to($toUser)->send(new createDepartment($details));
         }
 
+        // Notify Admin
+        $user1 = User::where('access_level', 'master_admin')->first();
+        $user1->notify(new DepartmentCreateNotification($department->id));
+
+        // Notify Department
+        $user2 = User::where('id',$user->id)->first();
+        $user2->notify(new DepartmentCreateNotification($department->id));
+
         Alert::success('Success', 'Successfully Created');
         return redirect()->route('department.create');
   }
@@ -293,7 +350,7 @@ class UserController extends Controller
   {
       $departments = Department::where('is_active',1)->get();
       return view('departments.department_list',[
-        'departments' => $departments
+        'departments' => $departments,
       ]);
   }
 
@@ -388,6 +445,13 @@ class UserController extends Controller
          $user->email = $request->post('email');
          $user->mobile_no = $request->post('mobile');
          $user->save();
+
+         // Notify Admin
+         $user1 = User::where('access_level', 'master_admin')->first();
+         $user1->notify(new editDepartmentNotifiaction($userID));
+         // Notify Department
+         $user2 = User::where('id',$userID)->first();
+         $user2->notify(new editDepartmentNotifiaction($userID));
 
       Alert::success('Success', 'Successfully Updated');
       return redirect()->route('department.edit',$department->id);

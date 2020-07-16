@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Notification;
+
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
     public function index(Request $request)
     {
-      echo "hello";
+      return view('personal.notification');
     }
 }

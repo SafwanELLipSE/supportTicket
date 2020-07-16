@@ -5,6 +5,8 @@ use Carbon\Carbon;
 use App\Ticket;
 use App\Department;
 use App\Agent_department;
+use App\Notification;
+use App\User;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -30,7 +32,6 @@ class HomeController extends Controller
     {
       if(Auth::user()->isMasterAdmin())
         {
-
             $today = Ticket::whereDate('created_at', '=',date('Y-m-d'))->count();
             $yesterday = Ticket::whereDate('created_at', '=', date('Y-m-d',strtotime('-1 days')) )->count();
             $lastWeek = Ticket::whereDate('created_at', '>', date('Y-m-d',strtotime('-7 days')) )->count();

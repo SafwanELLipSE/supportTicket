@@ -224,7 +224,7 @@
 		            <div class="row">
 		              <div class="col-md-10">
 										<input type="hidden" name= "agent_id" value="{{$agent->id}}">
-		                <select class="select2" data-placeholder="Choose Employees" name="departments[]" multiple style="width:100% !important">
+		                <select class="select2" data-placeholder="Choose Departments" name="departments[]" multiple style="width:100% !important">
 		                  @foreach($departments as $department)
 		                    <option value="{{$department->id}}">{{$department->name}}</option>
 		                  @endforeach

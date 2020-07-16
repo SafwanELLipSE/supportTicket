@@ -10,6 +10,14 @@ use App\Ticket_comment;
 use App\Department_employee;
 use App\Department_employee_ticket;
 use App\Mail\assignTicket;
+use App\Notifications\TicketCreateNotification;
+use App\Notifications\AssignTicketNotification;
+use App\Notifications\ReassignTicketNotification;
+use App\Notifications\SolveTicketNotification;
+use App\Notifications\CloseTicketNotification;
+use App\Notifications\ActiveEmpolyeeTicketNotification;
+use App\Notifications\InactiveEmpolyeeTicketNotification;
+use App\Notifications\TicketCommentsNotification;
 
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +25,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 
 class TicketController extends Controller
 {
@@ -71,10 +80,19 @@ class TicketController extends Controller
               }
           }
 
-            $get_employee_email = Department_employee::where('is_active',1)->whereIn('id',$employeeIds)->pluck('email');
-            foreach ($get_employee_email as $item){
-                Mail::to($item)->send(new assignTicket($ticketId));
-            }
+          $get_employee_email = Department_employee::where('is_active',1)->whereIn('id',$employeeIds)->pluck('email');
+          foreach ($get_employee_email as $item){
+              Mail::to($item)->send(new assignTicket($ticketId));
+          }
+
+          // Notify admin
+          $user1 = User::where('access_level', 'master_admin')->first();
+          $user1->notify(new AssignTicketNotification($ticketId));
+
+          // Notify agent
+          $getTicketUser = Ticket::where('id',$request->post('ticket_id'))->pluck('user_id');
+          $user2 = User::where('id',$getTicketUser)->first();
+          $user2->notify(new AssignTicketNotification($ticketId));
 
           Alert::success('Success', 'Successfully Created');
           return redirect()->route('ticket.display',$ticketId);
@@ -96,6 +114,28 @@ class TicketController extends Controller
           $comments->ticket_id = Ticket::find($id)->id;
           $comments->comment = $request->post('comments');
           $comments->save();
+
+          // Notify admin
+          $user1 = User::where('access_level', 'master_admin')->first();
+          $user1->notify(new TicketCommentsNotification($comments->id));
+
+          $getTicketUser = Ticket::where('id',$id)->pluck('user_id');
+          $getTicketDepartment = Ticket::where('id',$id)->pluck('department_id');
+
+          if(Auth::user()->canDepartmentAdmin())
+          {
+              // Notify Agent
+              $user2 = User::where('id',$getTicketUser)->first();
+              $user2->notify(new TicketCommentsNotification($comments->id));
+          }
+
+          if(Auth::user()->isAgent())
+          {
+              // Notify Department
+              $getDepartmentUser = Department::where('id',$getTicketDepartment)->pluck('user_id');
+              $user3 = User::where('id',$getDepartmentUser)->first();
+              $user->notify(new TicketCommentsNotification($comments->id));
+          }
 
           Alert::success('Success', 'successfully added');
           return redirect()->route('ticket.display',$comments->ticket_id);
@@ -165,11 +205,57 @@ class TicketController extends Controller
                 $item->is_active = 0;
                 $item->save();
               }
+
+              // Notify admin
+              $user1 = User::where('access_level', 'master_admin')->first();
+              $user1->notify(new ReassignTicketNotification($ticketId));
+
+              // Notify Department
+              $getDepartmentUser = Department::where('id',$departmentId)->pluck('user_id');
+              $user2 = User::where('id',$getDepartmentUser)->first();
+              $user2->notify(new ReassignTicketNotification($ticketId));
+
           }
-          else {
+          elseif($statusNumber == 1){
             $ticket = Ticket::find($ticketId);
             $ticket->status = $statusNumber;
             $ticket->save();
+
+            // Notify admin
+            $user1 = User::where('access_level', 'master_admin')->first();
+            $user1->notify(new SolveTicketNotification($ticketId));
+
+            if(Auth::user()->isMasterAdmin())
+            {
+                // Notify Department
+                $getDepartmentUser = Department::where('id',$departmentId)->pluck('user_id');
+                $user2 = User::where('id',$getDepartmentUser)->first();
+                $user2->notify(new SolveTicketNotification($ticketId));
+            }
+
+            if(Auth::user()->canDepartmentAdmin())
+            {
+              // Notify Agent
+              $getTicketUser = Ticket::where('id', $ticketId)->pluck('user_id');
+              $user = User::where('id',$getTicketUser)->first();
+              $user->notify(new SolveTicketNotification($ticketId));
+            }
+
+          }
+          elseif($statusNumber == 0){
+            $ticket = Ticket::find($ticketId);
+            $ticket->status = $statusNumber;
+            $ticket->save();
+
+            // Notify admin
+            $user1 = User::where('access_level', 'master_admin')->first();
+            $user1->notify(new CloseTicketNotification($ticketId));
+
+            // Notify Department
+            $getDepartmentUser = Department::where('id',$departmentId)->pluck('user_id');
+            $user2 = User::where('id',$getDepartmentUser)->first();
+            $user2->notify(new CloseTicketNotification($ticketId));
+
           }
 
         Alert::success('Success', 'successfully Updated');
@@ -193,14 +279,37 @@ class TicketController extends Controller
             $deptEmployeeTicketId = $request->post('dept_employee_ticket_id');
             $employeeStatusNumber = $request->post('employee_status');
 
-            if($employeeStatusNumber != 0){
+            if($employeeStatusNumber != 0)
+            {
                 $dept_employee_ticket = Department_employee_ticket::find($deptEmployeeTicketId);
                 $dept_employee_ticket->is_active = 1;
+
+                // Notify admin
+                $user1 = User::where('access_level', 'master_admin')->first();
+                $user1->notify(new ActiveEmpolyeeTicketNotification($deptEmployeeTicketId));
+
+                // Notify department
+                $getEmployeeID = Department_employee_ticket::where('id',$deptEmployeeTicketId)->pluck('dept_employee_id');
+                $getDepartmentEmployeeUser = Department_employee::where('id',$getEmployeeID)->pluck('department_id');
+                $getDepartmentUser = Department::where('id',$getDepartmentEmployeeUser)->pluck('user_id');
+                $user2 = User::where('id',$getDepartmentUser)->first();
+                $user2->notify(new ActiveEmpolyeeTicketNotification($deptEmployeeTicketId));
             }
             elseif($employeeStatusNumber == 0)
             {
                 $dept_employee_ticket = Department_employee_ticket::find($deptEmployeeTicketId);
                 $dept_employee_ticket->is_active = 0;
+
+                // Notify admin
+                $user1 = User::where('access_level', 'master_admin')->first();
+                $user1->notify(new InactiveEmpolyeeTicketNotification($deptEmployeeTicketId));
+
+                // Notify department
+                $getEmployeeID = Department_employee_ticket::where('id',$deptEmployeeTicketId)->pluck('dept_employee_id');
+                $getDepartmentEmployeeUser = Department_employee::where('id',$getEmployeeID)->pluck('department_id');
+                $getDepartmentUser = Department::where('id',$getDepartmentEmployeeUser)->pluck('user_id');
+                $user2 = User::where('id',$getDepartmentUser)->first();
+                $user2->notify(new InactiveEmpolyeeTicketNotification($deptEmployeeTicketId));
             }
 
             $dept_employee_ticket->save();
@@ -218,7 +327,6 @@ class TicketController extends Controller
       else{
         $agentDepartmentIds = Agent_department::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('department_id');
         $departments = Department::whereIn('id', $agentDepartmentIds)->get();
-
       }
 
       return view('tickets.create_ticket',[
@@ -280,6 +388,15 @@ class TicketController extends Controller
         $ticket->img_urls = $image_string;
         $ticket->status = 2;
         $ticket->save();
+
+        // Notify admin
+        $user1 = User::where('access_level', 'master_admin')->first();
+        $user1->notify(new TicketCreateNotification($ticket->id));
+        // Notify Department
+        $getDepartmentUser = Department::where('id', $request->post('department'))->pluck('user_id');
+        $user2 = User::where('id',$getDepartmentUser)->first();
+        $user2->notify(new TicketCreateNotification($ticket->id));
+
         Alert::success('Success', 'successfully added');
         return redirect()->route('ticket.create');
     }

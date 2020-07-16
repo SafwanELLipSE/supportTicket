@@ -123,50 +123,232 @@
 						<i class="fe fe-maximize-2"></i>
 					</a>
 				</div><!-- full-screen -->
+				@php
+						$user = App\Notification::all();
+				@endphp
 				<div class="dropdown header-notify">
 					<a class="nav-link icon" data-toggle="dropdown" aria-expanded="false">
 						<i class="fe fe-bell "></i>
-						<span class="pulse bg-success"></span>
+						@if(count(Auth::user()->unreadNotifications) != 0)
+						  <span class="pulse bg-success"></span>
+						@endif
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow ">
-						<a href="#" class="dropdown-item text-center">4 New Notifications</a>
+						<a href="#" class="dropdown-item text-center">{{ count(Auth::user()->unreadNotifications) }} New Notifications</a>
 						<div class="dropdown-divider"></div>
+
+
+					@foreach(Auth::user()->notifications as $notification)
+						@if($notification->type == 'App\Notifications\TicketCreateNotification')
 						<a href="#" class="dropdown-item d-flex pb-3">
 							<div class="notifyimg bg-green">
-								<i class="fe fe-mail"></i>
+								<i class="fa fa-ticket"></i>
 							</div>
 							<div>
-								<strong>Ticket Completed.</strong>
+								@php
+									$value = str_limit($notification->data['title'], 20);
+								@endphp
+								<strong>{{ $value }} Ticket Created.</strong>
+								<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+							</div>
+						</a>
+						@endif
+						@if($notification->type == 'App\Notifications\SolveTicketNotification')
+						<a href="#" class="dropdown-item d-flex pb-3">
+							<div class="notifyimg bg-lime">
+								<i class="fa fa-ticket"></i>
+							</div>
+							<div>
+								@php
+									$value = str_limit($notification->data['title'], 20);
+								@endphp
+								<strong>{{ $value }}Ticket Solved .</strong>
 								<div class="small text-muted">12 mins ago</div>
 							</div>
 						</a>
+						@endif
+						@if($notification->type == 'App\Notifications\CloseTicketNotification')
 						<a href="#" class="dropdown-item d-flex pb-3">
-							<div class="notifyimg bg-pink">
-								<i class="fe fe-shopping-cart"></i>
+							<div class="notifyimg bg-danger">
+								<i class="fa fa-ticket"></i>
 							</div>
 							<div>
-								<strong>Ticket sent to jhorotek</strong>
-								<div class="small text-muted">2  hour ago</div>
+								@php
+									$value = str_limit($notification->data['title'], 20);
+								@endphp
+								<strong>{{ $value }} Ticket Closed.</strong>
+								<div class="small text-muted">12 mins ago</div>
 							</div>
 						</a>
-						<a href="#" class="dropdown-item d-flex pb-3">
-							<div class="notifyimg bg-blue">
-								<i class="fe fe-calendar"></i>
-							</div>
-							<div>
-								<strong>New Comments</strong>
-								<div class="small text-muted">1  hour ago</div>
-							</div>
-						</a>
-						<a href="#" class="dropdown-item d-flex pb-3">
-							<div class="notifyimg bg-orange">
-								<i class="fe fe-monitor"></i>
-							</div>
-							<div>
-								<strong>Your Admin Lanuch</strong>
-								<div class="small text-muted">2  days ago</div>
-							</div>
-						</a>
+						@endif
+						@if($notification->type == 'App\Notifications\DepartmentCreateNotification')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-pink">
+									<i class="fa fa-user-plus"></i>
+								</div>
+								<div>
+									<strong>{{ $notification->data['name'] }} Department Created.</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
+						@if($notification->type == 'App\Notifications\AgentCreateNotification')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-primary">
+									<i class="fa fa-user"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['name'], 20);
+									@endphp
+									<strong>{{ $value }} Agent Created.</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
+						@if($notification->type == 'App\Notifications\ActiveEmpolyeeTicketNotification')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-gradient-success">
+									<i class="fa fa-check-circle"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['name'], 20);
+										$value2 = str_limit($notification->data['title'], 20);
+									@endphp
+									<strong>Employee {{ $value }} Active in <br> {{ $value2  }}.</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
+						@if($notification->type == 'App\Notifications\InactiveEmpolyeeTicketNotification')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-gradient-danger">
+									<i class="fa fa-times-circle"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['name'], 20);
+										$value2 = str_limit($notification->data['title'], 20);
+									@endphp
+									<strong>Employee {{ $value }} Inactive in <br> {{ $value2  }}.</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
+						@if($notification->type == 'App\Notifications\createEmployeeNotification')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-secondary">
+									<i class="fa fa-user-circle"></i>
+								</div>
+								<div>
+									<strong>Employee {{ $notification->data['name'] }} created under <br> {{ $notification->data['department']  }}.</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
+						@if($notification->type == 'App\Notifications\TicketCommentsNotification')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-gradient-primary">
+									<i class="fa fa-comments"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['ticket_title'], 20);
+									@endphp
+									<strong>Comment on {{ $value }}  <br>by {{ $notification->data['name'] }}.</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
+						@if($notification->type == 'App\Notifications\AssignTicketNotification')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-orange">
+									<i class="fa fa-ticket"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['title'], 20);
+
+									@endphp
+									<strong>{{ $value }} Ticket Assigned.</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
+						@if($notification->type == 'App\Notifications\ActiveAgentDepartment')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-purple">
+									<i class="si si-user-follow"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['name'], 20);
+										$value2 = str_limit($notification->data['department'], 20);
+									@endphp
+									<strong>Department {{ $value2 }} Active for <br> {{ $value }}.</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
+						@if($notification->type == 'App\Notifications\InactiveAgentDepartment')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-pink">
+									<i class="si si-user-unfollow"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['name'], 20);
+										$value2 = str_limit($notification->data['department'], 20);
+									@endphp
+									<strong>Department {{ $value2 }} Inactive for <br> {{ $value }}.</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
+						@if($notification->type == 'App\Notifications\editAgentNotification')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-gray">
+									<i class="mdi mdi-account-alert"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['name'], 20);
+									@endphp
+									<strong>Edit agent {{ $value }} is done.</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
+						@if($notification->type == 'App\Notifications\editEmployeeNotification')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-teal">
+									<i class="mdi mdi-account-settings-variant"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['name'], 20);
+									@endphp
+									<strong>Edit employee {{ $value }} is done.</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
+						@if($notification->type == 'App\Notifications\editDepartmentNotifiaction')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-cyan">
+									<i class="mdi mdi-account-edit"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['name'], 20);
+									@endphp
+									<strong>Edit Department {{ $value }} is done.</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
+					@endforeach
 						<div class="dropdown-divider"></div>
 						<a href="#" class="dropdown-item text-center">View all Notifications</a>
 					</div>
