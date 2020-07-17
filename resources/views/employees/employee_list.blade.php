@@ -30,7 +30,7 @@
 									<div class="card-body">
 										<div class="media mt-0">
 											<figure class="rounded-circle align-self-start mb-0">
-												<img src="../../assets/images/users/female/1.jpg" alt="Generic placeholder image" class="avatar brround avatar-md mr-3">
+												<img src="{{asset('assets/images/users/female/employee.jpg')}}" alt="Generic placeholder image" class="avatar brround avatar-md mr-3">
 											</figure>
 											<div class="media-body">
 												<h5 class="time-title p-0 mb-0 font-weight-semibold leading-normal">{{$item->name}}</h5> {{$item->mobile_no}}

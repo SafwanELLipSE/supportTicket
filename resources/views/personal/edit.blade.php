@@ -84,7 +84,13 @@
 								<div class="text-center">
 									<div class="userprofile ">
 										<div class="userpic  brround">
-											<img src="../../assets/images/users/female/5.jpg" alt="" class="userpicimg">
+											@if($user->access_level == 'master_admin')
+												<img src="{{asset('assets/images/users/female/admin_person.jpg')}}" alt="" style="height:100%; width:100%;" class="userpicimg">
+											@elseif($user->access_level == 'department_admin')
+												<img src="{{asset('assets/images/users/female/department_admin.jpg')}}" alt="" style="height:100%; width:100%;" class="userpicimg">
+											@elseif($user->access_level == 'agent')
+												<img src="{{asset('assets/images/users/female/agent.jpg')}}" alt="" style="height:100%; width:100%;" class="userpicimg">
+											@endif
 										</div>
                     @if($user->access_level == 'master_admin')
                     	<h3 class="username mb-2">Admin</h3>

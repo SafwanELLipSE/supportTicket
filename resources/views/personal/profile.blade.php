@@ -27,8 +27,14 @@
             <div class="">
               <div class="">
                 <a href="#">
-                  <img src="../../assets/images/users/female/5.jpg" class="avatar-xxl rounded-circle" alt="profile">
-                </a>
+									@if($user->access_level == 'master_admin')
+                  	<img src="{{asset('assets/images/users/female/admin_person.jpg')}}" class="avatar-xxl rounded-circle" alt="profile">
+									@elseif($user->access_level == 'department_admin')
+										<img src="{{asset('assets/images/users/female/department_admin.jpg')}}" class="avatar-xxl rounded-circle" alt="profile">
+									@elseif($user->access_level == 'agent')
+										<img src="{{asset('assets/images/users/female/agent.jpg')}}" class="avatar-xxl rounded-circle" alt="profile">
+									@endif
+								</a>
               </div>
             </div>
           </div>
@@ -450,7 +456,7 @@
                                            </div> <!-- end col-6 -->
 
 
-                                              
+
                                                </div><!-- end row -->
                                              </div><!-- end #profile-friends tab -->
                                            </div><!-- end tab-content -->

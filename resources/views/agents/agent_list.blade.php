@@ -28,7 +28,7 @@
               <div class="col-xl-6">
                 <div class="mb-2 border shadow">
                   <div class="media overflow-visible">
-                    <a class="media-left" href="javascript:;"><img alt="" class="avatar avatar-md brround" src="../assets/images/users/female/2.jpg"></a>
+                    <a class="media-left" href="javascript:;"><img alt="" class="avatar avatar-md brround" src="{{asset('assets/images/users/female/agent 2.jpg')}}"></a>
                     <div class="media-body valign-middle">
                       <b class="text-inverse">{{$item->name}}</b> <br> <sub class="text-info">{{$item->mobile_no}}</sub>
                     </div>

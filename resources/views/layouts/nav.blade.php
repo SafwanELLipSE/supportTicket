@@ -357,7 +357,14 @@
 					<span class="mr-3 d-none d-lg-block ">
 						<span class="text-gray-white"><span class="ml-2">{{Auth::user()->name}}</span></span>
 					</span>
-					<span class="avatar avatar-md brround"><img src="{{asset('assets/images/users/pyke.jpg')}}" alt="Profile-img" class="avatar avatar-md brround"></span>
+					@if(Auth::user()->isMasterAdmin())
+							<span class="avatar avatar-md brround"><img src="{{asset('assets/images/users/female/admin_person.jpg')}}" alt="Profile-img" class="avatar avatar-md brround"></span>
+					@elseif(Auth::user()->canDepartmentAdmin())
+							<span class="avatar avatar-md brround"><img src="{{asset('assets/images/users/female/department_admin.jpg')}}" alt="Profile-img" class="avatar avatar-md brround"></span>
+					@elseif(Auth::user()->isAgent())
+							<span class="avatar avatar-md brround"><img src="{{asset('assets/images/users/female/agent.jpg')}}" alt="Profile-img" class="avatar avatar-md brround"></span>
+				  @endif
+
 				</a>
 				<div class="dropdown">
 					<a  class="nav-link icon siderbar-link" data-toggle="sidebar-right" data-target=".sidebar-right">

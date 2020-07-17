@@ -103,7 +103,7 @@
 								<div class="text-center">
 									<div class="userprofile ">
 										<div class="userpic  brround">
-											<img src="../../assets/images/users/female/5.jpg" alt="" class="userpicimg">
+											<img src="{{asset('assets/images/users/female/call center.jpg')}}" alt="" style="height:100%; width:100%;" class="userpicimg">
 										</div>
 										<h3 class="username mb-2">Agent</h3>
 										<p class="mb-1">{{ $agent->name }} </p>
