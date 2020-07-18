@@ -28,7 +28,7 @@
 									<div class="">
 										<div class="card-body p-0 relative">
 											<div class="arrow-ribbon">Comming Events</div>
-											<img class="" alt="img" src="../assets/images/photos/32.jpg">
+											<img class="" alt="img" src="{{asset('assets/images/photos/32.jpg')}}">
 											<div class="btn-absolute">
 												<a class="btn btn-primary btn-pill btn-sm" href="#">More info</a>
 												<span id="timer-countercallback1" class="h5 text-white float-right mb-0 mt-1"></span>
@@ -59,7 +59,7 @@
 											<div class="list-group list-lg-group list-group-flush">
 												<a class="list-group-item list-group-item-action overflow-hidden pl-0 pr-0 pb-4" href="#">
 													<div class="d-flex">
-														<img class="avatar-xl br-7 mr-3" src="../assets/images/photos/33.jpg" alt="Image description">
+														<img class="avatar-xl br-7 mr-3" src="{{asset('assets/images/photos/33.jpg')}}" alt="Image description">
 														<div class="media-body">
 															<div class="align-items-center">
 																<h5 class="mb-0">
@@ -77,7 +77,7 @@
 												</a>
 												<a class="list-group-item list-group-item-action overflow-hidden pl-0 pr-0 pt-4" href="#">
 													<div class="d-flex">
-														<img class="avatar-xl br-7 mr-3" src="../assets/images/photos/34.jpg" alt="Image description">
+														<img class="avatar-xl br-7 mr-3" src="{{asset('assets/images/photos/34.jpg')}}" alt="Image description">
 														<div class="media-body">
 															<div class="align-items-center">
 																<h5 class="mb-0">
@@ -109,7 +109,7 @@
 					</a>
 					<div class="dropdown-menu dropdown-menu-left">
 						<a class="dropdown-item" href="#">Change Password</a>
-						<a class="dropdown-item" href="#">Change Email</a>
+						<a class="dropdown-item" href="{{route('edit',Auth::user()->id)}}">Change Email</a>
 						<a class="dropdown-item" href="#">Option 3</a>
 						<a class="dropdown-item" href="#">Option 4</a>
 						<a class="dropdown-item" href="#">Option 5</a>
