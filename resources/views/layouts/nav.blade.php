@@ -2,7 +2,7 @@
 <div class="app-header header d-flex">
 	<div class="container-fluid">
 		<div class="d-flex">
-			<a class="header-brand" href="index.html">
+			<a class="header-brand" href="{{route('home')}}">
 				<img src="{{ asset('assets/images/brand/service_chai.png') }}" class="header-brand-img main-logo" alt="service chai logo" style=" max-width: 60%;">
 				<!-- <img src="../assets/images/brand/icon.png" class="header-brand-img icon-logo" alt="Hogo logo"> -->
 			</a><!-- logo-->
@@ -123,9 +123,6 @@
 						<i class="fe fe-maximize-2"></i>
 					</a>
 				</div><!-- full-screen -->
-				@php
-						$user = App\Notification::all();
-				@endphp
 				<div class="dropdown header-notify">
 					<a class="nav-link icon" data-toggle="dropdown" aria-expanded="false">
 						<i class="fe fe-bell "></i>
@@ -138,7 +135,7 @@
 						<div class="dropdown-divider"></div>
 
 
-					@foreach(Auth::user()->notifications as $notification)
+					@foreach(Auth::user()->unreadNotifications as $notification)
 						@if($notification->type == 'App\Notifications\TicketCreateNotification')
 						<a href="#" class="dropdown-item d-flex pb-3">
 							<div class="notifyimg bg-green">
@@ -163,7 +160,7 @@
 									$value = str_limit($notification->data['title'], 20);
 								@endphp
 								<strong>{{ $value }}Ticket Solved .</strong>
-								<div class="small text-muted">12 mins ago</div>
+								<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
 							</div>
 						</a>
 						@endif
@@ -177,7 +174,7 @@
 									$value = str_limit($notification->data['title'], 20);
 								@endphp
 								<strong>{{ $value }} Ticket Closed.</strong>
-								<div class="small text-muted">12 mins ago</div>
+								<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
 							</div>
 						</a>
 						@endif
@@ -269,7 +266,6 @@
 								<div>
 									@php
 										$value = str_limit($notification->data['title'], 20);
-
 									@endphp
 									<strong>{{ $value }} Ticket Assigned.</strong>
 									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
@@ -350,7 +346,7 @@
 						@endif
 					@endforeach
 						<div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item text-center">View all Notifications</a>
+						<a href="{{ route('mark_all_notification',Auth::user()->id) }}" class="dropdown-item text-center">View all Notifications</a>
 					</div>
 				</div><!-- notifications -->
 				<a class="nav-link leading-none siderbar-link"  data-toggle="sidebar-right" data-target=".sidebar-right">
@@ -395,7 +391,13 @@
 			<div class="tab-pane active " id="tab">
 				<div class="card-body p-0">
 					<div class="header-user text-center mt-4 pb-4">
-						<span class="avatar avatar-xxl brround"><img src="{{asset('assets/images/users/pyke.jpg')}}" alt="Profile-img" class="avatar avatar-xxl brround"></span>
+						@if(Auth::user()->access_level == 'master_admin')
+								<span class="avatar avatar-xxl brround"><img src="{{asset('assets/images/users/female/admin_person.jpg')}}" alt="Profile-img" class="avatar avatar-xxl brround"></span>
+						@elseif(Auth::user()->access_level == 'department_admin')
+								<span class="avatar avatar-xxl brround"><img src="{{asset('assets/images/users/female/department_admin.jpg')}}" alt="Profile-img" class="avatar avatar-xxl brround"></span>
+						@elseif(Auth::user()->access_level == 'agent')
+								<span class="avatar avatar-xxl brround"><img src="{{asset('assets/images/users/female/agent.jpg')}}" alt="Profile-img" class="avatar avatar-xxl brround"></span>
+						@endif
 						<div class="dropdown-item text-center font-weight-semibold user h3 mb-0">{{Auth::user()->name}}</div>
 						@if(Auth::user()->access_level == 'master_admin')
 							<small>Admin</small>

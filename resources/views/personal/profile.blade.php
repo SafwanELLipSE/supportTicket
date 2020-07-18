@@ -21,7 +21,13 @@
 <div class="row">
   <div class="col-md-12">
     <div class="card card-profile  overflow-hidden">
-      <div class="card-body text-center profile-bg">
+		@if($user->access_level == 'master_admin')
+      <div class="card-body text-center bg-gradient-primary">
+		@elseif($user->access_level == 'department_admin')
+			<div class="card-body text-center bg-gradient-secondary">
+		@elseif($user->access_level == 'agent')
+			<div class="card-body text-center bg-gradient-success">
+		@endif
         <div class=" card-profile">
           <div class="row justify-content-center">
             <div class="">
@@ -41,13 +47,15 @@
         </div>
         <h3 class="mt-3 text-white">{{ $user->name }}</h3>
 				@if($user->access_level == 'master_admin')
-        	<p class="mb-2 text-white">Admin</p>
+        		<p class="mb-2 text-white">Admin</p>
+						<a href="{{route('edit',$user->id)}}" class="btn btn-info btn-sm"><i class="fas fa-pencil-alt" aria-hidden="true"></i> Edit profile</a>
 				@elseif($user->access_level == 'department_admin')
 						<p class="mb-2 text-white">Department</p>
+						<a href="{{route('edit',$user->id)}}" class="btn btn-secondary btn-sm"><i class="fas fa-pencil-alt" aria-hidden="true"></i> Edit profile</a>
 				@elseif($user->access_level == 'agent')
 						<p class="mb-2 text-white">Agent</p>
+						<a href="{{route('edit',$user->id)}}" class="btn btn-success btn-sm"><i class="fas fa-pencil-alt" aria-hidden="true"></i> Edit profile</a>
 				@endif
-        <a href="{{route('edit',$user->id)}}" class="btn btn-info btn-sm"><i class="fas fa-pencil-alt" aria-hidden="true"></i> Edit profile</a>
         </div>
         <div class="card-body">
           <div class="nav-wrapper p-0">
