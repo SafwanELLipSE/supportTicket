@@ -344,6 +344,21 @@
 								</div>
 							</a>
 						@endif
+						@if($notification->type == 'App\Notifications\addDepartmentCategoryNotification')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-azure">
+									<i class="ion ion-pricetags"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['name'], 20);
+										$value2 = str_limit($notification->data['department'], 20);
+									@endphp
+									<strong>Category added to {{ $value2 }}, User <br>{{ $value }}.</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
 					@endforeach
 						<div class="dropdown-divider"></div>
 						<a href="{{ route('mark_all_notification',Auth::user()->id) }}" class="dropdown-item text-center">View all Notifications</a>

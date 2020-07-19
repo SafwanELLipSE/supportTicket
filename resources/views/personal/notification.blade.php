@@ -340,6 +340,27 @@
 					</td>
 				</tr>
 				@endif
+				@if($notification->type == 'App\Notifications\addDepartmentCategoryNotification')
+				<tr>
+					<td>
+						<div class="notifyimg bg-azure">
+							<i class="ion ion-pricetags"></i>
+						</div>
+					</td>
+					<td>
+						 Category added to Department ({{ $notification->data['department'] }}) where <br> User {{ $notification->data['name'] }} ({{ $notification->data['email'] }}). <div class="badge badge-primary badge-md">New</div>
+						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+					</td>
+					<td class="text-right">
+						<form action="{{ route('mark_notification') }}" method="post" enctype="multipart/form-data">
+								@csrf
+								<input type="hidden" name= "notification_id" value="{{$notification->id}}">
+								<input type="hidden" name= "user_id" value="{{Auth::user()->id}}">
+								<button type="submit" class="btn btn-sm btn-success"><i class="fa fa-check"></i> Mark</button>
+						</form>
+					</td>
+				</tr>
+				@endif
 			@endforeach
 			<tr>
 				<td></td>
@@ -669,6 +690,27 @@
 					</td>
 					<td>
 						 Edit Department ({{ $notification->data['department'] }}) where <br> User {{ $notification->data['name'] }} ({{ $notification->data['email'] }}) is done.
+						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+					</td>
+					<td class="text-right">
+						<form action="{{ route('delete_notification') }}" method="post" enctype="multipart/form-data">
+								@csrf
+								<input type="hidden" name= "notification_id" value="{{$notification->id}}">
+								<input type="hidden" name= "user_id" value="{{Auth::user()->id}}">
+								<button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+						</form>
+					</td>
+				</tr>
+				@endif
+				@if($notification->type == 'App\Notifications\addDepartmentCategoryNotification')
+				<tr>
+					<td>
+						<div class="notifyimg bg-azure">
+							<i class="ion ion-pricetags"></i>
+						</div>
+					</td>
+					<td>
+						 Category added to Department ({{ $notification->data['department'] }}) where <br> User {{ $notification->data['name'] }} ({{ $notification->data['email'] }}).
 						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
 					</td>
 					<td class="text-right">

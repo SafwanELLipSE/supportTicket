@@ -17,6 +17,7 @@ use App\Notifications\editAgentNotification;
 use App\Notifications\ActiveAgentDepartment;
 use App\Notifications\InactiveAgentDepartment;
 use App\Notifications\AddDepartmentToAgent;
+use App\Notifications\addDepartmentCategoryNotification;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -399,6 +400,13 @@ class UserController extends Controller
             $category->save();
           }
         }
+
+        $user1 = User::where('access_level', 'master_admin')->first();
+        $user1->notify(new addDepartmentCategoryNotification($departmentId));
+
+        $getUser = Department::where('id',$departmentId)->pluck('user_id');
+        $user2 = User::where('id', $getUser)->first();
+        $user2->notify(new addDepartmentCategoryNotification($departmentId));
 
         Alert::success('Success', 'Successfully Created');
         return redirect()->back();
