@@ -63,7 +63,7 @@
 									<a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
 										 data-image="/ticket_images/{{$item}}"
 										 data-target="#image-gallery">
-											<img class="img-thumbnail"
+											<img class="img-thumbnail" style="width: 15rem; height: 10rem;"
 													 src="/ticket_images/{{$item}}"
 													 alt="Another alt text">
 									</a>

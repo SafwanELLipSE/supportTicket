@@ -45,17 +45,13 @@ class TicketController extends Controller
         {
           if($image == $imageLink)
           {
-
             $path_image = public_path(). '/ticket_images/'. $imageLink;
-            // dd($path_image);
-            if($path_image != 0)
-            {
-              unlink($path_image);
-            }
+            unlink($path_image);
             if($request->imageToUpload)
             {
               $uploadImage = $request->imageToUpload;
-              $name = $originalName[0].'.'.$uploadImage->extension();
+              $name = $originalName[0].'.'.$uploadImage->getClientOriginalExtension();
+              // dd($uploadImage, $uploadImage->getClientOriginalExtension(), $name);
               $uploadImage->move(public_path('ticket_images'), $name);
               $newArray[] = $name;
               continue;
@@ -88,14 +84,11 @@ class TicketController extends Controller
           if($file == $fileLink)
           {
             $path_file = public_path(). '/ticket_files/'. $fileLink;
-            if($path_file != 0)
-            {
-              unlink($path_file);
-            }
+            unlink($path_file);
             if($request->fileToUpload)
             {
-              $uploadFile= $request->fileToUpload;
-              $name = $originalName[0].'.'.$uploadFile->extension();
+              $uploadFile = $request->fileToUpload;
+              $name = $originalName[0] .'.'. $uploadFile->getClientOriginalExtension();
               $uploadFile->move(public_path('ticket_files'), $name);
               $newArray[] = $name;
               continue;
