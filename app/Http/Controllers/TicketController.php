@@ -18,6 +18,10 @@ use App\Notifications\CloseTicketNotification;
 use App\Notifications\ActiveEmpolyeeTicketNotification;
 use App\Notifications\InactiveEmpolyeeTicketNotification;
 use App\Notifications\TicketCommentsNotification;
+use App\Notifications\deleteTicketFileNotification;
+use App\Notifications\deleteTicketImageNotification;
+use App\Notifications\editTicketFileNotification;
+use App\Notifications\editTicketImageNotification;
 
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
@@ -66,6 +70,19 @@ class TicketController extends Controller
         $addTicket->img_urls = $currentArray;
         $addTicket->save();
 
+        // Notify admin
+        $user1 = User::where('access_level', 'master_admin')->first();
+        $user1->notify(new editTicketImageNotification($ticketId,$imageLink,$name));
+
+        // Notify Department
+        $getUserDpt = Department::where('id',$getTicket->department_id)->pluck('user_id');
+        $user2 = User::where('id',$getUserDpt)->first();
+        $user2->notify(new editTicketImageNotification($ticketId,$imageLink,$name));
+
+        // Notify Agent
+        $user3 = User::where('id',$getTicket->user_id)->first();
+        $user3->notify(new editTicketImageNotification($ticketId,$imageLink,$name));
+
       Alert::success('Success', 'Successfully, Image has been edited');
       return redirect()->back();
     }
@@ -102,6 +119,19 @@ class TicketController extends Controller
         $addTicket->file_urls = $currentArray;
         $addTicket->save();
 
+        // Notify admin
+        $user1 = User::where('access_level', 'master_admin')->first();
+        $user1->notify(new editTicketFileNotification($ticketId,$fileLink,$name));
+
+        // Notify Department
+        $getUserDpt = Department::where('id',$getTicket->department_id)->pluck('user_id');
+        $user2 = User::where('id',$getUserDpt)->first();
+        $user2->notify(new editTicketFileNotification($ticketId,$fileLink,$name));
+
+        // Notify Agent
+        $user3 = User::where('id',$getTicket->user_id)->first();
+        $user3->notify(new editTicketFileNotification($ticketId,$fileLink,$name));
+
       Alert::success('Success', 'Successfully, File has been edited');
       return redirect()->back();
 
@@ -134,6 +164,19 @@ class TicketController extends Controller
         $addTicket->img_urls = $currentArray;
         $addTicket->save();
 
+        // Notify admin
+        $user1 = User::where('access_level', 'master_admin')->first();
+        $user1->notify(new deleteTicketImageNotification($ticketId,$imageLink));
+
+        // Notify Department
+        $getUserDpt = Department::where('id',$getTicket->department_id)->pluck('user_id');
+        $user2 = User::where('id',$getUserDpt)->first();
+        $user2->notify(new deleteTicketImageNotification($ticketId,$imageLink));
+
+        // Notify Agent
+        $user3 = User::where('id',$getTicket->user_id)->first();
+        $user3->notify(new deleteTicketImageNotification($ticketId,$imageLink));
+
       Alert::success('Success', 'Successfully, Image has been removed');
       return redirect()->back();
 
@@ -165,6 +208,19 @@ class TicketController extends Controller
         $addTicket = Ticket::find($ticketId);
         $addTicket->file_urls = $currentArray;
         $addTicket->save();
+
+        // Notify admin
+        $user1 = User::where('access_level', 'master_admin')->first();
+        $user1->notify(new deleteTicketFileNotification($ticketId,$fileLink));
+
+        // Notify Department
+        $getUserDpt = Department::where('id',$getTicket->department_id)->pluck('user_id');
+        $user2 = User::where('id',$getUserDpt)->first();
+        $user2->notify(new deleteTicketFileNotification($ticketId,$fileLink));
+
+        // Notify Agent
+        $user3 = User::where('id',$getTicket->user_id)->first();
+        $user3->notify(new deleteTicketFileNotification($ticketId,$fileLink));
 
         Alert::success('Success', 'Successfully, File has been removed');
         return redirect()->back();
