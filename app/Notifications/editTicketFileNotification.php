@@ -65,8 +65,8 @@ class editTicketFileNotification extends Notification
 
       return [
           "title" => $title,
-          "from_image_name" => $this->details2,
-          "to_image_name" => $this->details3,
+          "from_file_name" => $this->details2,
+          "to_file_name" => $this->details3,
       ];
     }
 }

@@ -361,6 +361,108 @@
 					</td>
 				</tr>
 				@endif
+				@if($notification->type == 'App\Notifications\deleteTicketImageNotification')
+				<tr>
+					<td>
+						<div class="notifyimg bg-gradient-danger">
+							<i class="fa fa-picture-o"></i>
+						</div>
+					</td>
+					@php
+						$value = str_limit($notification->data['title'], 20);
+						$value2 = str_limit($notification->data['image_name'], 20);
+					@endphp
+					<td>
+						 Image, {{ $value2 }} deleted from ticket <br> {{ $value }}. <div class="badge badge-primary badge-md">New</div>
+						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+					</td>
+					<td class="text-right">
+						<form action="{{ route('mark_notification') }}" method="post" enctype="multipart/form-data">
+								@csrf
+								<input type="hidden" name= "notification_id" value="{{$notification->id}}">
+								<input type="hidden" name= "user_id" value="{{Auth::user()->id}}">
+								<button type="submit" class="btn btn-sm btn-success"><i class="fa fa-check"></i> Mark</button>
+						</form>
+					</td>
+				</tr>
+				@endif
+				@if($notification->type == 'App\Notifications\deleteTicketFileNotification')
+				<tr>
+					<td>
+						<div class="notifyimg bg-gradient-danger">
+							<i class="fa fa-file"></i>
+						</div>
+					</td>
+					@php
+						$value = str_limit($notification->data['title'], 20);
+						$value2 = str_limit($notification->data['file_name'], 20);
+					@endphp
+					<td>
+						 File, {{ $value2 }} deleted from ticket <br> {{ $value }}. <div class="badge badge-primary badge-md">New</div>
+						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+					</td>
+					<td class="text-right">
+						<form action="{{ route('mark_notification') }}" method="post" enctype="multipart/form-data">
+								@csrf
+								<input type="hidden" name= "notification_id" value="{{$notification->id}}">
+								<input type="hidden" name= "user_id" value="{{Auth::user()->id}}">
+								<button type="submit" class="btn btn-sm btn-success"><i class="fa fa-check"></i> Mark</button>
+						</form>
+					</td>
+				</tr>
+				@endif
+				@if($notification->type == 'App\Notifications\editTicketImageNotification')
+				<tr>
+					<td>
+						<div class="notifyimg bg-gradient-danger">
+							<i class="fa fa-picture-o"></i>
+						</div>
+					</td>
+					@php
+						$value = str_limit($notification->data['title'], 20);
+						$value2 = str_limit($notification->data['from_image_name'], 20);
+						$value3 = str_limit($notification->data['to_image_name'], 20);
+					@endphp
+					<td>
+						 Image, {{ $value2 }} was edited to {{ $value3 }} from ticket <br> {{ $value }}. <div class="badge badge-primary badge-md">New</div>
+						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+					</td>
+					<td class="text-right">
+						<form action="{{ route('mark_notification') }}" method="post" enctype="multipart/form-data">
+								@csrf
+								<input type="hidden" name= "notification_id" value="{{$notification->id}}">
+								<input type="hidden" name= "user_id" value="{{Auth::user()->id}}">
+								<button type="submit" class="btn btn-sm btn-success"><i class="fa fa-check"></i> Mark</button>
+						</form>
+					</td>
+				</tr>
+				@endif
+				@if($notification->type == 'App\Notifications\editTicketFileNotification')
+				<tr>
+					<td>
+						<div class="notifyimg bg-gradient-danger">
+							<i class="fa fa-file"></i>
+						</div>
+					</td>
+					@php
+						$value = str_limit($notification->data['title'], 20);
+						$value2 = str_limit($notification->data['from_file_name'], 20);
+						$value3 = str_limit($notification->data['to_file_name'], 20);
+					@endphp
+					<td>
+						 File, {{ $value2 }} was edited to {{ $value3 }} from ticket <br> {{ $value }}. <div class="badge badge-primary badge-md">New</div>
+						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+					</td>
+					<td class="text-right">
+						<form action="{{ route('mark_notification') }}" method="post" enctype="multipart/form-data">
+								@csrf
+								<input type="hidden" name= "notification_id" value="{{$notification->id}}">
+								<input type="hidden" name= "user_id" value="{{Auth::user()->id}}">
+								<button type="submit" class="btn btn-sm btn-success"><i class="fa fa-check"></i> Mark</button>
+						</form>
+					</td>
+				</tr>
+				@endif
 			@endforeach
 			<tr>
 				<td></td>
@@ -711,6 +813,110 @@
 					</td>
 					<td>
 						 Category added to Department ({{ $notification->data['department'] }}) where <br> User {{ $notification->data['name'] }} ({{ $notification->data['email'] }}).
+						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+					</td>
+					<td class="text-right">
+						<form action="{{ route('delete_notification') }}" method="post" enctype="multipart/form-data">
+								@csrf
+								<input type="hidden" name= "notification_id" value="{{$notification->id}}">
+								<input type="hidden" name= "user_id" value="{{Auth::user()->id}}">
+								<button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+						</form>
+					</td>
+				</tr>
+				@endif
+
+
+				@if($notification->type == 'App\Notifications\deleteTicketImageNotification')
+				<tr>
+					<td>
+						<div class="notifyimg bg-gradient-danger">
+							<i class="fa fa-picture-o"></i>
+						</div>
+					</td>
+					@php
+						$value = str_limit($notification->data['title'], 20);
+						$value2 = str_limit($notification->data['image_name'], 20);
+					@endphp
+					<td>
+						 Image, {{ $value2 }} deleted from ticket <br> {{ $value }}.
+						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+					</td>
+					<td class="text-right">
+						<form action="{{ route('delete_notification') }}" method="post" enctype="multipart/form-data">
+								@csrf
+								<input type="hidden" name= "notification_id" value="{{$notification->id}}">
+								<input type="hidden" name= "user_id" value="{{Auth::user()->id}}">
+								<button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+						</form>
+					</td>
+				</tr>
+				@endif
+				@if($notification->type == 'App\Notifications\deleteTicketFileNotification')
+				<tr>
+					<td>
+						<div class="notifyimg bg-gradient-danger">
+							<i class="fa fa-file"></i>
+						</div>
+					</td>
+					@php
+						$value = str_limit($notification->data['title'], 20);
+						$value2 = str_limit($notification->data['file_name'], 20);
+					@endphp
+					<td>
+						 File, {{ $value2 }} deleted from ticket <br> {{ $value }}.
+						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+					</td>
+					<td class="text-right">
+						<form action="{{ route('delete_notification') }}" method="post" enctype="multipart/form-data">
+								@csrf
+								<input type="hidden" name= "notification_id" value="{{$notification->id}}">
+								<input type="hidden" name= "user_id" value="{{Auth::user()->id}}">
+								<button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+						</form>
+					</td>
+				</tr>
+				@endif
+				@if($notification->type == 'App\Notifications\editTicketImageNotification')
+				<tr>
+					<td>
+						<div class="notifyimg bg-gradient-danger">
+							<i class="fa fa-picture-o"></i>
+						</div>
+					</td>
+					@php
+						$value = str_limit($notification->data['title'], 20);
+						$value2 = str_limit($notification->data['from_image_name'], 20);
+						$value3 = str_limit($notification->data['to_image_name'], 20);
+					@endphp
+					<td>
+						 Image, {{ $value2 }} was edited to {{ $value3 }} from ticket <br> {{ $value }}.
+						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+					</td>
+					<td class="text-right">
+						<form action="{{ route('delete_notification') }}" method="post" enctype="multipart/form-data">
+								@csrf
+								<input type="hidden" name= "notification_id" value="{{$notification->id}}">
+								<input type="hidden" name= "user_id" value="{{Auth::user()->id}}">
+								<button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+						</form>
+					</td>
+				</tr>
+				@endif
+				@if($notification->type == 'App\Notifications\editTicketFileNotification')
+				<tr>
+					<td>
+						<div class="notifyimg bg-gradient-danger">
+							<i class="fa fa-file"></i>
+						</div>
+					</td>
+					@php
+						$value = str_limit($notification->data['title'], 20);
+						$value2 = str_limit($notification->data['from_file_name'], 20);
+						$value3 = str_limit($notification->data['to_file_name'], 20);
+					@endphp
+					<td>
+						 File, {{ $value2 }} was edited to {{ $value3 }} from ticket <br> {{ $value }}.
 						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
 					</td>
 					<td class="text-right">

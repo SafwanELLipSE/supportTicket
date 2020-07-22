@@ -359,6 +359,66 @@
 								</div>
 							</a>
 						@endif
+						@if($notification->type == 'App\Notifications\deleteTicketImageNotification')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-gradient-danger">
+									<i class="fa fa-picture-o"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['title'], 20);
+										$value2 = str_limit($notification->data['image_name'], 20);
+									@endphp
+									<strong>Delete image, {{ $value2 }} from Ticket <br> {{ $value }}</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
+						@if($notification->type == 'App\Notifications\deleteTicketFileNotification')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-gradient-danger">
+									<i class="fa fa-file"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['title'], 20);
+										$value2 = str_limit($notification->data['file_name'], 20);
+									@endphp
+									<strong>Delete file, {{ $value2 }} from Ticket <br> {{ $value }}</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
+						@if($notification->type == 'App\Notifications\editTicketImageNotification')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-gradient-success">
+									<i class="fa fa-picture-o"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['title'], 20);
+										$value2 = str_limit($notification->data['to_image_name'], 20);
+									@endphp
+									<strong>Edit image, {{ $value2 }} from Ticket <br> {{ $value }}</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
+						@if($notification->type == 'App\Notifications\editTicketFileNotification')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-gradient-success">
+									<i class="fa fa-file"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['title'], 20);
+										$value2 = str_limit($notification->data['to_file_name'], 20);
+									@endphp
+									<strong>Edit file, {{ $value2 }} from Ticket <br> {{ $value }}</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
 					@endforeach
 						<div class="dropdown-divider"></div>
 						<a href="{{ route('mark_all_notification',Auth::user()->id) }}" class="dropdown-item text-center">View all Notifications</a>
