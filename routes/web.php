@@ -47,6 +47,10 @@ Route::group(['middleware' => ['auth']], function () {
       Route::post('staging-employee-status',['as' =>'staging_employee_status','uses' =>'TicketController@changeEmployeeStatus']);
       Route::get('upload-file/{id}', ['as' => 'upload_file','uses' => 'TicketController@displayUploadedFile']);
       Route::post('download-file',['as' =>'download_file','uses' =>'TicketController@downloadUploadFile']);
+      Route::post('delete-image',['as' =>'delete_image','uses' =>'TicketController@deleteTicketImage']);
+      Route::post('delete-file',['as' =>'delete_file','uses' =>'TicketController@deleteTicketFile']);
+      Route::post('edit-image',['as' =>'edit_image','uses' =>'TicketController@editTicketImage']);
+      Route::post('edit-file',['as' =>'edit_file','uses' =>'TicketController@editTicketFile']);
     });
 
     Route::group(['prefix' =>'notification', 'as'=>'notification.'], function(){

@@ -29,6 +29,153 @@ use Illuminate\Support\Facades\Notification;
 
 class TicketController extends Controller
 {
+    public function editTicketImage(Request $request)
+    {
+        $ticketId = $request->post('ticket_id');
+        $imageLink = $request->post('image_name');
+        $originalName = explode('.',$imageLink);
+
+        $getTicket = Ticket::where('id',$ticketId)->first();
+        $images = $getTicket->img_urls;
+        $arrayOfImageFiles = explode(',',$images);
+
+        $newArray = array();
+
+        foreach ($arrayOfImageFiles as $image)
+        {
+          if($image == $imageLink)
+          {
+
+            $path_image = public_path(). '/ticket_images/'. $imageLink;
+            // dd($path_image);
+            if($path_image != 0)
+            {
+              unlink($path_image);
+            }
+            if($request->imageToUpload)
+            {
+              $uploadImage = $request->imageToUpload;
+              $name = $originalName[0].'.'.$uploadImage->extension();
+              $uploadImage->move(public_path('ticket_images'), $name);
+              $newArray[] = $name;
+              continue;
+            }
+          }
+          $newArray[] = $image;
+        }
+
+        $currentArray = implode(",", $newArray);
+
+        $addTicket = Ticket::find($ticketId);
+        $addTicket->img_urls = $currentArray;
+        $addTicket->save();
+
+      Alert::success('Success', 'Successfully, Image has been edited');
+      return redirect()->back();
+    }
+    public function editTicketFile(Request $request)
+    {
+        $ticketId = $request->post('ticket_id');
+        $fileLink = $request->post('file_name');
+        $originalName = explode('.',$fileLink);
+
+        $getTicket = Ticket::where('id',$ticketId)->first();
+        $files = $getTicket->file_urls;
+        $arrayOfFiles = explode(',',$files);
+
+        foreach ($arrayOfFiles as $file)
+        {
+          if($file == $fileLink)
+          {
+            $path_file = public_path(). '/ticket_files/'. $fileLink;
+            if($path_file != 0)
+            {
+              unlink($path_file);
+            }
+            if($request->fileToUpload)
+            {
+              $uploadFile= $request->fileToUpload;
+              $name = $originalName[0].'.'.$uploadFile->extension();
+              $uploadFile->move(public_path('ticket_files'), $name);
+              $newArray[] = $name;
+              continue;
+            }
+          }
+          $newArray[] = $file;
+        }
+        $currentArray = implode(",", $newArray);
+
+        $addTicket = Ticket::find($ticketId);
+        $addTicket->file_urls = $currentArray;
+        $addTicket->save();
+
+      Alert::success('Success', 'Successfully, File has been edited');
+      return redirect()->back();
+
+    }
+    public function deleteTicketImage(Request $request)
+    {
+        $ticketId = $request->post('ticket_id');
+        $imageLink = $request->post('image_name');
+
+        $getTicket = Ticket::where('id',$ticketId)->first();
+        $images = $getTicket->img_urls;
+        $arrayOfImageFiles = explode(',',$images);
+
+        $newArray = array();
+
+        foreach ($arrayOfImageFiles as $image)
+        {
+          if($image == $imageLink)
+          {
+            $path_image = public_path(). '/ticket_images/'. $imageLink;
+            unlink($path_image);
+            continue;
+          }
+          $newArray[] = $image;
+        }
+
+        $currentArray = implode(",", $newArray);
+
+        $addTicket = Ticket::find($ticketId);
+        $addTicket->img_urls = $currentArray;
+        $addTicket->save();
+
+      Alert::success('Success', 'Successfully, Image has been removed');
+      return redirect()->back();
+
+    }
+    public function deleteTicketFile(Request $request)
+    {
+        $ticketId = $request->post('ticket_id');
+        $fileLink = $request->post('file_name');
+
+        $getTicket = Ticket::where('id',$ticketId)->first();
+        $files = $getTicket->file_urls;
+        $arrayOfFiles = explode(',',$files);
+
+        $newArray = array();
+
+        foreach ($arrayOfFiles as $file)
+        {
+          if($file == $fileLink)
+          {
+            $path_file = public_path(). '/ticket_files/'. $fileLink;
+            unlink($path_file);
+            continue;
+          }
+          $newArray[] = $file;
+        }
+
+        $currentArray = implode(",", $newArray);
+
+        $addTicket = Ticket::find($ticketId);
+        $addTicket->file_urls = $currentArray;
+        $addTicket->save();
+
+        Alert::success('Success', 'Successfully, File has been removed');
+        return redirect()->back();
+    }
 
     public function downloadUploadFile(Request $request)
     {
@@ -49,6 +196,7 @@ class TicketController extends Controller
         return view('tickets.ticket_internal_files',[
             'arrayOfImageFiles' => $arrayOfImageFiles,
             'arrayOfFiles' => $arrayOfFiles,
+            'ticketID' => $ticketId,
         ]);
     }
 

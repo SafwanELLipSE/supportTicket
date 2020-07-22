@@ -52,17 +52,58 @@
 	</div>
 	<div class="card-body">
 		<div class="row">
+			@php
+				$count = 1;
+			@endphp
 				@foreach($arrayOfImageFiles as $item)
 				 @if($item != "")
 					<div class="col-lg-3 col-md-4 col-xs-6 thumb">
-	            <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
-	               data-image="/ticket_images/{{$item}}"
-	               data-target="#image-gallery">
-	                <img class="img-thumbnail"
-	                     src="/ticket_images/{{$item}}"
-	                     alt="Another alt text">
-	            </a>
+						<div class="card">
+								<div class="card-body">
+									<a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
+										 data-image="/ticket_images/{{$item}}"
+										 data-target="#image-gallery">
+											<img class="img-thumbnail"
+													 src="/ticket_images/{{$item}}"
+													 alt="Another alt text">
+									</a>
+						@if(Auth::user()->canModarateTickets())
+									<div class="col-md-12">
+										<div class="collapse" id="collapseImage{{$count}}">
+											<form action="{{ route('ticket.edit_image') }}" method="post" enctype="multipart/form-data">
+												@csrf
+												<div class="form-group">
+													<div class="custom-file">
+														<input type="hidden" name="ticket_id" value="{{ $ticketID }}">
+														<input type="hidden" name="image_name" value="{{ $item }}">
+														<input type="file" class="custom-file-input" name="imageToUpload" id="filesToUpload" />
+														<label class="custom-file-label">Choose Images</label>
+													</div>
+												</div>
+												<button type="submit" class="btn btn-sm btn-pill btn-success mt-1 mx-auto d-block">Submit</button>
+											</form>
+										</div>
+									</div>
+						@endif
+								</div>
+						@if(Auth::user()->canModarateTickets())
+								<div class="card-footer mx-auto d-block">
+									<div class="col-md-12">
+										<button type="submit" class="btn btn-sm btn-pill btn-success" style="position: absolute; margin-right: 3rem;" data-toggle="collapse" data-target="#collapseImage{{$count}}" aria-expanded="false" aria-controls="collapseImage{{$count}}"><i class="si si-pencil"></i></button>
+										<form action="{{ route('ticket.delete_image') }}" method="post" style="margin-left: 3rem;">
+											@csrf
+											<input type="hidden" name="ticket_id" value="{{ $ticketID }}">
+											<input type="hidden" name="image_name" value="{{ $item }}">
+											<button type="submit" class="btn btn-sm btn-pill btn-danger"><i class="fe fe-trash"></i></button>
+										</form>
+								  </div>
+								</div>
+						@endif
+							</div>
 	        </div>
+					 @php
+	 					 $count++;
+	 				 @endphp
 					@else
 					 <div class="h3 text-secondary mx-auto d-block">
 					 	 Sorry!! No image Uploaded.
@@ -81,9 +122,13 @@
 	</div>
 	<div class="card-body">
 		<div class="row">
+			@php
+				$count = 1;
+			@endphp
+
 			@foreach($arrayOfFiles as $item)
 				@if($item != "")
-					<div class="col-md-12 col-xl-3">
+					<div class="col-lg-3 col-md-4 col-xs-6">
 						<div class="card">
 								<div class="card-body mx-auto d-block">
 										@if(explode('.', $item)[1] == 'pdf')
@@ -114,22 +159,53 @@
 											<i class="fa fa-files-o fa-4x text-orange"></i>
 										@endif
 								</div>
-								<div class="card-footer">
-									<div class="row">
-										<form action="{{route('ticket.download_file')}}" method="POST" enctype="multipart/form-data">
+								<div class="card-footer mx-auto d-block">
+									<div class="row text-center">
+										<div class="col-12">
+											<a href="#" class="text-center">{{ $item }}</a>
+										</div>
+										@if(Auth::user()->canModarateTickets())
+											<button type="submit" class="btn btn-sm btn-pill btn-success mt-2" data-toggle="collapse" data-target="#collapseFile{{$count}}" aria-expanded="false" aria-controls="collapseFile{{$count}}"><i class="si si-pencil"></i></button>
+										@endif
+										<form action="{{route('ticket.download_file')}}" method="POST" enctype="multipart/form-data" class="mx-auto d-block">
 											@csrf
-												<div class="col-12">
-													<input type="hidden" name="file_name" value="{{ $item }}">
-													<a href="#">{{ $item }}</a>
-												</div>
+												<input type="hidden" name="file_name" value="{{ $item }}">
 												<div class="col-12 mt-2">
-													<button type="submit" class="btn btn-sm btn-pill btn-success mx-auto d-block">Download</button>
+													<button type="submit" class="btn btn-sm btn-pill btn-purple mx-auto d-block">Download</button>
 												</div>
 										</form>
+										@if(Auth::user()->canModarateTickets())
+										<form action="{{ route('ticket.delete_file') }}" method="post" class="mt-2">
+											@csrf
+											<input type="hidden" name="ticket_id" value="{{ $ticketID }}">
+											<input type="hidden" name="file_name" value="{{ $item }}">
+											<button type="submit" class="btn btn-sm btn-pill btn-danger"><i class="fe fe-trash"></i></button>
+										</form>
+										<div class="col-md-12 mt-3">
+											<div class="collapse" id="collapseFile{{$count}}">
+												<form action="{{ route('ticket.edit_file') }}" method="post" enctype="multipart/form-data">
+													@csrf
+													<div class="form-group">
+														<div class="custom-file">
+															<input type="hidden" name="ticket_id" value="{{ $ticketID }}">
+															<input type="hidden" name="file_name" value="{{ $item }}">
+															<input type="file" class="custom-file-input" name="fileToUpload" id="filesToUpload"/>
+															<label class="custom-file-label">Choose Files</label>
+														</div>
+													</div>
+													<button type="submit" class="btn btn-sm btn-pill btn-success mt-1">Submit</button>
+												</form>
+											</div>
+										</div>
+										@endif
 									</div>
 								</div>
 						</div>
 					</div>
+
+					@php
+						$count++;
+					@endphp
 					@else
 					 <div class="h3 text-secondary mx-auto d-block">
 					 	 Sorry!! No file is there in the Database.
