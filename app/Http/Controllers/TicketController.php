@@ -50,12 +50,14 @@ class TicketController extends Controller
           if($image == $imageLink)
           {
             $path_image = public_path(). '/ticket_images/'. $imageLink;
-            unlink($path_image);
+            if(file_exists($path_image) == true)
+            {
+                unlink($path_image);
+            }
             if($request->imageToUpload)
             {
               $uploadImage = $request->imageToUpload;
               $name = $originalName[0].'.'.$uploadImage->getClientOriginalExtension();
-              // dd($uploadImage, $uploadImage->getClientOriginalExtension(), $name);
               $uploadImage->move(public_path('ticket_images'), $name);
               $newArray[] = $name;
               continue;
@@ -101,7 +103,10 @@ class TicketController extends Controller
           if($file == $fileLink)
           {
             $path_file = public_path(). '/ticket_files/'. $fileLink;
-            unlink($path_file);
+            if(file_exists($path_file) == true)
+            {
+                unlink($path_file);
+            }
             if($request->fileToUpload)
             {
               $uploadFile = $request->fileToUpload;
