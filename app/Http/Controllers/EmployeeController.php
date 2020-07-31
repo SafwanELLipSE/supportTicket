@@ -74,7 +74,7 @@ class EmployeeController extends Controller
 
           // Notify Admin
           $user1 = User::where('access_level', 'master_admin')->first();
-          $user->notify(new createEmployeeNotification($dept_employee->id));
+          $user1->notify(new createEmployeeNotification($dept_employee->id));
           // Notify Department
           $userDepartment = Department::where('id',$request->post('department'))->pluck('user_id');
           $user2 = User::where('id',$userDepartment)->first();

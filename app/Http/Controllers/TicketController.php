@@ -392,13 +392,15 @@ class TicketController extends Controller
 
         $ticketId = $request->post('ticket_id');
         $statusNumber = $request->post('ticket_status');
-        $departmentId = $request->post('department');
-        $deptTicketCategoryId = $request->post('category');
+        $getTicket = Ticket::where('id',$ticketId)->first();
+        $departmentId = $getTicket->department_id;
+        $reassignDepartmentId = $request->post('department');
+        $reassignDeptTicketCategoryId = $request->post('category');
 
           if($statusNumber == 2){
               $ticket = Ticket::find($ticketId);
-              $ticket->department_id = $departmentId;
-              $ticket->dept_ticket_category_id = $deptTicketCategoryId;
+              $ticket->department_id = $reassignDepartmentId;
+              $ticket->dept_ticket_category_id = $reassignDeptTicketCategoryId;
               $ticket->status = $statusNumber;
               $ticket->save();
 
@@ -439,8 +441,8 @@ class TicketController extends Controller
             {
               // Notify Agent
               $getTicketUser = Ticket::where('id', $ticketId)->pluck('user_id');
-              $user = User::where('id',$getTicketUser)->first();
-              $user->notify(new SolveTicketNotification($ticketId));
+              $user3 = User::where('id',$getTicketUser)->first();
+              $user3->notify(new SolveTicketNotification($ticketId));
             }
 
           }
@@ -457,7 +459,6 @@ class TicketController extends Controller
             $getDepartmentUser = Department::where('id',$departmentId)->pluck('user_id');
             $user2 = User::where('id',$getDepartmentUser)->first();
             $user2->notify(new CloseTicketNotification($ticketId));
-
           }
 
         Alert::success('Success', 'successfully Updated');

@@ -53,12 +53,12 @@ class assignTicket extends Mailable
                               'ticketPriority' => $ticket_priority,
                           ]);
 
-        if(count($arrayOfFiles) == ""){
+        if(count($arrayOfFiles) != ""){
           foreach ($arrayOfFiles as $file) {
               $email->attach(public_path(). '/ticket_files/'. $file); // attach each file
           }
         }
-        if(count($arrayOfImages) == ""){
+        if(count($arrayOfImages) != ""){
           foreach ($arrayOfImages as $image) {
               $extension = explode('.',$image);
               $email->attach(public_path().'/ticket_images/'. $image,['mime' => 'image/'.$extension[1] ]);// attach each file

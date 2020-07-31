@@ -42,23 +42,23 @@ class HomeController extends Controller
             $recentTicketList = Ticket::whereDate('created_at', '>=', date('Y-m-d',strtotime('-7 days')) )->limit(20)->get();
             $recentDepartment = Department::where('is_active',1)->orderBy('id', 'DESC')->limit(20)->get();
 
-            $solved = Ticket::where('status',Ticket::SOLVED)->orderBy('created_at', 'DESC')->Limit(8)->get();
+            $solved = Ticket::where('status',Ticket::SOLVED)->orderBy('created_at', 'DESC')->limit(8)->get();
 
             if(count($solved) < 8)
             {
-              $close = Ticket::where('status',Ticket::CLOSED)->orderBy('created_at', 'DESC')->Limit(8 - count($solved))->get();
+              $close = Ticket::where('status',Ticket::CLOSED)->orderBy('created_at', 'DESC')->limit(8 - count($solved))->get();
             }
             else
             {
-              $close = Ticket::where('status',Ticket::CLOSED)->orderBy('created_at', 'DESC')->Limit(0)->get();
+              $close = Ticket::where('status',Ticket::CLOSED)->orderBy('created_at', 'DESC')->limit(0)->get();
             }
             if(count($close) + count($solved)  < 8)
             {
-              $open = Ticket::where('status',Ticket::OPEN)->orderBy('created_at', 'DESC')->Limit(8 - (count($close) + count($solved)))->get();
+              $open = Ticket::where('status',Ticket::OPEN)->orderBy('created_at', 'DESC')->limit(8 - (count($close) + count($solved)))->get();
             }
             else
             {
-              $open = Ticket::where('status',Ticket::OPEN)->orderBy('created_at', 'DESC')->Limit(0)->get();
+              $open = Ticket::where('status',Ticket::OPEN)->orderBy('created_at', 'DESC')->limit(0)->get();
             }
         }
         elseif(Auth::user()->isAgent())
