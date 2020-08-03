@@ -248,6 +248,9 @@ table, th, td {
                         <th class="wd-20p">Name</th>
                         <th class="wd-15p">Email</th>
                         <th class="wd-10p">Mobile No.</th>
+                        @if(Auth::user()->isMasterAdmin())
+                          <th class="wd-10p">Department</th>
+                        @endif
                         <th class="wd-10p">Status</th>
                         <th class="wd-10p">View</th>
                       </tr>
@@ -255,23 +258,26 @@ table, th, td {
                     <tbody>
                       @foreach($assigned as $item)
                         <tr>
-                            <th>{{ $item->id }} </th>
-                            <th>{{ $item->employee->name }}</th>
-                            <th>{{ $item->employee->email }} </th>
-                            <th>{{ $item->employee->mobile_no }}</th>
-                            <th>{!! App\Department_employee_ticket::getStatus($item->is_active) !!}</th>
+                            <th>{{ $item->employeeTicket->id }} </th>
+                            <th>{{ $item->name }}</th>
+                            <th>{{ $item->email }} </th>
+                            <th>{{ $item->mobile_no }}</th>
+                            @if(Auth::user()->isMasterAdmin())
+                              <th>{{ $item->department->name }}</th>
+                            @endif
+                            <th>{!! App\Department_employee_ticket::getStatus($item->employeeTicket->is_active) !!}</th>
                             <th>
                               <div class="dropdown">
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                   <i class="fa fa-eye"></i>View
                                 </button>
                                 <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 41px, 0px);">
-                                  <a class="dropdown-item" href="{{ route('employee.details',$item->dept_employee_id) }}">View profile</a>
+                                  <a class="dropdown-item" href="{{ route('employee.details',$item->employeeTicket->id) }}">View profile</a>
                                   <form action="{{route('ticket.staging_employee_status')}}" method="POST" enctype="multipart/form-data">
                                     @csrf
-                                    <input type="hidden" name="ticket_id" value="{{$item->ticket_id}}">
-                                    <input type="hidden" name="dept_employee_ticket_id" value="{{$item->id}}">
-                                    @if($item->is_active == 0)
+                                    <input type="hidden" name="ticket_id" value="{{$item->employeeTicket->ticket_id}}">
+                                    <input type="hidden" name="dept_employee_ticket_id" value="{{$item->employeeTicket->id}}">
+                                    @if($item->employeeTicket->is_active == 0)
                                       <input type="hidden" name="employee_status" value="1">
                                       <button type="submit" class="btn dropdown-item">Active</button>
                                     @else

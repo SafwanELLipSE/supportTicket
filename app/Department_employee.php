@@ -14,6 +14,12 @@ class Department_employee extends Model
     return $this->belongsTo(Department::class);
   }
 
+  public function employeeTicket()
+  {
+    return $this->hasOne(Department_employee_ticket::class,'dept_employee_id','id');
+    // return $this->belongsTo(Department_employee_ticket::class);
+  }
+
   public static function getStatus($active_id){
     switch($active_id) {
             case 0    : return "<span class='text-danger'> Inactive </span>";

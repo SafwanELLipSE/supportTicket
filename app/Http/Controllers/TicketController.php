@@ -357,16 +357,21 @@ class TicketController extends Controller
           }
       })->get();
 
-      $assigned = Department_employee_ticket::where('ticket_id',$ticketId)->get();
       $departmentEmployeeTickets = Department_employee_ticket::where('ticket_id',$ticketId)->get();
 
        $departments = array();
        if( Auth::user()->isMasterAdmin()){
          $departments = Department::where('is_active',1)->get();
+         // $assigned = Department_employee_ticket::where('ticket_id',$ticketId)->get();
+         $getAssignedEmp = Department_employee_ticket::where('ticket_id',$ticketId)->pluck('dept_employee_id');
+         $assigned = Department_employee::whereIn('id',$getAssignedEmp)->get();
+         // dd($assigned);
        }
        else{
          $agentDepartmentIds = Agent_department::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('department_id');
          $departments = Department::whereIn('id', $agentDepartmentIds)->get();
+         $getAssignedEmp = Department_employee_ticket::where('ticket_id',$ticketId)->pluck('dept_employee_id');
+         $assigned = Department_employee::whereIn('id',$getAssignedEmp)->where('department_id',$departmentId)->get();
        }
 
       return view('tickets.display_ticket',[
