@@ -206,25 +206,25 @@
 						<div class="col-xl-3 col-lg-6 col-sm-6">
 							<div class="text-center mt-0">
 								<h5 class="mb-1 text-muted">Total Created</h5>
-								<h2 class="mb-0 mt-2 fs-2 text-dark mainvalue">1,653</h2>
+								<h2 class="mb-0 mt-2 fs-2 text-dark mainvalue">{{ $totalTicket }}</h2>
 							</div>
 						</div>
 						<div class="col-xl-3 col-lg-6 col-sm-6">
 							<div class="text-center mt-4 mt-sm-0">
 								<h5 class="mb-1 text-muted">Total Closed</h5>
-								<h2 class="mb-0 mt-2 fs-2 text-dark mainvalue">639</h2>
+								<h2 class="mb-0 mt-2 fs-2 text-dark mainvalue">{{ $totalClosed }}</h2>
 							</div>
 						</div>
 						<div class="col-xl-3 col-lg-6 col-sm-6">
 							<div class="text-center mt-4 mt-lg-0">
-								<h5 class="mb-1 text-muted">Total Completed</h5>
-								<h2 class="mb-0 mt-2 fs-2 text-dark mainvalue">12,765</h2>
+								<h5 class="mb-1 text-muted">Total Solved</h5>
+								<h2 class="mb-0 mt-2 fs-2 text-dark mainvalue">{{ $totalSolved }}</h2>
 							</div>
 						</div>
 						<div class="col-xl-3 col-lg-6 col-sm-6">
 							<div class="text-center mt-4 mt-lg-0">
-								<h5 class="mb-1 text-muted">Total Pending</h5>
-								<h2 class="mb-0 mt-2 fs-2 text-dark mainvalue">24</h2>
+								<h5 class="mb-1 text-muted">Total Open</h5>
+								<h2 class="mb-0 mt-2 fs-2 text-dark mainvalue">{{ $totalOpen }}</h2>
 							</div>
 						</div>
 					</div>
@@ -253,28 +253,28 @@
 				<div class="card-body">
 					<div class="row">
 						<div class="col-md-4">
-							<div class="chart-circle mt-2 mb-2" data-value="1.00" data-thickness="10" data-color="#1753fc">
-								<div class="chart-circle-value"><div class="fs-2">100% </div></div>
+							<div class="chart-circle mt-2 mb-2" data-value="0.80" data-thickness="10" data-color="#1753fc">
+								<div class="chart-circle-value"><div class="fs-2">80% </div></div>
 							</div>
 						</div>
 						<div class="col-md-8">
 							<h4 class="mb-5">Todays Issues</h4>
 							<div class="mb-5">
 								<h5 class="mb-2 d-block">
-									<span class="fs-16"><b>74,526</b> Completed Issues</span>
-									<span class="float-right">80%</span>
+									<span class="fs-16"><b>{{ $todayClosed }}</b> Completed Issues</span>
+									<span class="float-right">{{ $todayPercentageOfCompleteIssue }}%</span>
 								</h5>
 								<div class="progress progress-md h-1">
-									<div class="progress-bar progress-bar-striped progress-bar-animated bg-primary w-80"></div>
+									<div class="progress-bar progress-bar-striped progress-bar-animated bg-primary w-{{ $todayPercentageOfCompleteIssue }}"></div>
 								</div>
 							</div>
 							<div class="mb-0">
 								<h5 class="mb-2 d-block">
-									<span class="fs-16"><b>14,526</b> Incomplete Issues</span>
-									<span class="float-right">30%</span>
+									<span class="fs-16"><b>{{ $todayOpen + $todaySolved }}</b> Incomplete Issues</span>
+									<span class="float-right">{{ $todayPercentageOfIncompleteIssue }}%</span>
 								</h5>
 								<div class="progress progress-md h-1">
-									<div class="progress-bar progress-bar-striped progress-bar-animated bg-danger w-30"></div>
+									<div class="progress-bar progress-bar-striped progress-bar-animated bg-danger w-{{ $todayPercentageOfIncompleteIssue }}"></div>
 								</div>
 							</div>
 						</div>
@@ -286,20 +286,20 @@
 							<h4 class="mb-5">Total Issues</h4>
 							<div class="mb-5">
 								<h5 class="mb-2 d-block">
-									<span class="fs-16"><b>7,325</b> Completed Issues</span>
-									<span class="float-right">20%</span>
+									<span class="fs-16"><b>{{ $totalClosed }}</b> Completed Issues</span>
+									<span class="float-right">{{ $percentageOfCompleteIssue }}%</span>
 								</h5>
 								<div class="progress progress-md h-1">
-									<div class="progress-bar progress-bar-striped progress-bar-animated bg-primary w-20"></div>
+									<div class="progress-bar progress-bar-striped progress-bar-animated bg-primary w-{{ $percentageOfCompleteIssue }}"></div>
 								</div>
 							</div>
 							<div class="mb-0">
 								<h5 class="mb-2 d-block">
-									<span class="fs-16"><b>1,425</b> Incompleted Issues</span>
-									<span class="float-right">30%</span>
+									<span class="fs-16"><b>{{ $totalOpen + $totalSolved }}</b> Incompleted Issues</span>
+									<span class="float-right">{{ $percentageOfIncompleteIssue }}%</span>
 								</h5>
 								<div class="progress progress-md h-1">
-									<div class="progress-bar progress-bar-striped progress-bar-animated bg-danger w-1"></div>
+									<div class="progress-bar progress-bar-striped progress-bar-animated bg-danger w-{{ $percentageOfIncompleteIssue }}"></div>
 								</div>
 							</div>
 						</div>
