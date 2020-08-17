@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Charts\TicketChart;
 use Carbon\Carbon;
 use App\Ticket;
 use App\Department;
@@ -52,6 +54,16 @@ class HomeController extends Controller
             $todaySolved = Ticket::whereDate('created_at', '=',date('Y-m-d'))->where('status',Ticket::SOLVED)->count();
             $todayOpen = Ticket::whereDate('created_at', '=',date('Y-m-d'))->where('status',Ticket::OPEN)->count();
 
+            $date = new Carbon;
+            $hours = array();
+            $count = 0;
+            for($i=0; $i<=24;$i++)
+            {
+                $hours[] = Ticket::whereDate('created_at', '=',date('Y-m-d'))->where('created_at', '>=', $date->subHours($count))->count();
+                $count++;
+            }
+
+
             $solved = Ticket::where('status',Ticket::SOLVED)->orderBy('created_at', 'DESC')->limit(8)->get();
 
             if(count($solved) < 8)
@@ -97,6 +109,15 @@ class HomeController extends Controller
 
           $solved = Ticket::whereIn('department_id',$agentDepartmentIds)->where('status',Ticket::SOLVED)->orderBy('created_at', 'DESC')->Limit(8)->get();
 
+          $date = new Carbon;
+          $hours = array();
+          $count = 0;
+          for($i=0;$i<=24;$i++)
+          {
+              $hours[] = Ticket::whereIn('department_id',$agentDepartmentIds)->whereDate('created_at', '=',date('Y-m-d'))->where('created_at', '>=', $date->subHours($count))->count();
+              $count++;
+          }
+
           if(count($solved) < 8)
           {
             $close = Ticket::whereIn('department_id',$agentDepartmentIds)->where('status',Ticket::CLOSED)->orderBy('created_at', 'DESC')->Limit(8 - count($solved))->get();
@@ -140,6 +161,15 @@ class HomeController extends Controller
 
             $open = Ticket::whereIn('department_id',$DepartmentIds)->where('status',Ticket::OPEN)->orderBy('created_at', 'DESC')->Limit(8)->get();
 
+            $date = new Carbon;
+            $hours = array();
+            $count = 0;
+            for($i=0; $i<=24;$i++)
+            {
+                $hours[] = Ticket::whereIn('department_id',$DepartmentIds)->whereDate('created_at', '=',date('Y-m-d'))->where('created_at', '>=', $date->subHours($count))->count();
+                $count++;
+            }
+
             if(count($open) < 8)
             {
               $solved = Ticket::whereIn('department_id',$DepartmentIds)->where('status',Ticket::SOLVED)->orderBy('created_at', 'DESC')->Limit(8 - count($open))->get();
@@ -173,6 +203,13 @@ class HomeController extends Controller
         $percentageOfCompleteIssue = ($totalClosed/$totalTicket)*100;
         $percentageOfIncompleteIssue = (($totalSolved+$totalOpen)/$totalTicket)*100;
 
+
+        $chart = new TicketChart;
+        $chart->labels(['0','4','8','12','16','20','24']);
+        $chart->dataset('Today\'s Ticket','line',$hours)
+        ->backgroundColor('rgb(0,0,128,0.7)')->color('rgb(128,0,128,0.8)');
+
+
         return view('home',[
           'solved' => $solved,
           'close' => $close,
@@ -196,6 +233,7 @@ class HomeController extends Controller
           'todayPercentageOfIncompleteIssue' => $todayPercentageOfIncompleteIssue,
           'percentageOfCompleteIssue' => $percentageOfCompleteIssue,
           'percentageOfIncompleteIssue' => $percentageOfIncompleteIssue,
+          'chart' => $chart,
         ]);
     }
 

@@ -47,6 +47,10 @@
 		<link  href="{{ asset('assets/plugins/iconfonts/plugin.css') }}" rel="stylesheet">
 		<link  href="{{ asset('assets/plugins/iconfonts/icons.css') }}" rel="stylesheet">
 		<link  href="{{ asset('assets/fonts/fonts/font-awesome.min.css') }}" rel="stylesheet">
+		<!-- chart JS ============================================ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <!-- chart bundle JS ============================================ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
 		<meta name="_token" content="{{ csrf_token() }}">
 		@yield('additional_headers')
 

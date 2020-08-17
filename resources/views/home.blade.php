@@ -182,7 +182,7 @@
 				<div class="card-header custom-header">
 					<div>
 						<h3 class="card-title">  Created Ticket Overview</h3>
-						<h6 class="card-subtitle">Overview of Latest Month</h6>
+						<h6 class="card-subtitle">Overview of Today's Ticket</h6>
 					</div>
 					<div class="card-options">
 						<a href="" class="mr-4 text-default" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
@@ -197,8 +197,10 @@
 					</div>
 				</div>
 				<div class="card-body">
-					<div>
-						<canvas id="conversion" class="chart-drop"></canvas>
+					<div style="height: 210px;">
+						<!-- <canvas id="conversion" class="chart-drop"></canvas> -->
+						{!! $chart->container() !!}
+						{!! $chart->script() !!}
 					</div>
 				</div>
 				<div class="card-footer">
