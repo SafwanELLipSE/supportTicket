@@ -199,9 +199,16 @@ class HomeController extends Controller
           $todayPercentageOfIncompleteIssue = 0;
         }
 
+        if($totalTicket != 0)
+        {
+          $percentageOfCompleteIssue = ($totalClosed/$totalTicket)*100;
+          $percentageOfIncompleteIssue = (($totalSolved+$totalOpen)/$totalTicket)*100;
+        }
+        else{
+          $percentageOfCompleteIssue = 0;
+          $percentageOfIncompleteIssue = 0;
+        }
 
-        $percentageOfCompleteIssue = ($totalClosed/$totalTicket)*100;
-        $percentageOfIncompleteIssue = (($totalSolved+$totalOpen)/$totalTicket)*100;
 
 
         $chart = new TicketChart;
