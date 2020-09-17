@@ -49,6 +49,16 @@
 <div class="card">
 	<div class="card-header">
 		<div class="card-title">Ticket Uploaded Images</div>
+		<div class="card-options">
+			<a href="" class="mr-4 text-default" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+				<span class="fa fa-ellipsis-v"></span>
+			</a>
+			<ul class="dropdown-menu dropdown-menu-right" role="menu">
+				<li>
+					<a href="#" data-toggle="modal" data-ticketid="{{$ticketID}}" data-target="#imageUploadModal"><i class="si si-plus mr-2"></i>Add New Image</a>
+				</li>
+			</ul>
+		</div>
 	</div>
 	<div class="card-body">
 		<div class="row">
@@ -119,6 +129,16 @@
 <div class="card">
 	<div class="card-header">
 		<div class="card-title">Ticket Uploaded Files</div>
+		<div class="card-options">
+			<a href="" class="mr-4 text-default" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+				<span class="fa fa-ellipsis-v"></span>
+			</a>
+			<ul class="dropdown-menu dropdown-menu-right" role="menu">
+				<li>
+					<a href="#" data-toggle="modal" data-ticketid="{{$ticketID}}" data-target="#fileUploadModal"><i class="si si-plus mr-2"></i>Add New File</a>
+				</li>
+			</ul>
+		</div>
 	</div>
 	<div class="card-body">
 		<div class="row">
@@ -241,10 +261,86 @@
 <!--End side app-->
 
 
+<!---Model Start--->
+<div class="modal fade" id="imageUploadModal" aria-labelledby="fileUploadModal" aria-hidden="true" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-md" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Upload New Images</h5>
+			</div>
+			<div class="modal-body">
+					<div class="container">
+						<form action="{{ route('ticket.upload_new_image') }}" method="POST" enctype="multipart/form-data">
+							@csrf
+							<div class="form-group">
+								<input type="hidden" name="ticket_id" id="ticket_id" value="">
+								<label class="form-label">Upload Images :</label>
+								<div class="custom-file row ml-1">
+									<input type="file" class="custom-file-input" name="imagesToUpload[]" id="filesToUpload"  multiple="multiple" />
+									<label class="custom-file-label">Choose Images</label>
+								</div>
+							</div>
+					</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-success">Submit</button>
+			 </form>
+			</div>
+		</div>
+	</div>
+</div>
+<!---Model End--->
+
+<!---Model Start--->
+<div class="modal fade" id="fileUploadModal" aria-labelledby="fileUploadModal" aria-hidden="true" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-md" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="example-Modal3">Upload New Files</h5>
+			</div>
+			<div class="modal-body">
+					<div class="container">
+						<form action="{{ route('ticket.upload_new_file') }}" method="POST" enctype="multipart/form-data">
+							@csrf
+							<div class="form-group">
+								<input type="hidden" name="ticket_id" id="ticket_id" value="">
+								<label class="form-label"> Upload Files :</label>
+								<div class="custom-file row ml-1">
+									<input type="file" class="custom-file-input" name="filesToUpload[]" id="filesToUpload"  multiple="multiple" />
+									<label class="custom-file-label">Choose files</label>
+								</div>
+							</div>
+
+					</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				<button type="submit" class="btn btn-success">Submit</button>
+			 </form>
+			</div>
+		</div>
+	</div>
+</div>
+<!---Model End--->
+
 @endsection
 
 @section('additional_scripts')
-
+<script type="text/javascript">
+$('#imageUploadModal').on('show.bs.modal', function (event) {
+		var button = $(event.relatedTarget)
+		var ticket_id = button.data('ticketid')
+		var modal = $(this)
+		modal.find('.modal-body #ticket_id').val(ticket_id);
+})
+$('#fileUploadModal').on('show.bs.modal', function (event) {
+		var button = $(event.relatedTarget)
+		var ticket_id = button.data('ticketid')
+		var modal = $(this)
+		modal.find('.modal-body #ticket_id').val(ticket_id);
+})
+</script>
 <!-- WYSIWYG Editor js -->
 <!-- <<script src="../assets/plugins/wysiwyag/jquery.richtext.js"></script>
 <script src="../assets/plugins/wysiwyag/richText1.js"></script> -->

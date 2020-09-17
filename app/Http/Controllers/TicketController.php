@@ -33,6 +33,66 @@ use Illuminate\Support\Facades\Notification;
 
 class TicketController extends Controller
 {
+    public function uploadNewTicketImage(Request $request)
+    {
+          $ticketId = $request->post('ticket_id');
+          $getTicket = Ticket::where('id',$ticketId)->first();
+          $images = $getTicket->img_urls;
+          $arrayOfImageFiles = explode(',',$images);
+
+          $newArray = array();
+
+          if($request->imagesToUpload)
+          {
+              $countImage = count($arrayOfImageFiles);
+              foreach($request->imagesToUpload  as $image)
+              {
+                  $name = Auth::user()->id.'_'.self::uniqueString().++$countImage.'.'.$image->extension();
+                  $image->move(public_path('ticket_images'), $name);
+                  $newArray[] = $name;
+              }
+          }
+
+          $newLink = $images.','.implode(",", $newArray);
+
+          $addTicket = Ticket::find($ticketId);
+          $addTicket->img_urls = $newLink;
+          $addTicket->save();
+
+
+          Alert::success('Success', 'Successfully, New Images has been Uploaded');
+          return redirect()->back();
+    }
+    public function uploadNewTicketFile(Request $request)
+    {
+          $ticketId = $request->post('ticket_id');
+          $getTicket = Ticket::where('id',$ticketId)->first();
+          $files = $getTicket->file_urls;
+          $arrayOfFiles = explode(',',$files);
+
+          $newArray = array();
+
+          if($request->filesToUpload)
+          {
+              $countFile = count($arrayOfFiles);
+              foreach($request->filesToUpload  as $file)
+              {
+                  $name = Auth::user()->id.'_'.self::uniqueString().++$countFile.'.'.$file->extension();
+                  $file->move(public_path('ticket_images'), $name);
+                  $newArray[] = $name;
+              }
+          }
+
+
+          $newLink = $files.','.implode(",", $newArray);
+
+          $addTicket = Ticket::find($ticketId);
+          $addTicket->file_urls = $newLink;
+          $addTicket->save();
+
+          Alert::success('Success', 'Successfully, New Files has been Uploaded');
+          return redirect()->back();
+    }
     public function editTicketImage(Request $request)
     {
         $ticketId = $request->post('ticket_id');

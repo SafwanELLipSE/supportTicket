@@ -51,6 +51,8 @@ Route::group(['middleware' => ['auth']], function () {
       Route::post('delete-file',['as' =>'delete_file','uses' =>'TicketController@deleteTicketFile']);
       Route::post('edit-image',['as' =>'edit_image','uses' =>'TicketController@editTicketImage']);
       Route::post('edit-file',['as' =>'edit_file','uses' =>'TicketController@editTicketFile']);
+      Route::post('upload-new-image',['as' =>'upload_new_image','uses' =>'TicketController@uploadNewTicketImage']);
+      Route::post('upload-new-file',['as' =>'upload_new_file','uses' =>'TicketController@uploadNewTicketFile']);
     });
 
     Route::group(['prefix' =>'notification', 'as'=>'notification.'], function(){
