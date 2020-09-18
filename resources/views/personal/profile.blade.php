@@ -11,7 +11,7 @@
 	<!-- page-header -->
 	<div class="page-header">
 		<ol class="breadcrumb"><!-- breadcrumb -->
-			<li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
+			<li class="breadcrumb-item"><a href="{{route('deshboard.home')}}">Home</a></li>
 			<li class="breadcrumb-item active" aria-current="page">Own Profile</li>
 		</ol><!-- End breadcrumb -->
 	</div>
@@ -48,13 +48,13 @@
         <h3 class="mt-3 text-white">{{ $user->name }}</h3>
 				@if($user->access_level == 'master_admin')
         		<p class="mb-2 text-white">Admin</p>
-						<a href="{{route('edit',$user->id)}}" class="btn btn-info btn-sm"><i class="fas fa-pencil-alt" aria-hidden="true"></i> Edit profile</a>
+						<a href="{{route('deshboard.edit',$user->id)}}" class="btn btn-info btn-sm"><i class="fas fa-pencil-alt" aria-hidden="true"></i> Edit profile</a>
 				@elseif($user->access_level == 'department_admin')
 						<p class="mb-2 text-white">Department</p>
-						<a href="{{route('edit',$user->id)}}" class="btn btn-secondary btn-sm"><i class="fas fa-pencil-alt" aria-hidden="true"></i> Edit profile</a>
+						<a href="{{route('deshboard.edit',$user->id)}}" class="btn btn-secondary btn-sm"><i class="fas fa-pencil-alt" aria-hidden="true"></i> Edit profile</a>
 				@elseif($user->access_level == 'agent')
 						<p class="mb-2 text-white">Agent</p>
-						<a href="{{route('edit',$user->id)}}" class="btn btn-success btn-sm"><i class="fas fa-pencil-alt" aria-hidden="true"></i> Edit profile</a>
+						<a href="{{route('deshboard.edit',$user->id)}}" class="btn btn-success btn-sm"><i class="fas fa-pencil-alt" aria-hidden="true"></i> Edit profile</a>
 				@endif
         </div>
         <div class="card-body">

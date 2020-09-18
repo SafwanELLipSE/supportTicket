@@ -13,7 +13,7 @@
 	<!-- page-header -->
 	<div class="page-header">
 		<ol class="breadcrumb"><!-- breadcrumb -->
-			<li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
+			<li class="breadcrumb-item"><a href="{{route('deshboard.home')}}">Home</a></li>
 			<li class="breadcrumb-item active" aria-current="page">Edit Employee Information</li>
 		</ol><!-- End breadcrumb -->
 	</div>
@@ -68,7 +68,7 @@
 							<div class="card-header">
 								<h3 class="card-title">My Profile</h3>
 								<div class="card-options">
-									<a href="#" class="btn btn-primary btn-sm"><i class="si si-eye mr-1"></i>View Profile</a>
+									<a href="{{ route('employee.details',$employee->id) }}" class="btn btn-primary btn-sm"><i class="si si-eye mr-1"></i>View Profile</a>
 								</div>
 							</div>
 							<div class="card-body">

@@ -2,7 +2,7 @@
 <div class="app-header header d-flex">
 	<div class="container-fluid">
 		<div class="d-flex">
-			<a class="header-brand" href="{{route('home')}}">
+			<a class="header-brand" href="{{route('deshboard.home')}}">
 				<img src="{{ asset('assets/images/brand/service_chai.png') }}" class="header-brand-img main-logo" alt="service chai logo" style=" max-width: 60%;">
 				<!-- <img src="../assets/images/brand/icon.png" class="header-brand-img icon-logo" alt="Hogo logo"> -->
 			</a><!-- logo-->
@@ -109,7 +109,7 @@
 					</a>
 					<div class="dropdown-menu dropdown-menu-left">
 						<a class="dropdown-item" href="#">Change Password</a>
-						<a class="dropdown-item" href="{{route('edit',Auth::user()->id)}}">Change Email</a>
+						<a class="dropdown-item" href="{{route('deshboard.edit',Auth::user()->id)}}">Change Email</a>
 						<a class="dropdown-item" href="#">Option 3</a>
 						<a class="dropdown-item" href="#">Option 4</a>
 						<a class="dropdown-item" href="#">Option 5</a>
@@ -159,7 +159,7 @@
 								@php
 									$value = str_limit($notification->data['title'], 20);
 								@endphp
-								<strong>{{ $value }}Ticket Solved .</strong>
+								<strong>{{ $value }}Ticket Solved.</strong>
 								<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
 							</div>
 						</a>
@@ -449,7 +449,7 @@
 						@endif
 					@endforeach
 						<div class="dropdown-divider"></div>
-						<a href="{{ route('mark_all_notification',Auth::user()->id) }}" class="dropdown-item text-center">View all Notifications</a>
+						<a href="{{ route('deshboard.mark_all_notification',Auth::user()->id) }}" class="dropdown-item text-center">View all Notifications</a>
 					</div>
 				</div><!-- notifications -->
 				<a class="nav-link leading-none siderbar-link"  data-toggle="sidebar-right" data-target=".sidebar-right">
@@ -526,7 +526,7 @@
 					<div class="card-body border-top">
 						<div class="row">
 							<div class="col-4 text-center">
-								<a class="" href="{{route('notification.index')}}"><i class="dropdown-icon mdi  mdi-message-outline fs-30 m-0 leading-tight"></i></a>
+								<a class="" href="{{route('deshboard.notification')}}"><i class="dropdown-icon mdi  mdi-message-outline fs-30 m-0 leading-tight"></i></a>
 								<div>Notifications</div>
 							</div>
 							<div class="col-4 text-center">
@@ -534,7 +534,7 @@
 								<div>Settings</div>
 							</div>
 							<div class="col-4 text-center">
-								<a class="" href="{{ route('logout') }}"><i class="dropdown-icon mdi mdi-logout-variant fs-30 m-0 leading-tight"></i></a>
+								<a class="" href="{{ route('deshboard.logout') }}"><i class="dropdown-icon mdi mdi-logout-variant fs-30 m-0 leading-tight"></i></a>
 								<div>Sign out</div>
 							</div>
 						</div>

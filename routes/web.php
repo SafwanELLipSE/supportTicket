@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return redirect('home');
+    return redirect('deshboard/home');
 });
 
 Auth::routes();
@@ -20,15 +20,27 @@ Auth::routes();
 
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/logout', ['uses' => 'Auth\LoginController@logout']);
-    Route::get('/home', 'HomeController@index')->name('home');
-    Route::get('/profile',['as' =>'profile','uses' =>'ProfileController@profileView']);
-    Route::get('edit/{id}',['as' =>'edit','uses' =>'ProfileController@profileEdit' ]);
-    Route::post('save-edit',['as' =>'save_edit','uses' =>'ProfileController@profileUpdate']);
-    Route::post('notification',['as' =>'notification','uses' =>'NotificationController@index']);
-    Route::post('mark-notification',['as' =>'mark_notification','uses' =>'NotificationController@markNotification']);
-    Route::post('delete-notification',['as' =>'delete_notification','uses' =>'NotificationController@deleteNotification']);
-    Route::get('mark-all-notification/{id}',['as' =>'mark_all_notification','uses' =>'NotificationController@markAllNotification' ]);
+
+    Route::group(['prefix' =>'deshboard', 'as'=>'deshboard.'], function(){
+        Route::get('home',['as' =>'home','uses' =>'HomeController@index']);
+        Route::get('logout', ['as' =>'logout','uses' => 'Auth\LoginController@logout']);
+        Route::get('profile',['as' =>'profile','uses' =>'ProfileController@profileView']);
+        Route::get('edit/{id}',['as' =>'edit','uses' =>'ProfileController@profileEdit' ]);
+        Route::post('save-edit',['as' =>'save_edit','uses' =>'ProfileController@profileUpdate']);
+        Route::get('notification',['as' =>'notification','uses' =>'NotificationController@index']);
+        Route::post('mark-notification',['as' =>'mark_notification','uses' =>'NotificationController@markNotification']);
+        Route::post('delete-notification',['as' =>'delete_notification','uses' =>'NotificationController@deleteNotification']);
+        Route::get('mark-all-notification/{id}',['as' =>'mark_all_notification','uses' =>'NotificationController@markAllNotification' ]);
+    });
+
+    // Route::get('/home', 'HomeController@index')->name('home');
+    // Route::get('/profile',['as' =>'profile','uses' =>'ProfileController@profileView']);
+    // Route::get('edit/{id}',['as' =>'edit','uses' =>'ProfileController@profileEdit' ]);
+    // Route::post('save-edit',['as' =>'save_edit','uses' =>'ProfileController@profileUpdate']);
+    // Route::post('notification',['as' =>'notification','uses' =>'NotificationController@index']);
+    // Route::post('mark-notification',['as' =>'mark_notification','uses' =>'NotificationController@markNotification']);
+    // Route::post('delete-notification',['as' =>'delete_notification','uses' =>'NotificationController@deleteNotification']);
+    // Route::get('mark-all-notification/{id}',['as' =>'mark_all_notification','uses' =>'NotificationController@markAllNotification' ]);
 
 
     Route::group(['prefix' =>'ticket', 'as'=>'ticket.'], function(){
@@ -55,9 +67,9 @@ Route::group(['middleware' => ['auth']], function () {
       Route::post('upload-new-file',['as' =>'upload_new_file','uses' =>'TicketController@uploadNewTicketFile']);
     });
 
-    Route::group(['prefix' =>'notification', 'as'=>'notification.'], function(){
-      Route::get('/',['as' =>'index','uses' =>'NotificationController@index' ]);
-    });
+    // Route::group(['prefix' =>'notification', 'as'=>'notification.'], function(){
+    //   Route::get('/',['as' =>'index','uses' =>'NotificationController@index' ]);
+    // });
 
     Route::group(['prefix' =>'agent', 'as'=>'agent.'], function(){
       Route::get('create',['as' =>'create','uses' =>'UserController@createAgent' ]);

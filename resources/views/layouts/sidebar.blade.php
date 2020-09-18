@@ -40,7 +40,7 @@
 				<li class=""><a href="#index1" class="active" data-toggle="tab"><i class="fa fa-home fs-17"></i></a></li>
 				<li><a href="#index2" data-toggle="tab"><i class="fa fa-briefcase fs-17"></i></a></li>
 				<li><a href="#index3" data-toggle="tab"><i class="fa fa-user fs-17"></i></a></li>
-				<li><a href="{{ route('logout') }}" title="logout"><i class="fa fa-power-off fs-17"></i></a></li>
+				<li><a href="{{ route('deshboard.logout') }}" title="logout"><i class="fa fa-power-off fs-17"></i></a></li>
 			</ul>
 		</div>
 	</div>
@@ -50,7 +50,7 @@
 				<div class="row row-demo-list">
 					<div id="parentVerticalTab" class="col-md-12">
 						<ul class="resp-tabs-list hor_1">
-							<li class="resp-tab-item hor_1 {{Request::is('home') || Request::is('profile') || Request::is('notification') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-device-desktop" data-toggle="tooltip" title="si-user-follow"></i></li>
+							<li class="resp-tab-item hor_1 {{Request::is('deshboard') || Request::is('deshboard/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-device-desktop" data-toggle="tooltip" title="si-user-follow"></i></li>
 							@if(Auth::user()->canModarateTickets())
 								<li class="resp-tab-item hor_1 {{Request::is('ticket') || Request::is('ticket/*') ? 'resp-tab-active': ''}}"><i class="side-menu__icon typcn typcn-keyboard" data-toggle="tooltip" title="si-user-follow"></i></li>
 							@endif
@@ -65,13 +65,13 @@
 							@endif
 						</ul>
 						<div class="resp-tabs-container hor_1">
-							<div class="{{Request::is('home') || Request::is('profile') || Request::is('notification') ? 'resp-tab-content-active': ''}}">
+							<div class="{{Request::is('deshboard') || Request::is('deshboard/*') ? 'resp-tab-content-active': ''}}">
 								<div class="row">
 									<div class="col-md-12">
 										<h4 class="font-weight-semibold">Home</h4>
-                    <a class="slide-item" href="{{route('home')}}"> Dashboard</a>
-										<a class="slide-item" href="{{route('profile')}}"> Profile</a>
-										<a class="slide-item" href="{{route('notification')}}"> Notifications</a>
+                    <a class="slide-item" href="{{route('deshboard.home')}}"> Dashboard</a>
+										<a class="slide-item" href="{{route('deshboard.profile')}}"> Profile</a>
+										<a class="slide-item" href="{{route('deshboard.notification')}}"> Notifications</a>
 									</div>
 								</div>
 							</div>

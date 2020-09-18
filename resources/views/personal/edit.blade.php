@@ -13,7 +13,7 @@
 	<!-- page-header -->
 	<div class="page-header">
 		<ol class="breadcrumb"><!-- breadcrumb -->
-			<li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
+			<li class="breadcrumb-item"><a href="{{route('deshboard.home')}}">Home</a></li>
 			<li class="breadcrumb-item active" aria-current="page">Edit Personal Information</li>
 		</ol><!-- End breadcrumb -->
 	</div>
@@ -29,7 +29,7 @@
                    $dep = App\Department::where('user_id',$user->id)->first();
                  }
               @endphp
-								<form action="{{ route('save_edit') }}" method="POST" enctype="multipart/form-data">
+								<form action="{{ route('deshboard.save_edit') }}" method="POST" enctype="multipart/form-data">
 									@csrf
 									<div class="card-body">
                     @if(Auth::user()->canDepartmentAdmin())
@@ -77,7 +77,7 @@
 							<div class="card-header">
 								<h3 class="card-title">My Profile</h3>
 								<div class="card-options">
-									<a href="{{ route('profile') }}" class="btn btn-primary btn-sm"><i class="si si-eye mr-1"></i>View Profile</a>
+									<a href="{{ route('deshboard.profile') }}" class="btn btn-primary btn-sm"><i class="si si-eye mr-1"></i>View Profile</a>
 								</div>
 							</div>
 							<div class="card-body">
