@@ -419,6 +419,34 @@
 								</div>
 							</a>
 						@endif
+						@if($notification->type == 'App\Notifications\uploadNewTicketImageNotification')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-gradient-success">
+									<i class="fa fa-picture-o"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['title'], 20);
+									@endphp
+									<strong>New Images is added to Ticket <br> {{ $value }}</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
+						@if($notification->type == 'App\Notifications\uploadNewTicketFileNotification')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-gradient-success">
+									<i class="fa fa-file"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['title'], 20);
+									@endphp
+									<strong>New Files is added to Ticket <br> {{ $value }}</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
 					@endforeach
 						<div class="dropdown-divider"></div>
 						<a href="{{ route('mark_all_notification',Auth::user()->id) }}" class="dropdown-item text-center">View all Notifications</a>

@@ -22,6 +22,8 @@ use App\Notifications\deleteTicketFileNotification;
 use App\Notifications\deleteTicketImageNotification;
 use App\Notifications\editTicketFileNotification;
 use App\Notifications\editTicketImageNotification;
+use App\Notifications\uploadNewTicketImageNotification;
+use App\Notifications\uploadNewTicketFileNotification;
 
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Auth;
@@ -53,11 +55,31 @@ class TicketController extends Controller
               }
           }
 
-          $newLink = $images.','.implode(",", $newArray);
+          if($images == 0)
+          {
+              $newLink = implode(",", $newArray);
+          }
+          else
+          {
+              $newLink = $images.','.implode(",", $newArray);
+          }
 
           $addTicket = Ticket::find($ticketId);
           $addTicket->img_urls = $newLink;
           $addTicket->save();
+
+          // Notify admin
+          $user1 = User::where('access_level', 'master_admin')->first();
+          $user1->notify(new uploadNewTicketImageNotification($ticketId));
+
+          // Notify Department
+          $getUserDpt = Department::where('id',$getTicket->department_id)->pluck('user_id');
+          $user2 = User::where('id',$getUserDpt)->first();
+          $user2->notify(new uploadNewTicketImageNotification($ticketId));
+
+          // Notify Agent
+          $user3 = User::where('id',$getTicket->user_id)->first();
+          $user3->notify(new uploadNewTicketImageNotification($ticketId));
 
 
           Alert::success('Success', 'Successfully, New Images has been Uploaded');
@@ -83,12 +105,32 @@ class TicketController extends Controller
               }
           }
 
+          if($files == 0)
+          {
+              $newLink = implode(",", $newArray);
+          }
+          else
+          {
+              $newLink = $files.','.implode(",", $newArray);
+          }
 
-          $newLink = $files.','.implode(",", $newArray);
 
           $addTicket = Ticket::find($ticketId);
           $addTicket->file_urls = $newLink;
           $addTicket->save();
+
+          // Notify admin
+          $user1 = User::where('access_level', 'master_admin')->first();
+          $user1->notify(new uploadNewTicketFileNotification($ticketId));
+
+          // Notify Department
+          $getUserDpt = Department::where('id',$getTicket->department_id)->pluck('user_id');
+          $user2 = User::where('id',$getUserDpt)->first();
+          $user2->notify(new uploadNewTicketFileNotification($ticketId));
+
+          // Notify Agent
+          $user3 = User::where('id',$getTicket->user_id)->first();
+          $user3->notify(new uploadNewTicketFileNotification($ticketId));
 
           Alert::success('Success', 'Successfully, New Files has been Uploaded');
           return redirect()->back();
