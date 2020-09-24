@@ -1,47 +1,85 @@
-@extends('layouts.app')
+<!doctype html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta content="Hogo– Creative Admin Multipurpose Responsive Bootstrap4 Dashboard HTML Template" name="description">
+		<meta content="Spruko Technologies Private Limited" name="author">
+		<meta name="keywords" content="html admin template, bootstrap admin template premium, premium responsive admin template, admin dashboard template bootstrap, bootstrap simple admin template premium, web admin template, bootstrap admin template, premium admin template html5, best bootstrap admin template, premium admin panel template, admin template"/>
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
+		<!-- Favicon -->
 
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
+    <link rel="icon" href="{{asset('assets/images/brand/favicon.ico')}}" type="image/x-icon"/>
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/brand/favicon.ico')}}"/>
 
-                    <form method="POST" action="{{ route('password.email') }}">
-                        @csrf
 
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+		<!-- Title -->
+		<title>Support Ticket Forget Password</title>
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+		<!--Bootstrap.min css-->
+		<link rel="stylesheet" href="{{asset('assets/plugins/bootstrap/css/bootstrap.min.css')}}">
 
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
 
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Send Password Reset Link') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection
+		<!-- Dashboard css -->
+		<link href="{{asset('assets/css-dark/style.css')}}" rel="stylesheet" />
+
+		<!---Font icons css-->
+		<link href="{{asset('assets/plugins/iconfonts/plugin.css')}}" rel="stylesheet" />
+
+		<link href="{{asset('assets/plugins/iconfonts/icons.css')}}" rel="stylesheet" />
+
+		<link  href="{{asset('assets/fonts/fonts/font-awesome.min.css')}}" rel="stylesheet">
+
+
+	</head>
+	<body class="bg-account">
+	    <!-- page -->
+		<div class="page">
+
+			<!-- page-content -->
+			<div class="page-content">
+				<div class="container text-center text-dark">
+					<div class="row">
+						<div class="col-lg-4 d-block mx-auto">
+							<div class="row">
+								<div class="col-xl-12 col-md-12 col-md-12">
+									<div class="card">
+									 <div class="card-body">
+										<div class="text-center mb-6">
+											<img src="{{ asset('assets/images/brand/service_chai.png') }}" class="" alt="">
+											<!-- <h3>Support Ticket</h3> -->
+										</div>
+										<h3>Forgot password</h3>
+								<form method="POST" action="{{ route('password.email') }}">
+                    @csrf
+										<div class="input-group  mr-auto ml-auto mb-4">
+											<span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+											<input type="email" name="email" class="form-control" placeholder="Email address">
+										</div>
+										<div class="text-center">
+											<button type="submit" class="btn btn-primary btn-block">Send</button>
+										</div>
+								 </form>
+									</div>
+								</div>
+							 </div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- page-content end -->
+		</div>
+		<!-- page End-->
+
+		<!-- Jquery js-->
+    <script src="{{asset('assets/js-dark/vendors/jquery-3.2.1.min.js')}}"></script>
+		<!--Bootstrap.min js-->
+    <script src="{{asset('assets/plugins/bootstrap/js/bootstrap.min.js')}}"></script>
+		<!-- Custom js-->
+    <script src="{{asset('assets/js-dark/custom.js')}}"></script>
+
+	</body>
+</html>

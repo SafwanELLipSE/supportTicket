@@ -108,7 +108,7 @@
 						<i class="fe fe-settings mr-2"></i>Settings
 					</a>
 					<div class="dropdown-menu dropdown-menu-left">
-						<a class="dropdown-item" href="#">Change Password</a>
+						<a class="dropdown-item" href="{{route('deshboard.change_password',Auth::user()->id)}}">Change Password</a>
 						<a class="dropdown-item" href="{{route('deshboard.edit',Auth::user()->id)}}">Change Email</a>
 						<a class="dropdown-item" href="#">Option 3</a>
 						<a class="dropdown-item" href="#">Option 4</a>

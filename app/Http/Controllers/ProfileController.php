@@ -12,15 +12,54 @@ use App\Department_employee;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
+    public function changePassword(Request $request,$id)
+    {
+        return view('personal.change_password',[
+              'id' => $id,
+        ]);
+    }
+    public function newPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+              'old_password' => 'required|min:8',
+              'new_password'     => 'required|min:8',
+              'password_confirmation' => 'required|same:new_password',
+        ]);
+
+        $userID = $request->post('userId');
+        $getUser = User::where('id',$userID)->first();
+        $getUserPassword = $getUser->password;
+
+        if($validator->fails()){
+            alert()->warning('Error occured',$validator->errors()->all()[0]);
+            return redirect()->back()->withInput()->withErrors($validator);
+        }
+        elseif(!Hash::check($request->get('old_password'),$getUserPassword))
+        {
+            return back()->with('error','Your Current Password doesnot match with what you provided');
+        }
+        elseif(strcmp($request->get('old_password'),$request->get('new_password')) == 0)
+        {
+          return back()->with('error','Your Current Password cannot be same with the new Password');
+        }
+        else
+        {
+            $getUser->password = bcrypt($request->get('new_password'));
+            $getUser->save();
+
+            Alert::success('Success', 'Successfully New Password is Updated.');
+            return redirect()->back();
+        }
+    }
     public function profileView(Request $request)
     {
         $user = Auth::user();
         $department = Department::where('user_id',$user->id)->first();
-        // dd($department);
 
         $agentDepartmentIds = Agent_department::where('user_id',$user->id)->where('is_active',1)->pluck('department_id');
         $agentDepartments = Department::whereIn('id',$agentDepartmentIds)->get();

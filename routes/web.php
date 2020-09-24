@@ -17,6 +17,12 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::group(['prefix' =>'password', 'as'=>'password.'], function(){
+  Route::get('reset',['as' =>'request','uses' =>'Auth\ForgotPasswordController@showLinkRequestForm']);
+  Route::post('email',['as' =>'email','uses' =>'Auth\ForgotPasswordController@sendResetLinkEmail']);
+  Route::get('reset/{token}',['as' =>'reset','uses' =>'Auth\ResetPasswordController@showResetForm']);
+  Route::post('reset',['as' =>'update','uses' =>'Auth\ResetPasswordController@reset']);
+});
 
 
 Route::group(['middleware' => ['auth']], function () {
@@ -31,6 +37,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('mark-notification',['as' =>'mark_notification','uses' =>'NotificationController@markNotification']);
         Route::post('delete-notification',['as' =>'delete_notification','uses' =>'NotificationController@deleteNotification']);
         Route::get('mark-all-notification/{id}',['as' =>'mark_all_notification','uses' =>'NotificationController@markAllNotification' ]);
+        Route::get('change-password/{id}',['as' =>'change_password','uses' =>'ProfileController@changePassword' ]);
+        Route::post('new-password',['as' =>'new_password','uses' =>'ProfileController@newPassword' ]);
     });
 
     // Route::get('/home', 'HomeController@index')->name('home');
