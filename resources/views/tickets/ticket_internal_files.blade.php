@@ -50,16 +50,18 @@
 <div class="card">
 	<div class="card-header">
 		<div class="card-title">Ticket Uploaded Images</div>
-		<div class="card-options">
-			<a href="" class="mr-4 text-default" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
-				<span class="fa fa-ellipsis-v"></span>
-			</a>
-			<ul class="dropdown-menu dropdown-menu-right" role="menu">
-				<li>
-					<a href="#" data-toggle="modal" data-ticketid="{{$ticketID}}" data-target="#imageUploadModal"><i class="si si-plus mr-2"></i>Add New Image</a>
-				</li>
-			</ul>
-		</div>
+		@if(Auth::user()->canModarateTickets())
+			<div class="card-options">
+				<a href="" class="mr-4 text-default" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+					<span class="fa fa-ellipsis-v"></span>
+				</a>
+				<ul class="dropdown-menu dropdown-menu-right" role="menu">
+					<li>
+						<a href="#" data-toggle="modal" data-ticketid="{{$ticketID}}" data-target="#imageUploadModal"><i class="si si-plus mr-2"></i>Add New Image</a>
+					</li>
+				</ul>
+			</div>
+		@endif
 	</div>
 	<div class="card-body">
 		<div class="row">
@@ -130,16 +132,18 @@
 <div class="card">
 	<div class="card-header">
 		<div class="card-title">Ticket Uploaded Files</div>
-		<div class="card-options">
-			<a href="" class="mr-4 text-default" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
-				<span class="fa fa-ellipsis-v"></span>
-			</a>
-			<ul class="dropdown-menu dropdown-menu-right" role="menu">
-				<li>
-					<a href="#" data-toggle="modal" data-ticketid="{{$ticketID}}" data-target="#fileUploadModal"><i class="si si-plus mr-2"></i>Add New File</a>
-				</li>
-			</ul>
-		</div>
+		@if(Auth::user()->canModarateTickets())
+			<div class="card-options">
+				<a href="" class="mr-4 text-default" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+					<span class="fa fa-ellipsis-v"></span>
+				</a>
+				<ul class="dropdown-menu dropdown-menu-right" role="menu">
+					<li>
+						<a href="#" data-toggle="modal" data-ticketid="{{$ticketID}}" data-target="#fileUploadModal"><i class="si si-plus mr-2"></i>Add New File</a>
+					</li>
+				</ul>
+			</div>
+		@endif
 	</div>
 	<div class="card-body">
 		<div class="row">
