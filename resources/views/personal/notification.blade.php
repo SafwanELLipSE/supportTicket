@@ -511,6 +511,56 @@
 					</td>
 				</tr>
 				@endif
+				@if($notification->type == 'App\Notifications\activeDepartmentalCategory')
+				<tr>
+					<td>
+						<div class="notifyimg bg-gradient-success">
+							<i class="fa fa-tag"></i>
+						</div>
+					</td>
+					@php
+						$value = str_limit($notification->data['department'], 20);
+						$value2 = str_limit($notification->data['category'], 20);
+					@endphp
+					<td>
+						 Active Category "{{ $value2 }}" of  <br> {{ $value }}. <div class="badge badge-primary badge-md">New</div>
+						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+					</td>
+					<td class="text-right">
+						<form action="{{ route('deshboard.mark_notification') }}" method="post" enctype="multipart/form-data">
+								@csrf
+								<input type="hidden" name= "notification_id" value="{{$notification->id}}">
+								<input type="hidden" name= "user_id" value="{{Auth::user()->id}}">
+								<button type="submit" class="btn btn-sm btn-success"><i class="fa fa-check"></i> Mark</button>
+						</form>
+					</td>
+				</tr>
+				@endif
+				@if($notification->type == 'App\Notifications\inactiveDepartmentalCategory')
+				<tr>
+					<td>
+						<div class="notifyimg bg-gradient-danger">
+							<i class="fa fa-tag"></i>
+						</div>
+					</td>
+					@php
+						$value = str_limit($notification->data['department'], 20);
+						$value2 = str_limit($notification->data['category'], 20);
+					@endphp
+					<td>
+						 Inactive Category "{{ $value2 }}" of  <br> {{ $value }}. <div class="badge badge-primary badge-md">New</div>
+						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+					</td>
+					<td class="text-right">
+						<form action="{{ route('deshboard.mark_notification') }}" method="post" enctype="multipart/form-data">
+								@csrf
+								<input type="hidden" name= "notification_id" value="{{$notification->id}}">
+								<input type="hidden" name= "user_id" value="{{Auth::user()->id}}">
+								<button type="submit" class="btn btn-sm btn-success"><i class="fa fa-check"></i> Mark</button>
+						</form>
+					</td>
+				</tr>
+				@endif
 			@endforeach
 			<tr>
 				<td></td>
@@ -1013,6 +1063,56 @@
 					@endphp
 					<td>
 						 New Files has been uploaded to ticket <br> {{ $value }}.
+						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+					</td>
+					<td class="text-right">
+						<form action="{{ route('deshboard.delete_notification') }}" method="post" enctype="multipart/form-data">
+								@csrf
+								<input type="hidden" name= "notification_id" value="{{$notification->id}}">
+								<input type="hidden" name= "user_id" value="{{Auth::user()->id}}">
+								<button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+						</form>
+					</td>
+				</tr>
+				@endif
+				@if($notification->type == 'App\Notifications\activeDepartmentalCategory')
+				<tr>
+					<td>
+						<div class="notifyimg bg-gradient-success">
+							<i class="fa fa-tag"></i>
+						</div>
+					</td>
+					@php
+						$value = str_limit($notification->data['department'], 20);
+						$value2 = str_limit($notification->data['category'], 20);
+					@endphp
+					<td>
+						 Active Category "{{ $value2 }}" of  <br> {{ $value }}.
+						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+					</td>
+					<td class="text-right">
+						<form action="{{ route('deshboard.delete_notification') }}" method="post" enctype="multipart/form-data">
+								@csrf
+								<input type="hidden" name= "notification_id" value="{{$notification->id}}">
+								<input type="hidden" name= "user_id" value="{{Auth::user()->id}}">
+								<button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Delete</button>
+						</form>
+					</td>
+				</tr>
+				@endif
+				@if($notification->type == 'App\Notifications\inactiveDepartmentalCategory')
+				<tr>
+					<td>
+						<div class="notifyimg bg-gradient-danger">
+							<i class="fa fa-tag"></i>
+						</div>
+					</td>
+					@php
+						$value = str_limit($notification->data['department'], 20);
+						$value2 = str_limit($notification->data['category'], 20);
+					@endphp
+					<td>
+						 Inactive Category "{{ $value2 }}" of  <br> {{ $value }}.
 						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
 					</td>
 					<td class="text-right">

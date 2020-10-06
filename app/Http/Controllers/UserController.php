@@ -18,6 +18,8 @@ use App\Notifications\ActiveAgentDepartment;
 use App\Notifications\InactiveAgentDepartment;
 use App\Notifications\AddDepartmentToAgent;
 use App\Notifications\addDepartmentCategoryNotification;
+use App\Notifications\activeDepartmentalCategory;
+use App\Notifications\inactiveDepartmentalCategory;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -464,6 +466,43 @@ class UserController extends Controller
       Alert::success('Success', 'Successfully Updated');
       return redirect()->route('department.edit',$department->id);
   }
+  public function changeStatusDepartmentalCategory(Request $request)
+  {
+      $categoryID = $request->post('category_id');
 
+      $category = Dept_ticket_category::find($categoryID);
+      $departmentID = $category->department_id;
+
+      if($category->is_active == 1)
+      {
+          $category->is_active = 0;
+          $category->save();
+
+          // Notify Admin
+          $user1 = User::where('access_level', 'master_admin')->first();
+          $user1->notify(new inactiveDepartmentalCategory($categoryID));
+          // Notify Department
+          $user2 = User::where('id',$departmentID)->first();
+          $user2->notify(new inactiveDepartmentalCategory($categoryID));
+
+          Alert::success('Success', 'Successfully Category Inactive');
+          return redirect()->back();
+      }
+      elseif($category->is_active == 0)
+      {
+          $category->is_active = 1;
+          $category->save();
+
+          // Notify Admin
+          $user1 = User::where('access_level', 'master_admin')->first();
+          $user1->notify(new activeDepartmentalCategory($categoryID));
+          // Notify Department
+          $user2 = User::where('id',$departmentID)->first();
+          $user2->notify(new activeDepartmentalCategory($categoryID));
+
+          Alert::success('Success', 'Successfully Category Active');
+          return redirect()->back();
+      }
+  }
 
 }

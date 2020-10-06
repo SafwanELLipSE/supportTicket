@@ -99,6 +99,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('add-category',['as' =>'add_category','uses' =>'UserController@addCategoryDepartment' ]);
         Route::get('edit/{id}',['as' =>'edit','uses' =>'UserController@editDepartment' ]);
         Route::post('save-edit',['as' =>'save_edit','uses' =>'UserController@updateDepartment']);
+        Route::post('category-status',['as' =>'category_status','uses' =>'UserController@changeStatusDepartmentalCategory']);
       });
 
     Route::group(['prefix' =>'employee', 'as'=>'employee.'], function(){

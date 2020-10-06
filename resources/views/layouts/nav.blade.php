@@ -447,6 +447,36 @@
 								</div>
 							</a>
 						@endif
+						@if($notification->type == 'App\Notifications\inactiveDepartmentalCategory')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-gradient-danger">
+									<i class="fa fa-tag"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['department'], 20);
+										$value2 = str_limit($notification->data['category'], 20);
+									@endphp
+									<strong>Inactive Category "{{ $value2 }}" of  <br> {{ $value }}</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
+						@if($notification->type == 'App\Notifications\activeDepartmentalCategory')
+							<a href="#" class="dropdown-item d-flex pb-3">
+								<div class="notifyimg bg-gradient-success">
+									<i class="fa fa-tag"></i>
+								</div>
+								<div>
+									@php
+										$value = str_limit($notification->data['department'], 20);
+										$value2 = str_limit($notification->data['category'], 20);
+									@endphp
+									<strong>Active Category "{{ $value2 }}" of  <br> {{ $value }}</strong>
+									<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
+								</div>
+							</a>
+						@endif
 					@endforeach
 						<div class="dropdown-divider"></div>
 						<a href="{{ route('deshboard.mark_all_notification',Auth::user()->id) }}" class="dropdown-item text-center">View all Notifications</a>
