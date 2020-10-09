@@ -92,14 +92,16 @@ table, th, td {
                   </div>
                 </div>
               </dl>
-              <dl class="product-gallery-data1">
-                <dt class="text-primary">Customer</dt>
-                <dd>{{$ticket->customer_name}}</dd>
-              </dl>
-              <dl class="product-gallery-data1">
-                <dt class="text-primary">Contact</dt>
-                <dd>{{$ticket->customer_phone }}</dd>
-              </dl>
+              @if(Auth::user()->canModarateTickets())
+                <dl class="product-gallery-data1">
+                  <dt class="text-primary">Customer</dt>
+                  <dd>{{$ticket->customer_name}}</dd>
+                </dl>
+                <dl class="product-gallery-data1">
+                  <dt class="text-primary">Contact</dt>
+                  <dd>{{$ticket->customer_phone }}</dd>
+                </dl>
+              @endif
               <dl class="product-gallery-data1">
                 <div class="row">
                     <a href="{{route('ticket.upload_file',$ticket->id)}}" class="btn btn-primary btn-lg mb-1 mx-auto d-block">Uploaded Files</a>

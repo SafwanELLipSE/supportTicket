@@ -100,7 +100,7 @@ class TicketController extends Controller
               foreach($request->filesToUpload  as $file)
               {
                   $name = Auth::user()->id.'_'.self::uniqueString().++$countFile.'.'.$file->extension();
-                  $file->move(public_path('ticket_images'), $name);
+                  $file->move(public_path('ticket_files'), $name);
                   $newArray[] = $name;
               }
           }
@@ -259,7 +259,10 @@ class TicketController extends Controller
           if($image == $imageLink)
           {
             $path_image = public_path(). '/ticket_images/'. $imageLink;
-            unlink($path_image);
+            if(file_exists($path_image) == true)
+            {
+                unlink($path_image);
+            }
             continue;
           }
           $newArray[] = $image;
@@ -304,7 +307,10 @@ class TicketController extends Controller
           if($file == $fileLink)
           {
             $path_file = public_path(). '/ticket_files/'. $fileLink;
-            unlink($path_file);
+            if(file_exists($path_file) == true)
+            {
+              unlink($path_file);
+            }
             continue;
           }
           $newArray[] = $file;
