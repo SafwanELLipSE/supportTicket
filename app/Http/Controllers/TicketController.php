@@ -444,7 +444,7 @@ class TicketController extends Controller
               // Notify Department
               $getDepartmentUser = Department::where('id',$getTicketDepartment)->pluck('user_id');
               $user3 = User::where('id',$getDepartmentUser)->first();
-              $user->notify(new TicketCommentsNotification($comments->id));
+              $user3->notify(new TicketCommentsNotification($comments->id));
           }
 
           Alert::success('Success', 'successfully added');
@@ -637,13 +637,13 @@ class TicketController extends Controller
     {
 
        $departments = array();
-      if( Auth::user()->isMasterAdmin()){
-        $departments = Department::where('is_active',1)->get();
-      }
-      else{
-        $agentDepartmentIds = Agent_department::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('department_id');
-        $departments = Department::whereIn('id', $agentDepartmentIds)->get();
-      }
+       if( Auth::user()->isMasterAdmin()){
+         $departments = Department::where('is_active',1)->get();
+        }
+        else{
+          $agentDepartmentIds = Agent_department::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('department_id');
+          $departments = Department::whereIn('id', $agentDepartmentIds)->get();
+        }
 
       return view('tickets.create_ticket',[
         'departments' => $departments,

@@ -27,7 +27,7 @@ class createEmployee extends Mailable
      */
     public function build()
     {
-      return $this->subject('Service Chia New Employee')
+      return $this->subject('Service Chai New Employee')
                 ->view('mails.mail_create_employee');
     }
 }

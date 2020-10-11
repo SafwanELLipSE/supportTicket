@@ -28,7 +28,7 @@ class createAgent extends Mailable
      */
     public function build()
     {
-      return $this->subject('Service Chia New Agent')
+      return $this->subject('Service Chai New Agent')
                 ->view('mails.mail_create_agent');
     }
 }

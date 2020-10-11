@@ -190,8 +190,8 @@ class HomeController extends Controller
 
         if($todayTicket != 0)
         {
-          $todayPercentageOfCompleteIssue = ($todayClosed/$todayTicket)*100;
-          $todayPercentageOfIncompleteIssue = (($todaySolved+$todayOpen)/$todayTicket)*100;
+          $todayPercentageOfCompleteIssue = (int)($todayClosed/$todayTicket)*100;
+          $todayPercentageOfIncompleteIssue = (int)(($todaySolved+$todayOpen)/$todayTicket)*100;
         }
         else
         {
@@ -201,8 +201,8 @@ class HomeController extends Controller
 
         if($totalTicket != 0)
         {
-          $percentageOfCompleteIssue = ($totalClosed/$totalTicket)*100;
-          $percentageOfIncompleteIssue = (($totalSolved+$totalOpen)/$totalTicket)*100;
+          $percentageOfCompleteIssue = (int)($totalClosed/$totalTicket)*100;
+          $percentageOfIncompleteIssue = (int)(($totalSolved+$totalOpen)/$totalTicket)*100;
         }
         else{
           $percentageOfCompleteIssue = 0;

@@ -28,7 +28,7 @@ class createDepartment extends Mailable
      */
     public function build()
     {
-      return $this->subject('Service Chia New Department')
+      return $this->subject('Service Chai New Department')
                 ->view('mails.mail_create_department');
     }
 }
