@@ -222,7 +222,8 @@
 						</div>
 					</td>
 					<td>
-						{{ $notification->data['title'] }} Ticket is just Assigned <br> by {{ $notification->data['department'] }}. <div class="badge badge-primary badge-md">New</div>
+						{{ $notification->data['title'] }} Ticket is just Assigned <br> by {!! App\Department::where('id',$notification->data['department'])->first()->name; !!}
+						. <div class="badge badge-primary badge-md">New</div>
 						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
 					</td>
 					<td class="text-right">
@@ -784,7 +785,7 @@
 						</div>
 					</td>
 					<td>
-						{{ $notification->data['title'] }} Ticket is just Assigned <br> by {{ $notification->data['department'] }}.
+						{{ $notification->data['title'] }} Ticket is just Assigned <br> by {!! App\Department::where('id',$notification->data['department'])->first()->name; !!}.
 						<div class="small text-muted">{{ $notification->created_at->format('F j, Y, g:i a') }}</div>
 					</td>
 					<td class="text-right">

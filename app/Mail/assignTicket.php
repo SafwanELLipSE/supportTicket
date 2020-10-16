@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 use App\Ticket;
+use App\Department;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -40,31 +41,32 @@ class assignTicket extends Mailable
         $ticket_departmentId = $get_ticket->department_id;
         $ticket_deptTicketCategoryId = $get_ticket->dept_ticket_category_id;
         $ticket_title = $get_ticket->title;
-        $ticket_desc = $get_ticket->description;
         $ticket_priority = $get_ticket->priority;
 
 
         $email = $this->view('mails.mail_assign_ticket')->subject('Employment Application')
                       ->with([
                               'ticketTitle' => $ticket_title,
-                              'ticketDesc' => $ticket_desc,
                               'ticketDepartment' => $ticket_departmentId,
                               'ticketCategory' => $ticket_deptTicketCategoryId,
                               'ticketPriority' => $ticket_priority,
                           ]);
 
-        if(count($arrayOfFiles) != ""){
-          foreach ($arrayOfFiles as $file) {
-              $email->attach(public_path(). '/ticket_files/'. $file); // attach each file
-          }
-        }
 
-        if(count($arrayOfImages) != ""){
+          foreach ($arrayOfFiles as $file){
+            if($file != "")
+            {
+              $email->attach(public_path(). '/ticket_files/'. $file); // attach each file
+            }
+          }
+
           foreach ($arrayOfImages as $image) {
+            if($image != "")
+            {
               $extension = explode('.',$image);
               $email->attach(public_path().'/ticket_images/'. $image,['mime' => 'image/'.$extension[1] ]);// attach each file
+            }
           }
-        }
 
         return $email;
     }

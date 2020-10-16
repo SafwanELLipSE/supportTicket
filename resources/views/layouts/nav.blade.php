@@ -130,7 +130,7 @@
 						  <span class="pulse bg-success"></span>
 						@endif
 					</a>
-					<div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow ">
+					<div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow border-0 p-0">
 						<a href="#" class="dropdown-item text-center">{{ count(Auth::user()->unreadNotifications) }} New Notifications</a>
 						<div class="dropdown-divider"></div>
 
