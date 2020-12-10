@@ -12,6 +12,7 @@ use App\User;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -54,13 +55,19 @@ class HomeController extends Controller
             $todaySolved = Ticket::whereDate('created_at', '=',date('Y-m-d'))->where('status',Ticket::SOLVED)->count();
             $todayOpen = Ticket::whereDate('created_at', '=',date('Y-m-d'))->where('status',Ticket::OPEN)->count();
 
-            $date = new Carbon;
-            $hours = array();
-            $count = 0;
-            for($i=0; $i<=24;$i++)
+            $tickets = Ticket::select(DB::raw("COUNT(*) as count"))
+                            ->whereYear('created_at',date('Y'))
+                            ->groupBy(DB::raw("Day(created_at)"))
+                            ->pluck('count');
+            $months = Ticket::select(DB::raw("COUNT(*) as count"))
+                            ->whereYear('created_at',date('Y'))
+                            ->groupBy(DB::raw("Day(created_at)"))
+                            ->pluck('count');
+
+            $datas = array(0,0,0,0,0,0,0,0,0,0,0,0,);
+            foreach($months as $index => $month)
             {
-                $hours[] = Ticket::whereDate('created_at', '=',date('Y-m-d'))->where('created_at', '>=', $date->subHours($count))->count();
-                $count++;
+                $datas[$month] = $tickets[$index];
             }
 
 
@@ -109,13 +116,21 @@ class HomeController extends Controller
 
           $solved = Ticket::whereIn('department_id',$agentDepartmentIds)->where('status',Ticket::SOLVED)->orderBy('created_at', 'DESC')->Limit(8)->get();
 
-          $date = new Carbon;
-          $hours = array();
-          $count = 0;
-          for($i=0;$i<=24;$i++)
+          $tickets = Ticket::whereIn('department_id',$agentDepartmentIds)
+                          ->select(DB::raw("COUNT(*) as count"))
+                          ->whereYear('created_at',date('Y'))
+                          ->groupBy(DB::raw("Day(created_at)"))
+                          ->pluck('count');
+          $months = Ticket::whereIn('department_id',$agentDepartmentIds)
+                          ->select(DB::raw("COUNT(*) as count"))
+                          ->whereYear('created_at',date('Y'))
+                          ->groupBy(DB::raw("Day(created_at)"))
+                          ->pluck('count');
+
+          $datas = array(0,0,0,0,0,0,0,0,0,0,0,0,);
+          foreach($months as $index => $month)
           {
-              $hours[] = Ticket::whereIn('department_id',$agentDepartmentIds)->whereDate('created_at', '=',date('Y-m-d'))->where('created_at', '>=', $date->subHours($count))->count();
-              $count++;
+              $datas[$month] = $tickets[$index];
           }
 
           if(count($solved) < 8)
@@ -161,14 +176,23 @@ class HomeController extends Controller
 
             $open = Ticket::whereIn('department_id',$DepartmentIds)->where('status',Ticket::OPEN)->orderBy('created_at', 'DESC')->Limit(8)->get();
 
-            $date = new Carbon;
-            $hours = array();
-            $count = 0;
-            for($i=0; $i<=24;$i++)
+            $tickets = Ticket::whereIn('department_id',$DepartmentIds)
+                            ->select(DB::raw("COUNT(*) as count"))
+                            ->whereYear('created_at',date('Y'))
+                            ->groupBy(DB::raw("Day(created_at)"))
+                            ->pluck('count');
+            $months = Ticket::whereIn('department_id',$DepartmentIds)
+                            ->select(DB::raw("COUNT(*) as count"))
+                            ->whereYear('created_at',date('Y'))
+                            ->groupBy(DB::raw("Day(created_at)"))
+                            ->pluck('count');
+
+            $datas = array(0,0,0,0,0,0,0,0,0,0,0,0,);
+            foreach($months as $index => $month)
             {
-                $hours[] = Ticket::whereIn('department_id',$DepartmentIds)->whereDate('created_at', '=',date('Y-m-d'))->where('created_at', '>=', $date->subHours($count))->count();
-                $count++;
+                $datas[$month] = $tickets[$index];
             }
+
 
             if(count($open) < 8)
             {
@@ -210,13 +234,6 @@ class HomeController extends Controller
         }
 
 
-
-        $chart = new TicketChart;
-        $chart->labels(['0','4','8','12','16','20','24']);
-        $chart->dataset('Today\'s Ticket','line',$hours)
-        ->backgroundColor('rgb(0,0,128,0.7)')->color('rgb(128,0,128,0.8)');
-
-
         return view('home',[
           'solved' => $solved,
           'close' => $close,
@@ -240,7 +257,7 @@ class HomeController extends Controller
           'todayPercentageOfIncompleteIssue' => $todayPercentageOfIncompleteIssue,
           'percentageOfCompleteIssue' => $percentageOfCompleteIssue,
           'percentageOfIncompleteIssue' => $percentageOfIncompleteIssue,
-          'chart' => $chart,
+          'datas' => $datas,
         ]);
     }
 

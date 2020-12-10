@@ -197,10 +197,9 @@
 					</div>
 				</div>
 				<div class="card-body">
-					<div style="height: 210px;">
+					<div style="height: 210px;" id="chart-container">
 						<!-- <canvas id="conversion" class="chart-drop"></canvas> -->
-						{!! $chart->container() !!}
-						{!! $chart->script() !!}
+
 					</div>
 				</div>
 				<div class="card-footer">
@@ -429,5 +428,57 @@
 
 </div>
 <!--End side app-->
+
+<!-- High-Charts js-->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script>
+			var datas = <?php echo json_encode($datas) ?>;
+			Highcharts.chart('chart-container',{
+				title:{
+					text:'New Ticket Generated, 2020'
+				},
+				subtitle:{
+					text:'Source: Service Chai'
+				},
+				xAxis:{
+					categories:['Jan','Feb','Mar','Apr','May','Jun','July','Aug','Sep','Oct','Nov','Dec']
+				},
+				yAxis:{
+					title:{
+						text:'Number of Ticket'
+					}
+				},
+				legend:{
+					layout:'vertical',
+					align:'right',
+					verticalAlign:'middle'
+				},
+				plotOptions:{
+					series:{
+						allowPointSelect:true
+					}
+				},
+				series:[{
+					name:'New Ticket',
+					data:datas
+				}],
+				responsive:{
+					rules:[
+						{
+							condition:{
+								maxWidth:500
+							},
+							chartOptions:{
+								legend:{
+									layout:'horizontal',
+									align:'center',
+									verticalAlign:'bottom'
+								}
+							}
+						}
+					]
+				}
+			})
+</script>
 
 @endsection
