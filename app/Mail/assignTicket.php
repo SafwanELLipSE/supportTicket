@@ -42,7 +42,7 @@ class assignTicket extends Mailable
         $ticket_deptTicketCategoryId = $get_ticket->dept_ticket_category_id;
         $ticket_title = $get_ticket->title;
         $ticket_priority = $get_ticket->priority;
-
+        $ticket_desc = $get_ticket->description;
 
         $email = $this->view('mails.mail_assign_ticket')->subject('Employment Application')
                       ->with([
@@ -50,8 +50,8 @@ class assignTicket extends Mailable
                               'ticketDepartment' => $ticket_departmentId,
                               'ticketCategory' => $ticket_deptTicketCategoryId,
                               'ticketPriority' => $ticket_priority,
+                              'ticketDesc' =>  $ticket_desc,
                           ]);
-
 
           foreach ($arrayOfFiles as $file){
             if($file != "")

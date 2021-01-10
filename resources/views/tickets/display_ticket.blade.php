@@ -77,10 +77,10 @@ table, th, td {
                     <form action="{{route('ticket.staging_ticket_status')}}" method="POST" enctype="multipart/form-data">
                       @csrf
                       <input type="hidden" name="ticket_id" value="{{$ticket->id}}">
-                      @if ($ticket->status == 2 && Auth::user()->canModifyTickets())
+                      @if($ticket->status == 2 && Auth::user()->canModifyTickets())
                         <input type="hidden" name="ticket_status" value="1">
                         <button type="submit" class="btn btn-pill btn-secondary btn-sm float-right">Solved</button>
-                      @elseif ($ticket->status == 1 && Auth::user()->canModarateTickets())
+                      @elseif($ticket->status == 1 && Auth::user()->canModarateTickets())
                         <input type="hidden" name="ticket_status" value="0">
                         <button type="submit" class="btn btn-pill btn-danger btn-sm float-right">Closed</button>
                       @else

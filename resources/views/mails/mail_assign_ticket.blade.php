@@ -416,7 +416,7 @@
                   <p>Thank you</p>
 
                   <!-- A Real Hero (and a real human being) -->
-                  <div class="text-white mt-3 ml-2 p-2 ticket-description">{!!  $ticketDesc  !!}</div>
+                  <div class="text-white mt-3 ml-2 p-2 ticket-description"></div>
 
                   <!-- Callout Panel -->
 
