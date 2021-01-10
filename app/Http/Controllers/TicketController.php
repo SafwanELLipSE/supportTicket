@@ -719,7 +719,6 @@ class TicketController extends Controller
 
     public function displayAllTickets(Request $request)
     {
-
       return view('tickets.ticket_list',[
         "creators" => User::where('access_level','!=','department_admin')->get(),
         "departments" => Department::where("is_active",1)->get(),
@@ -818,25 +817,34 @@ class TicketController extends Controller
 
     public function displayOpenTickets(Request $request)
     {
-      return view('tickets.open_ticket',[
-        "creators" => User::where('access_level','!=','department_admin')->get(),
-        "departments" => Department::where("is_active",1)->get(),
-      ]);
-
+        $departments = array();
+        if(Auth::user()->isMasterAdmin()){
+            $departments = Department::where("is_active",1)->get();
+        }
+        elseif(Auth::user()->isAgent()){
+            $agentDepartmentIds = Agent_department::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('department_id');
+            $departments = Department::whereIn('id',$agentDepartmentIds)->where('is_active',1)->get();
+        }
+        elseif(Auth::user()->canDepartmentAdmin()){
+            $departments = Department::where('user_id',Auth::user()->id)->where("is_active",1)->get();
+        }
+        return view('tickets.open_ticket',[
+          "departments" => $departments,
+        ]);
     }
 
     public function getTickets(Request $request)
     {
         if(Auth::user()->isMasterAdmin()){
-          $tickets = "";
+            $tickets = "";
         }
         elseif(Auth::user()->isAgent()){
             $agentDepartmentIds = Agent_department::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('department_id');
             $tickets = Ticket::whereIn('department_id',$agentDepartmentIds);
         }
         elseif(Auth::user()->canDepartmentAdmin()){
-          $DepartmentIds = Department::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('id');
-          $tickets = Ticket::whereIn('department_id',$DepartmentIds);
+            $DepartmentIds = Department::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('id');
+            $tickets = Ticket::whereIn('department_id',$DepartmentIds);
         }
 
         if($request->post('department_id'))
@@ -924,17 +932,37 @@ class TicketController extends Controller
     }
     public function getSolvedTickets(Request $request)
     {
+      $departments = array();
+      if(Auth::user()->isMasterAdmin()){
+          $departments = Department::where("is_active",1)->get();
+      }
+      elseif(Auth::user()->isAgent()){
+          $agentDepartmentIds = Agent_department::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('department_id');
+          $departments = Department::whereIn('id',$agentDepartmentIds)->where('is_active',1)->get();
+      }
+      elseif(Auth::user()->canDepartmentAdmin()){
+          $departments = Department::where('user_id',Auth::user()->id)->where("is_active",1)->get();
+      }
       return view('tickets.solved_ticket',[
-        "creators" => User::where('access_level','!=','department_admin')->get(),
-        "departments" => Department::where("is_active",1)->get(),
+        "departments" => $departments,
       ]);
 
     }
     public function getClosedTickets(Request $request)
     {
+      $departments = array();
+      if(Auth::user()->isMasterAdmin()){
+          $departments = Department::where("is_active",1)->get();
+      }
+      elseif(Auth::user()->isAgent()){
+          $agentDepartmentIds = Agent_department::where('user_id',Auth::user()->id)->where('is_active',1)->pluck('department_id');
+          $departments = Department::whereIn('id',$agentDepartmentIds)->where('is_active',1)->get();
+      }
+      elseif(Auth::user()->canDepartmentAdmin()){
+          $departments = Department::where('user_id',Auth::user()->id)->where("is_active",1)->get();
+      }
       return view('tickets.closed_ticket',[
-        "creators" => User::where('access_level','!=','department_admin')->get(),
-        "departments" => Department::where("is_active",1)->get(),
+        "departments" => $departments,
       ]);
     }
     private function uniqueString()
