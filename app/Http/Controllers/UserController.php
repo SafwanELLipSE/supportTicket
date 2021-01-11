@@ -205,10 +205,26 @@ class UserController extends Controller
         }
 
          $agentId = $request->post('agent_id');
+         $image_link = User::where('id',$agentId)->pluck('image');
          $user = User::find($agentId);
          $user->name = $request->post('user_name');
          $user->email = $request->post('email');
          $user->mobile_no = $request->post('mobile');
+         if($request->image)
+         {
+             $path_image = public_path().'/user_image/'. $image_link;
+             if(file_exists($path_image) == true)
+             {
+                 unlink($path_image);
+             }
+         }
+         if($request->image)
+         {
+             $image = $request->file('image');
+             $new_name = Auth::user()->id . '_a_' . self::uniqueString() . '.' . $image->getClientOriginalExtension();
+             $image->move(public_path('user_image'), $new_name);
+             $user->image = $new_name;
+         }
          $user->save();
 
          // Notify Admin
@@ -466,10 +482,26 @@ class UserController extends Controller
 
         // do it first
          $userID = Department::find($request->post('department_id'))->user_id;
+         $image_link = User::where('id', $userID)->pluck('image');
          $user = User::find($userID);
          $user->name = $request->post('user_name');
          $user->email = $request->post('email');
          $user->mobile_no = $request->post('mobile');
+         if($request->image)
+         {
+             $path_image = public_path().'/user_image/'. $image_link;
+             if(file_exists($path_image) == true)
+             {
+                 unlink($path_image);
+             }
+         }
+         if($request->image)
+         {
+             $image = $request->file('image');
+             $new_name = Auth::user()->id . '_d_' . self::uniqueString() . '.' . $image->getClientOriginalExtension();
+             $image->move(public_path('user_image'), $new_name);
+             $user->image = $new_name;
+         }
          $user->save();
 
          // Notify Admin

@@ -59,11 +59,10 @@ class editDepartmentNotifiaction extends Notification
     public function toArray($notifiable)
     {
         $getUser = User::where('id',$this->details)->first();
-        $getDepartment = Department::where('id',$getUser->id)->first();
 
         $name = $getUser->name;
         $email = $getUser->email;
-        $department = $getDepartment->name;
+        $department = Department::where('id',$getUser->id)->pluck('name');
 
         return [
           "name" => $name,

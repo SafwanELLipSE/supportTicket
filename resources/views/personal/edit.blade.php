@@ -66,8 +66,8 @@
                     @endif
 
 										<div class="form-group">
-											<label for="exampleInputImage">Email address</label>
-											<input type="file" class="dropify" id="address" name="image" data-default-file="">
+											<label for="exampleInputImage">Upload Image</label>
+											<input type="file" class="dropify" id="image" name="image" data-default-file="/user_image/{{ $user->image }}">
 										</div>
 
 										</div>
@@ -91,23 +91,21 @@
 									<div class="userprofile ">
 										<div class="userpic  brround">
 											@if($user->access_level == 'master_admin')
-												<img src="{{asset('assets/images/users/female/admin_person.jpg')}}" alt="" style="height:100%; width:100%;" class="userpicimg">
+												<img src="/user_image/{{ $user->image }}" alt="" style="height:100%; width:100%;" class="userpicimg">
 											@elseif($user->access_level == 'department_admin')
-												<img src="{{asset('assets/images/users/female/department_admin.jpg')}}" alt="" style="height:100%; width:100%;" class="userpicimg">
+												<img src="/user_image/{{ $user->image }}" alt="" style="height:100%; width:100%;" class="userpicimg">
 											@elseif($user->access_level == 'agent')
-												<img src="{{asset('assets/images/users/female/agent.jpg')}}" alt="" style="height:100%; width:100%;" class="userpicimg">
+												<img src="/user_image/{{ $user->image }}" alt="" style="height:100%; width:100%;" class="userpicimg">
 											@endif
 										</div>
                     @if($user->access_level == 'master_admin')
                     	<h3 class="username mb-2">Admin</h3>
             				@elseif($user->access_level == 'department_admin')
             					<h3 class="username mb-2">Department</h3>
+											<p class="mb-1">{{ $dep->name }}</p>
             				@elseif($user->access_level == 'agent')
             					<h3 class="username mb-2">Agent</h3>
             				@endif
-                    @if(Auth::user()->canDepartmentAdmin())
-										  <p class="mb-1">{{ $dep->name }}</p>
-                    @endif
 									</div>
 								</div>
 							</div>

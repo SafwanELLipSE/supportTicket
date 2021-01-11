@@ -4,7 +4,7 @@
 		<link href="../assets/plugins/notify/css/notifIt.css" rel="stylesheet" />
 		<link href="{{asset('assets/plugins/select2/select2.min-dark.css')}}" rel="stylesheet" />
 		<link rel="stylesheet" href="{{asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
-
+		<link href="{{asset('assets/plugins/fileuploads/css/dropify.css')}}" rel="stylesheet" type="text/css">
 @endsection
 
 @section('content')
@@ -55,6 +55,10 @@
 											<label for="exampleInputEmail1">Email address</label>
 											<input type="email" class="form-control" id="exampleInputEmail1" value="{{$employee->email}}" placeholder="Email Address" name="email">
 										</div>
+										<div class="form-group">
+											<label for="exampleInputImage">Upload Image</label>
+											<input type="file" class="dropify" id="image" name="image" data-default-file="/employee_image/{{$employee->image}}">
+										</div>
 										</div>
 										<div class="card-footer text-right">
 											<a href="#" class="btn btn-danger mt-1">Cancel</a>
@@ -75,7 +79,7 @@
 								<div class="text-center">
 									<div class="userprofile ">
 										<div class="userpic  brround">
-											<img src="{{asset('assets/images/users/female/employee2.jpg')}}" alt="" style="height:100%; width:100%;" class="rounded-circle">
+											<img src="/employee_image/{{$employee->image}}" alt="" style="height:100%; width:100%;" class="rounded-circle">
 										</div>
 										<h3 class="username mb-2">Employee</h3>
 										<p class="mb-1">{{ $employee->department->name }}</p>
@@ -140,5 +144,6 @@
 <script src="{{ asset('assets/plugins/accordion-Wizard-Form/jquery.accordion-wizard.min.js') }}"></script>
 <script src="../assets/plugins/notify/js/notifIt.js"></script>
 <script src="../assets/plugins/select2/select2.full.min.js"></script>
-
+<script src="{{ asset('assets/plugins/fileuploads/js/dropify.js') }}"></script>
+<script src="{{ asset('assets/plugins/fileuploads/js/dropify-demo.js') }}"></script>
 @endsection

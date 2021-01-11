@@ -53,7 +53,7 @@ class EmployeeController extends Controller
           $dept_employee->name = $request->post('name');
           $dept_employee->email = $request->post('email');
           $dept_employee->mobile_no = $request->post('mobile_no');
-          
+
           if($request->image)
           {
             $image = $request->file('image');
@@ -158,11 +158,27 @@ class EmployeeController extends Controller
         }
 
         $employeeId = $request->post('employee_id');
-        $employee =  Department_employee::find($employeeId);
+        $image_link = Department_employee::where('id',$employeeId)->pluck('image');
+        $employee = Department_employee::find($employeeId);
         $employee->department_id = $request->post('department');
         $employee->name = $request->post('employee_name');
         $employee->email = $request->post('email');
         $employee->mobile_no = $request->post('mobile');
+        if($request->image)
+        {
+          $path_image = public_path().'/employee_image/'. $image_link;
+          if(file_exists($path_image) == true)
+          {
+              unlink($path_image);
+          }
+        }
+        if($request->image)
+        {
+            $image = $request->file('image');
+            $new_name = Auth::user()->id . '_e_' . self::uniqueString() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('employee_image'), $new_name);
+            $employee->image = $new_name;
+        }
         $employee->save();
 
         // Notify Admin
@@ -171,7 +187,7 @@ class EmployeeController extends Controller
         // Notify Department
         $userDepartment = Department::where('id',$request->post('department'))->pluck('user_id');
         $user2 = User::where('id',$userDepartment)->first();
-        $user2->notify(new createEmployeeNotification($dept_employee->id));
+        $user2->notify(new createEmployeeNotification($employeeId));
 
 
         Alert::success('Success', 'Successfully Created');

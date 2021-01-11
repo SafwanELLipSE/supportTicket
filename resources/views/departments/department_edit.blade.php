@@ -4,7 +4,7 @@
 		<link href="../assets/plugins/notify/css/notifIt.css" rel="stylesheet" />
 		<link href="{{asset('assets/plugins/select2/select2.min-dark.css')}}" rel="stylesheet" />
 		<link rel="stylesheet" href="{{asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
-
+    <link href="{{asset('assets/plugins/fileuploads/css/dropify.css')}}" rel="stylesheet" type="text/css">
 @endsection
 
 @section('content')
@@ -27,33 +27,37 @@
 								<form action="{{ route('department.save_edit') }}" method="POST" enctype="multipart/form-data">
 									@csrf
 									<div class="card-body">
-										<div class="form-group">
-											<label for="exampleInputname">Department Name</label>
-											<input type="hidden" name= "department_id" value="{{$department->id}}">
-											<input type="text" class="form-control" id="department_name" value="{{$department->name}}" placeholder="Department Name" name="department_name">
-										</div>
-										<div class="row">
-											<div class="col-lg-6 col-md-12">
-												<div class="form-group">
-													<label for="exampleInputEmail1">User Name</label>
-													<input type="text" class="form-control" id="user_name" value="{{ $department->user->name }}" placeholder="User Name" name="user_name">
-												</div>
+											<div class="form-group">
+												<label for="exampleInputname">Department Name</label>
+												<input type="hidden" name= "department_id" value="{{$department->id}}">
+												<input type="text" class="form-control" id="department_name" value="{{$department->name}}" placeholder="Department Name" name="department_name">
 											</div>
-											<div class="col-lg-6 col-md-12">
-												<div class="form-group">
-													<label for="exampleInputnumber">Conatct Number</label>
-													<input type="number" class="form-control" id="mobile" value="{{ $department->user->mobile_no }}" placeholder="Mobile Number" name="mobile">
+											 <div class="row">
+													<div class="col-lg-6 col-md-12">
+														<div class="form-group">
+															<label for="exampleInputEmail1">User Name</label>
+															<input type="text" class="form-control" id="user_name" value="{{ $department->user->name }}" placeholder="User Name" name="user_name">
+														</div>
+													</div>
+													<div class="col-lg-6 col-md-12">
+														<div class="form-group">
+															<label for="exampleInputnumber">Conatct Number</label>
+															<input type="number" class="form-control" id="mobile" value="{{ $department->user->mobile_no }}" placeholder="Mobile Number" name="mobile">
+														</div>
+													</div>
 												</div>
+											<div class="form-group">
+												<label for="exampleInputEmail1">Email address</label>
+												<input type="email" class="form-control" id="email" value="{{ $department->user->email }}" placeholder="Email Address" name="email">
 											</div>
-										</div>
-										<div class="form-group">
-											<label for="exampleInputEmail1">Email address</label>
-											<input type="email" class="form-control" id="email" value="{{ $department->user->email }}" placeholder="Email Address" name="email">
-										</div>
-										<div class="form-group">
-											<label for="exampleInputname1">Address</label>
-											<input type="text" class="form-control" id="address" value="{{ $department->address }}" placeholder="Address" name="address">
-										</div>
+											<div class="form-group">
+												<label for="exampleInputname1">Address</label>
+												<input type="text" class="form-control" id="address" value="{{ $department->address }}" placeholder="Address" name="address">
+											</div>
+											<div class="form-group">
+												<label for="exampleInputImage">Upload Image</label>
+												<input type="file" class="dropify" id="image" name="image" data-default-file="/user_image/{{ $department->user->image }}">
+											</div>
 										</div>
 										<div class="card-footer text-right">
 											<a href="{{ route('department.details',$department->id) }}" class="btn btn-danger mt-1">Cancel</a>
@@ -74,7 +78,7 @@
 								<div class="text-center">
 									<div class="userprofile ">
 										<div class="userpic  brround">
-											<img src="{{asset('assets/images/users/female/department2.jpg')}}" alt="" style="height:100%; width:100%;" class="userpicimg">
+											<img src="/user_image/{{ $department->user->image }}" alt="" style="height:100%; width:100%;" class="userpicimg">
 										</div>
 										<h3 class="username mb-2">Department</h3>
 										<p class="mb-1">{{ $department->name }}</p>
@@ -157,5 +161,7 @@
 <script src="{{ asset('assets/plugins/accordion-Wizard-Form/jquery.accordion-wizard.min.js') }}"></script>
 <script src="../assets/plugins/notify/js/notifIt.js"></script>
 <script src="../assets/plugins/select2/select2.full.min.js"></script>
+<script src="{{ asset('assets/plugins/fileuploads/js/dropify.js') }}"></script>
+<script src="{{ asset('assets/plugins/fileuploads/js/dropify-demo.js') }}"></script>
 
 @endsection

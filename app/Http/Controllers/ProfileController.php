@@ -138,11 +138,43 @@ class ProfileController extends Controller
 
         $userID = $request->post('user_id');
         $departmentID = $request->post('department_id');
+        $getUser = User::where('id',$userID)->first();
+        $image_link = $getUser->image;
 
         $user = User::find($userID);
         $user->name = $request->post('user_name');
         $user->email = $request->post('email');
         $user->mobile_no = $request->post('mobile');
+        if($request->image)
+        {
+            if($image_link != null)
+            {
+              $path_image = public_path().'/user_image/'. $image_link;
+              if(file_exists($path_image) == true)
+              {
+                  unlink($path_image);
+              }
+            }
+        }
+        if($request->image)
+        {
+            $image = $request->file('image');
+            if($getUser->access_level == 'master_admin')
+            {
+              $new_name = Auth::user()->id . '_ad_' . self::uniqueString() . '.' . $image->getClientOriginalExtension();
+            }
+            elseif($getUser->access_level == 'department_admin')
+            {
+              $new_name = Auth::user()->id . '_a_' . self::uniqueString() . '.' . $image->getClientOriginalExtension();
+            }
+            elseif($getUser->access_level == 'agent')
+            {
+              $new_name = Auth::user()->id . '_d_' . self::uniqueString() . '.' . $image->getClientOriginalExtension();
+            }
+
+            $image->move(public_path('user_image'), $new_name);
+            $user->image = $new_name;
+        }
         $user->save();
 
         if(Auth::user()->canDepartmentAdmin())
@@ -154,5 +186,14 @@ class ProfileController extends Controller
         }
         Alert::success('Success', 'Successfully Updated');
         return redirect()->back();
+    }
+
+    private function uniqueString()
+    {
+        $m = explode(' ', microtime());
+        list($totalSeconds, $extraMilliseconds) = array($m[1], (int)round($m[0] * 1000, 3));
+        $txID = date('YmdHis', $totalSeconds) . sprintf('%03d', $extraMilliseconds);
+        $txID = substr($txID, 2, 15);
+        return $txID;
     }
 }
