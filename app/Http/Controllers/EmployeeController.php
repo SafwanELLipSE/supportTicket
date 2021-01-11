@@ -53,23 +53,32 @@ class EmployeeController extends Controller
           $dept_employee->name = $request->post('name');
           $dept_employee->email = $request->post('email');
           $dept_employee->mobile_no = $request->post('mobile_no');
+          
+          if($request->image)
+          {
+            $image = $request->file('image');
+            $new_name = Auth::user()->id . '_e_' . self::uniqueString() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('employee_image'), $new_name);
+            $dept_employee->image = $new_name;
+          }
+
           $dept_employee->is_active = Department_employee::ACTIVE;
           $dept_employee->save();
 
           if($request->post('example-checkbox1') == 1)
           {
-              $toUser = $request->post('email');
-              $department_name = Department::where('id',$request->post('department'))->first()->name;
-              $name = $request->post('name');
-
-              $details = [
-                'title' => $department_name .' Employee('. $request->post('name') .')',
-                'body' => 'Welcome! From now on You are one us. we are glad to have you with us',
-                'from' =>  Auth::user()->name,
-                'department_name' => $department_name,
-                'name' => $name,
-              ];
-              Mail::to($toUser)->send(new createEmployee($details));
+              // $toUser = $request->post('email');
+              // $department_name = Department::where('id',$request->post('department'))->first()->name;
+              // $name = $request->post('name');
+              //
+              // $details = [
+              //   'title' => $department_name .' Employee('. $request->post('name') .')',
+              //   'body' => 'Welcome! From now on You are one us. we are glad to have you with us',
+              //   'from' =>  Auth::user()->name,
+              //   'department_name' => $department_name,
+              //   'name' => $name,
+              // ];
+              // Mail::to($toUser)->send(new createEmployee($details));
           }
 
           // Notify Admin
@@ -167,5 +176,13 @@ class EmployeeController extends Controller
 
         Alert::success('Success', 'Successfully Created');
         return redirect()->route('employee.edit', $employeeId);
+  }
+  private function uniqueString()
+  {
+      $m = explode(' ', microtime());
+      list($totalSeconds, $extraMilliseconds) = array($m[1], (int)round($m[0] * 1000, 3));
+      $txID = date('YmdHis', $totalSeconds) . sprintf('%03d', $extraMilliseconds);
+      $txID = substr($txID, 2, 15);
+      return $txID;
   }
 }

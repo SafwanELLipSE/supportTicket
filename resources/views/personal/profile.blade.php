@@ -208,7 +208,6 @@
 														 				</div> <!-- table-responsive -->
 														 			</div>
 														 		</div>  <!-- end Col-md-12 -->
-
                                </div><!-- end row -->
                              </div><!-- end #profile-friends tab -->
                            </div><!-- end tab-content -->

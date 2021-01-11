@@ -4,7 +4,7 @@
 		<link href="../assets/plugins/notify/css/notifIt.css" rel="stylesheet" />
 		<link href="{{asset('assets/plugins/select2/select2.min-dark.css')}}" rel="stylesheet" />
 		<link rel="stylesheet" href="{{asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
-
+	  <link href="{{asset('assets/plugins/fileuploads/css/dropify.css')}}" rel="stylesheet" type="text/css">
 
 		<style media="screen">
 					.button-style{
@@ -34,7 +34,7 @@
 										<h3 class="card-title">Add New Department</h3>
 									</div>
 									<div class="card-body">
-										<form action="{{ route('department.save_created') }}" method="POST" id="form">
+										<form action="{{ route('department.save_created') }}" method="POST" id="form" enctype="multipart/form-data">
 												@csrf
 											<div class="list-group">
 												<div class="list-group-item py-3" data-acc-step>
@@ -88,6 +88,18 @@
                                   </div>
                                 </div>
                               </div>
+															<div class="row">
+																<div class="col-md-2 offset-md-2">
+																	<div class="form-group">
+																		<label>Upload Image:</label>
+																	</div>
+																</div>
+																<div class="col-md-5 offset-md-2">
+																	<div class="form-group">
+																		<input type="file" name="image" class="dropify">
+																	</div>
+																</div>
+															</div>
 														</div>
 													</div>
 												</div>
@@ -142,6 +154,8 @@
 <script src="../assets/plugins/notify/js/notifIt.js"></script>
 <script src="../assets/plugins/select2/select2.full.min.js"></script>
 <script src="{{ asset('js/create_department.js') }}"></script>
+<script src="{{ asset('assets/plugins/fileuploads/js/dropify.js') }}"></script>
+<script src="{{ asset('assets/plugins/fileuploads/js/dropify-demo.js') }}"></script>
 <script>
 $('.select2').select2({
   minimumResultsForSearch: Infinity

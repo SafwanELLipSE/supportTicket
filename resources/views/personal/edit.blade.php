@@ -4,7 +4,7 @@
 		<link href="../assets/plugins/notify/css/notifIt.css" rel="stylesheet" />
 		<link href="{{asset('assets/plugins/select2/select2.min-dark.css')}}" rel="stylesheet" />
 		<link rel="stylesheet" href="{{asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
-
+		<link href="{{asset('assets/plugins/fileuploads/css/dropify.css')}}" rel="stylesheet" type="text/css">
 @endsection
 
 @section('content')
@@ -64,6 +64,12 @@
   											<input type="text" class="form-control" id="address" value="{{ $dep->address }}" placeholder="Address" name="address">
   										</div>
                     @endif
+
+										<div class="form-group">
+											<label for="exampleInputImage">Email address</label>
+											<input type="file" class="dropify" id="address" name="image" data-default-file="">
+										</div>
+
 										</div>
 										<div class="card-footer text-right">
 											<a href="" class="btn btn-danger mt-1">Cancel</a>
@@ -176,5 +182,7 @@
 <script src="{{ asset('assets/plugins/accordion-Wizard-Form/jquery.accordion-wizard.min.js') }}"></script>
 <script src="../assets/plugins/notify/js/notifIt.js"></script>
 <script src="../assets/plugins/select2/select2.full.min.js"></script>
+<script src="{{ asset('assets/plugins/fileuploads/js/dropify.js') }}"></script>
+<script src="{{ asset('assets/plugins/fileuploads/js/dropify-demo.js') }}"></script>
 
 @endsection
