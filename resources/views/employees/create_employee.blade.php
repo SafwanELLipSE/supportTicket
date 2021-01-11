@@ -51,19 +51,19 @@
 														<div class="my-3">
                               <div class="form-group">
                                 <label>Employee Name:</label>
-                                <input type="text" name="name" class="form-control name" />
+                                <input type="text" name="name" value="{{ old('name') }}" class="form-control name" />
                               </div>
                               <div class="row">
                                 <div class="col-md-6">
                                   <div class="form-group">
                                     <label>Email:</label>
-                                    <input type="text" name="email" class="form-control email" />
+                                    <input type="text" name="email" value="{{ old('email') }}" class="form-control email" />
                                   </div>
                                 </div>
                                 <div class="col-md-6">
                                   <div class="form-group">
                                     <label>Mobile:</label>
-                                    <input type="text" name="mobile_no" class="form-control mobile" />
+                                    <input type="text" name="mobile_no" value="{{ old('mobile_no') }}" class="form-control mobile" />
                                   </div>
                                 </div>
                               </div>

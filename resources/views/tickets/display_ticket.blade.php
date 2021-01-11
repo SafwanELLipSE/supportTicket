@@ -156,7 +156,7 @@ table, th, td {
 	               @csrf
               <div class="form-group mb-0">
                 <label class="sr-only" for="new-event">New event</label>
-                <textarea class="form-control" id="comments" name="comments" placeholder="Comment something..." rows="3"></textarea>
+                <textarea class="form-control" id="comments" name="comments" value="{{ old('comments') }}" placeholder="Comment something..." rows="3"></textarea>
               </div>
               <div class="btn-toolbar pull-right">
                 <!-- <div class=""><a href="#" class="btn btn-sm btn-primary mr-2"><i class="fa fa-camera fa-lg"></i></a> <a href="#" class="btn btn-sm btn-info"><i class="fa fa-map-marker fa-lg"></i></a>

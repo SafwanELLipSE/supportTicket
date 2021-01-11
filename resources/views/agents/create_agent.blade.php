@@ -35,11 +35,11 @@
 														<div class="my-3">
 															<div class="form-group">
 																<label>Name:</label>
-																<input type="text" name="name" class="form-control name" />
+																<input type="text" name="name" value="{{ old('name') }}" class="form-control name" />
 															</div>
 															<div class="form-group">
 																<label>Email:</label>
-																<input type="text" name="email" class="form-control email" />
+																<input type="text" name="email" value="{{ old('email') }}" class="form-control email" />
 															</div>
 														</div>
 													</div>
@@ -50,11 +50,11 @@
 														<div class="my-3">
 															<div class="form-group">
 																<label>Mobile:</label>
-																<input type="text" name="mobile_no" class="form-control mobile" />
+																<input type="text" name="mobile_no" value="{{ old('mobile_no') }}" class="form-control mobile" />
 															</div>
 															<div class="form-group">
 																<label>Address:</label>
-																<input type="text" name="address" class="form-control address" />
+																<input type="text" name="address" value="{{ old('address') }}" class="form-control address" />
 															</div>
 														</div>
 													</div>
@@ -65,11 +65,11 @@
 														<div class="my-3">
 															<div class="form-group">
 																<label>Password:</label>
-																<input type="password" name="password" class="form-control password">
+																<input type="password" name="password" value="{{ old('password') }}" class="form-control password">
 															</div>
                               <div class="form-group">
 																<label>Confirm Password:</label>
-																<input type="password" name="confirm_password" class="form-control confirm_password">
+																<input type="password" name="confirm_password" value="{{ old('confirm_password') }}" class="form-control confirm_password">
 															</div>
 														</div>
 													</div>

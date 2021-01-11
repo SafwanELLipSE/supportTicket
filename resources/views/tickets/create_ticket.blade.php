@@ -30,13 +30,13 @@
 	        <div class="card-body">
 						<div class="form-group">
 	            <label class="form-label">Title</label>
-	            <input type="text" class="form-control" name="title" placeholder="Ticket title" value="{{ old('title') }}" required>
+	            <input type="text" class="form-control" name="title" value="{{ old('title') }}" placeholder="Ticket title" value="{{ old('title') }}" required>
 	          </div>
 						<div class="form-group">
 	            <div class="row">
 	              <div class="col-lg-6 col-md-12">
 									<label class="form-label">Departments</label>
-	                <select class="form-control" id="department" name="department" required>
+	                <select class="form-control" id="department" name="department" value="{{ old('department') }}" required>
 										@foreach($departments as $department )
 											<option data-department="{{$department->id}}" value="{{$department->id}}">{{$department->name}}</option>
 										@endforeach
@@ -44,7 +44,7 @@
 	              </div>
 								<div class="col-lg-6 col-md-12" >
 									<label class="form-label">Category</label>
-	                <select class="form-control" id="category" name="category" required>
+	                <select class="form-control" id="category" name="category" value="{{ old('category') }}" required>
 										@foreach($departments as $department )
 												@foreach($department->ticketCategories as $item )
 														<option data-department="{{$item->department_id}}" value="{{$item->id}}">{{$item->category}}</option>
