@@ -191,15 +191,16 @@
 														 								<td>{!! App\Department::getStatus($item->is_active) !!}</td>
 														 								<td>{{ $item->created_at->format('M d, Y') }}</td>
 														 								<td>
-														 									<div class="media-body valign-middle text-right overflow-visible">
-														 										<button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-														 											Action
-														 										</button>
-														 										<ul class="dropdown-menu dropdown-menu-right" role="menu">
-														 											<li><a href="#">Active</a></li>
-														 											<li><a href="#">Inactive</a></li>
-														 										</ul>
-														 									</div>
+																							<form action="{{ route('department.category_status') }}" method="post">
+																								@csrf
+																								@if($item->is_active == 1)
+																									<input type="hidden" name="category_id" value="{{ $item->id }}">
+																									<button type="submit" class="btn btn-danger btn-sm">Inactive</button>
+																								@elseif($item->is_active == 0)
+																									<input type="hidden" name="category_id" value="{{ $item->id }}">
+																									<button type="submit" class="btn btn-success btn-sm">Active</button>
+																								@endif
+																							</form>
 														 								</td>
 														 							</tr>
 														 						@endforeach

@@ -535,9 +535,14 @@ class UserController extends Controller
           // Notify Admin
           $user1 = User::where('access_level', 'master_admin')->first();
           $user1->notify(new inactiveDepartmentalCategory($categoryID));
-          // Notify Department
-          $user2 = User::where('id',$departmentID)->first();
-          $user2->notify(new inactiveDepartmentalCategory($categoryID));
+
+          if(Auth::user()->id != 'department_admin')
+          {
+            // Notify Department
+            $userDept = Department::where('id',$departmentID)->pluck('user_id');
+            $user2 = User::where('id',$userDept)->first();
+            $user2->notify(new inactiveDepartmentalCategory($categoryID));
+          }
 
           Alert::success('Success', 'Successfully Category Inactive');
           return redirect()->back();
@@ -550,9 +555,14 @@ class UserController extends Controller
           // Notify Admin
           $user1 = User::where('access_level', 'master_admin')->first();
           $user1->notify(new activeDepartmentalCategory($categoryID));
-          // Notify Department
-          $user2 = User::where('id',$departmentID)->first();
-          $user2->notify(new activeDepartmentalCategory($categoryID));
+
+          if(Auth::user()->id != 'department_admin')
+          {
+            // Notify Department
+            $userDept = Department::where('id',$departmentID)->pluck('user_id');
+            $user2 = User::where('id',$userDept)->first();
+            $user2->notify(new activeDepartmentalCategory($categoryID));
+          }
 
           Alert::success('Success', 'Successfully Category Active');
           return redirect()->back();
