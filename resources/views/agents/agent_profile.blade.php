@@ -39,7 +39,7 @@
 					<div class="row">
 						<div class="col-md-3">
 							<div class="row mt-5">
-									<img class="avatar-xxl brround mr-2 mx-auto d-block" src="{{asset('assets/images/users/female/agent 2.jpg')}}" alt="img">
+									<img class="avatar-xxl brround mr-2 mx-auto d-block" src="/user_image/{{$agent->image}}" alt="img">
 							</div>
 							<div class="row mt-5">
 								<a href="" class="btn btn-pill btn-success btn-sm mx-auto d-block" data-toggle="modal" id="btnDepartment" data-target="#departmentModal">

@@ -486,12 +486,10 @@
 					<span class="mr-3 d-none d-lg-block ">
 						<span class="text-gray-white"><span class="ml-2">{{Auth::user()->name}}</span></span>
 					</span>
-					@if(Auth::user()->isMasterAdmin())
+					@if(Auth::user()->image == null)
 							<span class="avatar avatar-md brround"><img src="{{asset('assets/images/users/female/admin_person.jpg')}}" alt="Profile-img" class="avatar avatar-md brround"></span>
-					@elseif(Auth::user()->canDepartmentAdmin())
-							<span class="avatar avatar-md brround"><img src="{{asset('assets/images/users/female/department_admin.jpg')}}" alt="Profile-img" class="avatar avatar-md brround"></span>
-					@elseif(Auth::user()->isAgent())
-							<span class="avatar avatar-md brround"><img src="{{asset('assets/images/users/female/agent.jpg')}}" alt="Profile-img" class="avatar avatar-md brround"></span>
+					@else
+							<span class="avatar avatar-md brround"><img src="/user_image/{{Auth::user()->image}}" alt="Profile-img" class="avatar avatar-md brround"></span>
 				  @endif
 
 				</a>
@@ -524,13 +522,12 @@
 			<div class="tab-pane active " id="tab">
 				<div class="card-body p-0">
 					<div class="header-user text-center mt-4 pb-4">
-						@if(Auth::user()->access_level == 'master_admin')
+						@if(Auth::user()->image == null)
 								<span class="avatar avatar-xxl brround"><img src="{{asset('assets/images/users/female/admin_person.jpg')}}" alt="Profile-img" class="avatar avatar-xxl brround"></span>
-						@elseif(Auth::user()->access_level == 'department_admin')
-								<span class="avatar avatar-xxl brround"><img src="{{asset('assets/images/users/female/department_admin.jpg')}}" alt="Profile-img" class="avatar avatar-xxl brround"></span>
-						@elseif(Auth::user()->access_level == 'agent')
-								<span class="avatar avatar-xxl brround"><img src="{{asset('assets/images/users/female/agent.jpg')}}" alt="Profile-img" class="avatar avatar-xxl brround"></span>
+						@else
+								<span class="avatar avatar-xxl brround"><img src="/user_image/{{Auth::user()->image}}" alt="Profile-img" class="avatar avatar-xxl brround"></span>
 						@endif
+
 						<div class="dropdown-item text-center font-weight-semibold user h3 mb-0">{{Auth::user()->name}}</div>
 						@if(Auth::user()->access_level == 'master_admin')
 							<small>Admin</small>

@@ -27,7 +27,7 @@ class ProfileController extends Controller
     {
         $validator = Validator::make($request->all(), [
               'old_password' => 'required|min:8',
-              'new_password'     => 'required|min:8',
+              'new_password' => 'required|min:8',
               'password_confirmation' => 'required|same:new_password',
         ]);
 

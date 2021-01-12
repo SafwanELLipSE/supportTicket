@@ -3,12 +3,10 @@
 <aside class="app-sidebar">
 	<div class="app-sidebar__user pb-0">
 		<div class="user-body">
-			@if(Auth::user()->isMasterAdmin())
-					<span class="avatar avatar-xxl brround text-center cover-image" data-image-src="{{asset('assets/images/users/female/admin_person.jpg')}}"></span>
-			@elseif(Auth::user()->canDepartmentAdmin())
-					<span class="avatar avatar-xxl brround text-center cover-image" data-image-src="{{asset('assets/images/users/female/department_admin.jpg')}}"></span>
-			@elseif(Auth::user()->isAgent())
-					<span class="avatar avatar-xxl brround text-center cover-image" data-image-src="{{asset('assets/images/users/female/agent.jpg')}}"></span>
+			@if(Auth::user()->image == null)
+				<span class="avatar avatar-xxl brround text-center cover-image" data-image-src="{{asset('assets/images/users/female/admin_person.jpg')}}"></span>
+			@else
+				<span class="avatar avatar-xxl brround text-center cover-image" data-image-src="/user_image/{{Auth::user()->image}}"></span>
 		  @endif
 		</div>
 		<div class="user-info">
