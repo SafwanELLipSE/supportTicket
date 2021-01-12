@@ -212,10 +212,13 @@ class UserController extends Controller
          $user->mobile_no = $request->post('mobile');
          if($request->image)
          {
-             $path_image = public_path().'/user_image/'. $image_link;
-             if(file_exists($path_image) == true)
+             if($image_link != null)
              {
-                 unlink($path_image);
+                 $path_image = public_path().'/user_image/'. $image_link;
+                 if(file_exists($path_image) == true)
+                 {
+                     unlink($path_image);
+                 }
              }
          }
          if($request->image)
@@ -489,10 +492,13 @@ class UserController extends Controller
          $user->mobile_no = $request->post('mobile');
          if($request->image)
          {
-             $path_image = public_path().'/user_image/'. $image_link;
-             if(file_exists($path_image) == true)
+             if($image_link != null)
              {
-                 unlink($path_image);
+                 $path_image = public_path().'/user_image/'. $image_link;
+                 if(file_exists($path_image) == true)
+                 {
+                     unlink($path_image);
+                 }
              }
          }
          if($request->image)

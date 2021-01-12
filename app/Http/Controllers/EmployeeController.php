@@ -166,11 +166,14 @@ class EmployeeController extends Controller
         $employee->mobile_no = $request->post('mobile');
         if($request->image)
         {
-          $path_image = public_path().'/employee_image/'. $image_link;
-          if(file_exists($path_image) == true)
-          {
-              unlink($path_image);
-          }
+            if($image_link != null)
+            {
+                $path_image = public_path().'/employee_image/'. $image_link;
+                if(file_exists($path_image) == true)
+                {
+                    unlink($path_image);
+                }
+            }
         }
         if($request->image)
         {
